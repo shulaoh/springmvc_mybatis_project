@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.LessonMapper">
+    <resultMap id="BaseResultMap" type="com.web.data.pojo.Lession">
+        <result column="LESS_ID" jdbcType="CHAR" property="lessonId"/>
+        <result column="L_NAME" jdbcType="VARCHAR" property="lessonName"/>
+        <result column="L_TYPE" jdbcType="VARCHAR" property="lessonType"/>
+        <result column="L_STATUS" jdbcType="INTEGER" property="lessonStatus"/>
+        <result column="stime" jdbcType="TIMESTAMP" property="stime"/>
+        <result column="etime" jdbcType="TIMESTAMP" property="etime"/>
+        <result column="PLACE" jdbcType="VARCHAR" property="place"/>
+        <result column="TEACHER_ID" jdbcType="CHAR" property="teacherId"/>
+        <result column="P_URL" jdbcType="VARCHAR" property="purl"/>
+        <result column="L_INTRO" jdbcType="VARCHAR" property="lessonInfo"/>
+        <result column="ALL_COMM_FLAG" jdbcType="VARCHAR" property="allCommFlag"/>
+        <result column="joinStatus" jdbcType="VARCHAR" property="joinStatus"/>
+        <result column="REJ_REASON" jdbcType="VARCHAR" property="rejReason"/>
+        <result column="LESS_CYC_PIC_URL" jdbcType="VARCHAR" property="lessCycPicUrl"/>
+        <result column="LESS_PIC_URL" jdbcType="VARCHAR" property="lessPicUrl"/>
+        <result column="CREATOR_ID" jdbcType="VARCHAR" property="creatorId"/>
+        <result column="COMM_TEMPIDS" jdbcType="VARCHAR" property="commTempIds"/>
+
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+
+        <association column="TEACHER_ID" property="teacher" javaType="com.web.data.pojo.Teacher"
+                     select="getRelateTeacher"/>
+        <association column="CREATOR_ID" property="creator" javaType="com.web.data.pojo.Teacher"
+                     select="getRelateCreatorID"/>
+        <association property="instructor" column="less_id"
+                     javaType="com.web.data.pojo.SysUser" select="getTeacherByLessonId"/>
+    </resultMap>
+
+
+    <resultMap id="UserResultMap" type="com.web.data.pojo.SysUser">
+        <id column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR"/>
+        <result column="admin_flag" property="adminFlag" jdbcType="VARCHAR"/>
+        <result column="u_status" property="ustatus" jdbcType="VARCHAR"/>
+        <result column="user_pic_url" property="userPicUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getTeacherByLessonId" resultMap="UserResultMap">
+        select u.* from t_users u, t_lesson l where u.user_id = l.teacher_id
+        and l.less_id = #{lessonId, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getRelateTeacher" resultType="com.web.data.pojo.Teacher">
+        select USER_NAME name,PHONE phone,EMAIL email,DEPT dept
+        from t_users
+        where USER_ID=#{TEACHER_ID,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getRelateCreatorID" resultType="com.web.data.pojo.Teacher">
+        select USER_NAME name,PHONE phone,EMAIL email,DEPT dept
+        from t_users
+        where USER_ID=#{CREATOR_ID,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getcommentFlag" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*)
+        from t_comment
+        where USER_ID=#{userId,jdbcType=VARCHAR} and TARGET_TYPE=#{targetType,jdbcType=VARCHAR} and
+        LESS_ID=#{lessonId,jdbcType=VARCHAR} and TARGET_ID=#{targetId,jdbcType=VARCHAR}
+    </select>
+
+    <sql id="Base_Column_List">
+        LESS_ID, L_NAME, L_TYPE, L_STATUS,
+        DATE_FORMAT(S_TIME,'%Y-%m-%d %H:%i') stime,DATE_FORMAT(E_TIME,'%Y-%m-%d %H:%i') etime,
+        PLACE place,TEACHER_ID, P_URL ,L_INTRO,ALL_COMM_FLAG,LESS_CYC_PIC_URL,LESS_PIC_URL,
+        CREATOR_ID,COMM_TEMPIDS
+    </sql>
+
+    <select id="selectMyStuLessionsListPage" resultMap="BaseResultMap">
+        (select
+        <include refid="Base_Column_List"/>,IFNULL(temp_less_student.S_status,"PUB")
+        joinStatus,temp_less_student.REJ_REASON
+        from t_lesson ,(select DISTINCT LESS_ID tempLESS_id,S_STATUS,REJ_REASON from t_less_student where
+        S_USER_ID=#{userId,jdbcType=VARCHAR}) temp_less_student
+        WHERE t_lesson.LESS_ID=temp_less_student.tempLESS_id and L_STATUS!=0
+        and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
+        <if test="lessonType != null and lessonType.length()>0">
+            and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
+            and L_NAME like #{lessonNameKeyword,jdbcType=VARCHAR}
+        </if>
+        )
+        union
+        (select
+        <include refid="Base_Column_List"/>,'TEA' joinStatus,'' REJ_REASON
+        from t_lesson
+        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS!=0
+        <if test="lessonType != null and lessonType.length()>0">
+            and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        )
+        order by stime desc
+    </select>
+
+    <select id="selectAllLessionsListPage" resultMap="BaseResultMap">
+        (select
+        <include refid="Base_Column_List"/>,IFNULL(temp_less_student.S_status,"PUB")
+        joinStatus,temp_less_student.REJ_REASON
+        from t_lesson left join (select LESS_ID tempLESS_id,S_STATUS,REJ_REASON from t_less_student where
+        S_USER_ID=#{userId,jdbcType=VARCHAR}) temp_less_student
+        on t_lesson.LESS_ID=temp_less_student.tempLESS_id
+        where L_STATUS!=0 and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
+        <if test="lessonType != null and lessonType.length()>0">
+            and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
+            and L_NAME like #{lessonNameKeyword,jdbcType=VARCHAR}
+        </if>
+        )
+        union
+        (select
+        <include refid="Base_Column_List"/>,'TEA' joinStatus,'' REJ_REASON
+        from t_lesson
+        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS!=0
+        <if test="lessonType != null and lessonType.length()>0">
+            and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        )
+        order by stime desc
+    </select>
+
+    <select id="selectLessionsByStuTypeListPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select * from
+        (select
+        <include refid="Base_Column_List"/>,IFNULL(temp_less_student.S_STATUS,"PUB") joinStatus
+        ,temp_less_student.REJ_REASON
+        from t_lesson left join
+        (select LESS_ID tempLESS_id,S_STATUS,REJ_REASON from t_less_student
+        where S_USER_ID=#{userId,jdbcType=VARCHAR})
+        temp_less_student
+        on t_lesson.LESS_ID=temp_less_student.tempLESS_id
+        where L_STATUS!=0 and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
+        <if test="lessonType != null and lessonType.length()>0">
+            and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        ) middle
+        where joinStatus=#{oprType,jdbcType=VARCHAR}
+        order by stime desc
+    </select>
+
+    <select id="selectLessionsByTEATypeListPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,'TEA' joinStatus
+        from t_lesson
+        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS!=0
+        <if test="lessonType != null and lessonType.length()>0">
+            and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
+            and L_NAME like #{lessonNameKeyword,jdbcType=VARCHAR}
+        </if>
+        order by stime desc
+    </select>
+
+    <select id="selectLessionsByUserIdListPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_lesson
+        <if test="userId != null and userId.length()>0">
+            where CREATOR_ID=#{userId,jdbcType=VARCHAR}
+        </if>
+        order by stime desc
+    </select>
+
+    <select id="selectLessionById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_lesson
+        where LESS_ID=#{lessonId,jdbcType=VARCHAR}
+        <if test='lessonStatus!=null and lessonStatus != "Y"'>
+            and L_STATUS!=0
+        </if>
+    </select>
+
+    <select id="getLessonStuStatus" parameterType="java.util.HashMap" resultType="java.lang.String">
+        select IFNULL(S_STATUS,"PUB")
+        from t_less_student
+        where S_USER_ID=#{userId,jdbcType=VARCHAR} and LESS_ID=#{lessonId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertLessonStuStatus" parameterType="java.util.HashMap">
+        insert into t_less_student(LESS_ID, S_USER_ID,S_STATUS)
+        values (#{lessonId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},'WAIT')
+    </insert>
+
+    <update id="updateLessonStuStatus" parameterType="java.util.HashMap">
+        update t_less_student
+        <set>
+            S_STATUS = 'CONF'
+        </set>
+        where S_USER_ID=#{userId,jdbcType=VARCHAR} and LESS_ID=#{lessonId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateLessonStatus" parameterType="com.web.data.pojo.Lession">
+        update t_lesson
+        <set>
+            L_STATUS = #{lessonStatus,jdbcType=INTEGER},
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where LESS_ID=#{lessonId,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertLess" parameterType="com.web.data.pojo.Lession">
+        insert into t_lesson (LESS_ID,L_NAME,L_TYPE,L_STATUS,PLACE,
+        TEACHER_ID,CREATOR_ID,P_URL,L_INTRO,ALL_COMM_FLAG,LESS_PIC_URL,LESS_CYC_PIC_URL,COMM_TEMPIDS,CREATE_TIME,UPDATE_TIME)
+        values (
+        #{lessonId,jdbcType=VARCHAR},
+        #{lessonName,jdbcType=VARCHAR},
+        #{lessonType,jdbcType=VARCHAR},
+        #{lessonStatus,jdbcType=INTEGER},
+        <!-- STR_TO_DATE(#{stime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+        STR_TO_DATE(#{etime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'), -->
+        #{place,jdbcType=VARCHAR},
+        #{teacherId,jdbcType=VARCHAR},
+        #{creatorId,jdbcType=VARCHAR},
+        #{purl,jdbcType=VARCHAR},
+        #{lessonInfo,jdbcType=VARCHAR},
+        #{allCommFlag,jdbcType=VARCHAR},
+        #{lessPicUrl,jdbcType=VARCHAR},
+        #{lessCycPicUrl,jdbcType=VARCHAR},
+        #{commTempIds,jdbcType=VARCHAR}),
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertLessStu" parameterType="java.util.HashMap">
+        insert into t_less_student (LESS_ID,S_USER_ID,S_STATUS)
+        values (
+        #{lessId,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        'INVI'
+        )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.Lession">
+        update t_lesson
+        <set>
+            <if test="lessonName != null and lessonName.length()>0">
+                L_NAME = #{lessonName,jdbcType=VARCHAR},
+            </if>
+            <if test="lessonType != null and lessonType.length()>0">
+                L_TYPE = #{lessonType,jdbcType=VARCHAR},
+            </if>
+            <!--  <if test="stime != null and stime.length()>0">
+               S_TIME = str_to_date(#{stime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+             </if>
+              <if test="etime != null and etime.length()>0">
+               E_TIME = str_to_date(#{etime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+             </if> -->
+            <if test="place != null and place.length()>0">
+                PLACE = #{place,jdbcType=VARCHAR},
+            </if>
+            <if test="lessonInfo != null and lessonInfo.length()>0">
+                L_INTRO = #{lessonInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="purl != null and purl.length()>0">
+                P_URL = #{purl,jdbcType=VARCHAR},
+            </if>
+            <if test="teacherId != null and teacherId.length()>0">
+                TEACHER_ID = #{teacherId,jdbcType=VARCHAR},
+            </if>
+            <if test="allCommFlag != null and allCommFlag.length()>0">
+                ALL_COMM_FLAG = #{allCommFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="lessPicUrl != null and lessPicUrl.length()>0">
+                LESS_PIC_URL = #{lessPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="lessCycPicUrl != null and lessCycPicUrl.length()>0">
+                LESS_CYC_PIC_URL = #{lessCycPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="commTempIds != null and commTempIds.length()>0">
+                COMM_TEMPIDS = #{commTempIds,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where LESS_ID=#{lessonId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="countHaveLeave" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*)
+        from t_leave
+        where USER_ID=#{userId,jdbcType=VARCHAR} and SCH_ID=#{schId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

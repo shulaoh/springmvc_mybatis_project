@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.TCommTemplateItemMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.TCommTemplateItem">
+    <id column="TEMP_ITEM_ID" jdbcType="CHAR" property="tempItemId" />
+    <result column="TEMP_ITEM_Name" jdbcType="VARCHAR" property="tempItemName" />
+    <result column="TEMP_ITEM_Type" jdbcType="VARCHAR" property="tempItemType" />
+    <result column="TEMP_ITEM_Value" jdbcType="INTEGER" property="tempItemValue" />
+    <result column="TEMP_ITEM_TEXT" jdbcType="VARCHAR" property="tempItemText" />
+    <result column="TEMP_ITEM_Enable" jdbcType="INTEGER" property="tempItemEnable" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TEMP_ITEM_ID, TEMP_ITEM_Name, TEMP_ITEM_Type, TEMP_ITEM_Value, TEMP_ITEM_TEXT, 
+    TEMP_ITEM_Enable
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_comm_template_item
+    where TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_comm_template_item
+    where TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.TCommTemplateItem">
+    <selectKey keyProperty="tempItemId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_comm_template_item (TEMP_ITEM_Name, TEMP_ITEM_Type, TEMP_ITEM_Value, 
+      TEMP_ITEM_TEXT, TEMP_ITEM_Enable)
+    values (#{tempItemName,jdbcType=VARCHAR}, #{tempItemType,jdbcType=VARCHAR}, #{tempItemValue,jdbcType=INTEGER}, 
+      #{tempItemText,jdbcType=VARCHAR}, #{tempItemEnable,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.TCommTemplateItem">
+    <selectKey keyProperty="tempItemId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_comm_template_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tempItemName != null">
+        TEMP_ITEM_Name,
+      </if>
+      <if test="tempItemType != null">
+        TEMP_ITEM_Type,
+      </if>
+      <if test="tempItemValue != null">
+        TEMP_ITEM_Value,
+      </if>
+      <if test="tempItemText != null">
+        TEMP_ITEM_TEXT,
+      </if>
+      <if test="tempItemEnable != null">
+        TEMP_ITEM_Enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tempItemName != null">
+        #{tempItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="tempItemType != null">
+        #{tempItemType,jdbcType=VARCHAR},
+      </if>
+      <if test="tempItemValue != null">
+        #{tempItemValue,jdbcType=INTEGER},
+      </if>
+      <if test="tempItemText != null">
+        #{tempItemText,jdbcType=VARCHAR},
+      </if>
+      <if test="tempItemEnable != null">
+        #{tempItemEnable,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.TCommTemplateItem">
+    update t_comm_template_item
+    <set>
+      <if test="tempItemName != null">
+        TEMP_ITEM_Name = #{tempItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="tempItemType != null">
+        TEMP_ITEM_Type = #{tempItemType,jdbcType=VARCHAR},
+      </if>
+      <if test="tempItemValue != null">
+        TEMP_ITEM_Value = #{tempItemValue,jdbcType=INTEGER},
+      </if>
+      <if test="tempItemText != null">
+        TEMP_ITEM_TEXT = #{tempItemText,jdbcType=VARCHAR},
+      </if>
+      <if test="tempItemEnable != null">
+        TEMP_ITEM_Enable = #{tempItemEnable,jdbcType=INTEGER},
+      </if>
+    </set>
+    where TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.TCommTemplateItem">
+    update t_comm_template_item
+    set TEMP_ITEM_Name = #{tempItemName,jdbcType=VARCHAR},
+      TEMP_ITEM_Type = #{tempItemType,jdbcType=VARCHAR},
+      TEMP_ITEM_Value = #{tempItemValue,jdbcType=INTEGER},
+      TEMP_ITEM_TEXT = #{tempItemText,jdbcType=VARCHAR},
+      TEMP_ITEM_Enable = #{tempItemEnable,jdbcType=INTEGER}
+    where TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR}
+  </update>
+  
+  <sql id="Item_Column_List">
+    b.TEMP_ITEM_ID, b.TEMP_ITEM_Name, b.TEMP_ITEM_Type, b.TEMP_ITEM_Value, b.TEMP_ITEM_TEXT, 
+    b.TEMP_ITEM_Enable
+  </sql>
+  <!-- 获取当前用户针对指定评价对象的评价类型信息,指导小程序根据模板生成评价页面 -->
+  <resultMap id="commTypeResult" type="com.web.data.bean.CommType">
+    <result column="ROLE_TYPE" jdbcType="VARCHAR" property="roleType" />
+    <result column="TARGET_TYPE" jdbcType="VARCHAR" property="targetType" />
+  </resultMap>
+  <select id="selectCommTypes" parameterType="java.util.HashMap" resultMap="commTypeResult">
+  	select distinct a.ROLE_TYPE, a.TARGET_TYPE
+	from t_comm_template_relate a, t_lesson b
+	where 
+	b.comm_tempids = #{commTempId,jdbcType=VARCHAR}
+	<if test="roleType != null and roleType.length()>0">
+    and a.ROLE_TYPE=#{roleType,jdbcType=VARCHAR} 
+    </if>
+    <if test="targetType != null and targetType.length()>0">
+    and a.TARGET_TYPE=#{targetType,jdbcType=VARCHAR} 
+    </if>
+	and a.TEMP_GROUP_ID = b.comm_tempids
+	and a.TEMP_RELATE_Enable = 1
+	order by ROLE_TYPE
+  </select>
+  <!-- 后台WEB获取当前添加/修改的的课程和日程的评价可关联的评价模板列表 -->
+  <select id="selectCommTemps" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select 
+    <include refid="Item_Column_List" />
+    from t_comm_template_relate a, t_comm_template_item b
+    WHERE 
+    a.TEMP_ITEM_ID = b.TEMP_ITEM_ID
+	and b.TEMP_ITEM_Enable = 1
+    <if test="roleType != null and roleType.length()>0">
+    and a.ROLE_TYPE=#{roleType,jdbcType=VARCHAR} 
+    </if>
+    <if test="targetType != null and targetType.length()>0">
+    and a.TARGET_TYPE=#{targetType,jdbcType=VARCHAR} 
+    </if>
+	and a.TEMP_GROUP_ID=#{commTempId,jdbcType=VARCHAR} 
+	and a.TEMP_RELATE_Enable = 1
+	order by temp_item_type
+  </select>
+  <insert id="insertBatch">
+    insert into t_comm_template_item (TEMP_ITEM_ID,TEMP_ITEM_Name, TEMP_ITEM_Type, TEMP_ITEM_Value, 
+      TEMP_ITEM_TEXT, TEMP_ITEM_Enable)
+    values 
+    <foreach collection ="list" item="item" separator =",">
+    (#{item.tempItemId,jdbcType=VARCHAR},#{item.tempItemName,jdbcType=VARCHAR}, #{item.tempItemType,jdbcType=VARCHAR}, #{item.tempItemValue,jdbcType=INTEGER}, 
+      #{item.tempItemText,jdbcType=VARCHAR}, #{item.tempItemEnable,jdbcType=INTEGER})
+     </foreach>
+  </insert>
+</mapper>

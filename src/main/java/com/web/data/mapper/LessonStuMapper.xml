@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.LessonStuMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.LessionStu">
+    <result column="S_USER_ID" jdbcType="CHAR" property="userId" />
+    <result column="LESS_ID" jdbcType="CHAR" property="lessonId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="name" />
+     <result column="DEPT" jdbcType="VARCHAR" property="dept" />    
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />   
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="S_STATUS" jdbcType="VARCHAR" property="stuStatus" /> 
+    <result column="REJ_REASON" jdbcType="VARCHAR" property="rejReason" />    
+  </resultMap>     
+  
+  
+  <sql id="Base_Column_List">
+   S_USER_ID, LESS_ID, USER_NAME, DEPT,PHONE,EMAIL,S_STATUS,REJ_REASON  
+  </sql>
+  
+   <select id="selectLessionStusListPage" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_less_student ,t_users
+    where t_less_student.S_USER_ID=t_users.USER_ID and LESS_ID=#{lessonId,jdbcType=VARCHAR}
+    <if test="stuStatus!=null">
+    	and  S_STATUS=#{stuStatus,jdbcType=VARCHAR}
+    </if>    
+  </select>  
+  
+  <update id="updateLessonStu" parameterType="java.util.HashMap">
+    update t_less_student
+    <set>
+     	S_STATUS=#{status,jdbcType=VARCHAR},
+     	REJ_REASON=#{rejReason,jdbcType=VARCHAR}
+    </set>
+    where S_USER_ID = #{userId,jdbcType=VARCHAR} and LESS_ID=#{lessonId,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteLessonStu" parameterType="java.util.HashMap">
+    delete from t_less_student
+    where  LESS_ID=#{lessonId,jdbcType=VARCHAR} 
+    <if test="userId != null and userId.length()>0">
+    	and S_USER_ID = #{userId,jdbcType=VARCHAR}
+    </if>
+  </delete>
+</mapper>

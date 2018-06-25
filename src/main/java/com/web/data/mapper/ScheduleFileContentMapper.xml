@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.data.mapper.ScheduleFileContentMapper">
+    <resultMap id="ScheduleFileResultMap" type="com.web.data.pojo.ScheduleFileContent">
+        <id column="sch_id" property="scheduleId" jdbcType="VARCHAR"/>
+        <id column="fileid" property="fileId" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <insert id="insertScheduleFileContent" parameterType="com.web.data.pojo.ScheduleFileContent">
+        insert into t_sch_file (sch_id, fileid)
+        values (
+        #{scheduleId}, #{fileId}
+        ) on duplicate key update sch_id = #{scheduleId, jdbcType=VARCHAR}, fileid = #{fileId, jdbcType=VARCHAR}
+
+    </insert>
+    <delete id ="deleteScheduleFileContentByKey" >
+        delete from t_sch_file where sch_id = #{scheduleId, jdbcType=VARCHAR} and fileid = #{fileId, jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteAllFileContentsByScheduleId" parameterType="String">
+        delete from t_sch_file where sch_id = #{scheduleId, jdbcType=VARCHAR}
+    </delete>
+    <select id="getFileContentBySheduleId" resultType="com.web.data.pojo.ScheduleFileContent">
+
+    </select>
+</mapper>

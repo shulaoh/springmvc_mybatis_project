@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.InformMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.Inform">
+    <id column="INFORM_ID" jdbcType="CHAR" property="informId" />
+    <result column="INFORM_TYPE" jdbcType="CHAR" property="informType" />
+    <result column="LESS_ID" jdbcType="CHAR" property="lessID" />
+    <result column="INF_INFO" jdbcType="VARCHAR" property="infInfo" />
+    <result column="INF_TIME" jdbcType="VARCHAR" property="infTime" />
+  </resultMap>
+  <select id="selectInformsByUserIdListPage" resultType="com.web.data.pojo.Inform">
+  	select INFORM_ID informId,INFORM_TYPE informType,LESS_ID lessID,
+  	INF_INFO infInfo, DATE_FORMAT(INF_TIME,'%Y-%m-%d %H:%i') infTime
+	from t_inform
+	where LESS_ID in 
+	(select distinct LESS_ID from t_less_student where t_less_student.S_USER_ID = #{userId,jdbcType=VARCHAR} and S_STATUS = 'CONF'  )
+  </select>
+  
+  <select id="selectDefPics" resultType="com.web.data.pojo.PicDef">
+  	select 
+  	PIC_TYPE picType, SUB_TYPE subType, URL url, NAME name,GROUP_NAME groupName 
+	from t_pic
+	where
+		1=1 
+	<if test="picType != null and picType.length()>0">
+		and PIC_TYPE=#{picType,jdbcType=VARCHAR}
+	</if>
+	<if test="subType != null and subType.length()>0">
+		and SUB_TYPE=#{subType,jdbcType=VARCHAR}
+	</if>
+  </select>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.TCommTemplateRelateMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.TCommTemplateRelate">
+    <id column="TEMP_RELATE_ID" jdbcType="CHAR" property="tempRelateId" />
+    <result column="TEMP_GROUP_ID" jdbcType="CHAR" property="tempGroupId" />
+    <result column="TEMP_ITEM_ID" jdbcType="CHAR" property="tempItemId" />
+    <result column="ROLE_TYPE" jdbcType="VARCHAR" property="roleType" />
+    <result column="TARGET_TYPE" jdbcType="VARCHAR" property="targetType" />
+    <result column="TEMP_RELATE_Enable" jdbcType="INTEGER" property="tempRelateEnable" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TEMP_RELATE_ID, TEMP_GROUP_ID, TEMP_ITEM_ID, ROLE_TYPE, TARGET_TYPE, TEMP_RELATE_Enable
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_comm_template_relate
+    where TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_comm_template_relate
+    where TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.TCommTemplateRelate">
+    <selectKey keyProperty="tempRelateId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_comm_template_relate (TEMP_GROUP_ID, TEMP_ITEM_ID, ROLE_TYPE, 
+      TARGET_TYPE, TEMP_RELATE_Enable)
+    values (#{tempGroupId,jdbcType=CHAR}, #{tempItemId,jdbcType=CHAR}, #{roleType,jdbcType=VARCHAR}, 
+      #{targetType,jdbcType=VARCHAR}, #{tempRelateEnable,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertBatch">
+	insert into t_comm_template_relate (TEMP_RELATE_ID,TEMP_GROUP_ID, TEMP_ITEM_ID, ROLE_TYPE, 
+      TARGET_TYPE, TEMP_RELATE_Enable)
+    values 
+    <foreach collection ="list" item="item" separator =",">
+    (#{item.tempRelateId,jdbcType=CHAR},#{item.tempGroupId,jdbcType=CHAR}, #{item.tempItemId,jdbcType=CHAR}, #{item.roleType,jdbcType=VARCHAR}, 
+      #{item.targetType,jdbcType=VARCHAR}, #{item.tempRelateEnable,jdbcType=INTEGER})
+     </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.TCommTemplateRelate">
+    <selectKey keyProperty="tempRelateId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_comm_template_relate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tempGroupId != null">
+        TEMP_GROUP_ID,
+      </if>
+      <if test="tempItemId != null">
+        TEMP_ITEM_ID,
+      </if>
+      <if test="roleType != null">
+        ROLE_TYPE,
+      </if>
+      <if test="targetType != null">
+        TARGET_TYPE,
+      </if>
+      <if test="tempRelateEnable != null">
+        TEMP_RELATE_Enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tempGroupId != null">
+        #{tempGroupId,jdbcType=CHAR},
+      </if>
+      <if test="tempItemId != null">
+        #{tempItemId,jdbcType=CHAR},
+      </if>
+      <if test="roleType != null">
+        #{roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="targetType != null">
+        #{targetType,jdbcType=VARCHAR},
+      </if>
+      <if test="tempRelateEnable != null">
+        #{tempRelateEnable,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.TCommTemplateRelate">
+    update t_comm_template_relate
+    <set>
+      <if test="tempGroupId != null">
+        TEMP_GROUP_ID = #{tempGroupId,jdbcType=CHAR},
+      </if>
+      <if test="tempItemId != null">
+        TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR},
+      </if>
+      <if test="roleType != null">
+        ROLE_TYPE = #{roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="targetType != null">
+        TARGET_TYPE = #{targetType,jdbcType=VARCHAR},
+      </if>
+      <if test="tempRelateEnable != null">
+        TEMP_RELATE_Enable = #{tempRelateEnable,jdbcType=INTEGER},
+      </if>
+    </set>
+    where TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.TCommTemplateRelate">
+    update t_comm_template_relate
+    set TEMP_GROUP_ID = #{tempGroupId,jdbcType=CHAR},
+      TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR},
+      ROLE_TYPE = #{roleType,jdbcType=VARCHAR},
+      TARGET_TYPE = #{targetType,jdbcType=VARCHAR},
+      TEMP_RELATE_Enable = #{tempRelateEnable,jdbcType=INTEGER}
+    where TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR}
+  </update>
+</mapper>

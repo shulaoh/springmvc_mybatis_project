@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.AccessTokenMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.AccessToken">
+    <id column="Id" jdbcType="CHAR" property="id" />
+    <result column="ACCESS_TOKEN" jdbcType="VARCHAR" property="accessToken" />
+    <result column="EXPIRES_IN" jdbcType="INTEGER" property="expiresIn" />
+    <result column="EXPIRES_AFTER" jdbcType="BIGINT" property="expiresAfter" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    Id, ACCESS_TOKEN, EXPIRES_IN, EXPIRES_AFTER
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_access_token
+    where Id = #{id,jdbcType=CHAR}
+  </select>
+  <select id="selectAccessToken" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_access_token
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_access_token
+    where Id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.AccessToken">
+    insert into t_access_token (Id, ACCESS_TOKEN, EXPIRES_IN, 
+      EXPIRES_AFTER)
+    values (#{id,jdbcType=CHAR}, #{accessToken,jdbcType=VARCHAR}, #{expiresIn,jdbcType=INTEGER}, 
+      #{expiresAfter,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.AccessToken">
+    insert into t_access_token
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        Id,
+      </if>
+      <if test="accessToken != null">
+        ACCESS_TOKEN,
+      </if>
+      <if test="expiresIn != null">
+        EXPIRES_IN,
+      </if>
+      <if test="expiresAfter != null">
+        EXPIRES_AFTER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="accessToken != null">
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null">
+        #{expiresIn,jdbcType=INTEGER},
+      </if>
+      <if test="expiresAfter != null">
+        #{expiresAfter,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.AccessToken">
+    update t_access_token
+    <set>
+      <if test="accessToken != null">
+        ACCESS_TOKEN = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null">
+        EXPIRES_IN = #{expiresIn,jdbcType=INTEGER},
+      </if>
+      <if test="expiresAfter != null">
+        EXPIRES_AFTER = #{expiresAfter,jdbcType=BIGINT},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.AccessToken">
+    update t_access_token
+    set ACCESS_TOKEN = #{accessToken,jdbcType=VARCHAR},
+      EXPIRES_IN = #{expiresIn,jdbcType=INTEGER},
+      EXPIRES_AFTER = #{expiresAfter,jdbcType=BIGINT}
+    where Id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

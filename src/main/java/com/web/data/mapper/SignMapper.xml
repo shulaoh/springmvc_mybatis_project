@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.SignMapper">
+
+
+	<!-- 时间插入是否正确 -->
+	<insert id="insert" parameterType="com.web.data.pojo.Sign">
+		insert into t_sign (USER_ID,LESS_ID, SCH_ID,S_TIME, SIGN_PIC_URL)
+		values (
+		#{userId,jdbcType=VARCHAR},
+		#{lessonId,jdbcType=VARCHAR},
+		#{schId,jdbcType=VARCHAR},
+		now(),
+		#{signPicUrl,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="getSignFlag" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(*)
+		from t_sign
+		where USER_ID=#{userId,jdbcType=VARCHAR} and
+		SCH_ID=#{schId,jdbcType=VARCHAR} and
+		LESS_ID=#{lessonId,jdbcType=VARCHAR}
+	</select>
+
+	<!-- <resultMap id="signListResultMap" type="com.web.data.pojo.SignInfo"> 
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" /> <result 
+		column="LESS_ID" jdbcType="VARCHAR" property="lessonId" /> <result column="SCH_ID" 
+		jdbcType="VARCHAR" property="schId" /> <result column="S_TIME" jdbcType="VARCHAR" 
+		property="sTime" /> <result column="SIGN_PIC_URL" jdbcType="VARCHAR" property="signPicUrl" 
+		/> <result column="DEPT" jdbcType="VARCHAR" property="dept" /> <result column="EMAIL" 
+		jdbcType="VARCHAR" property="email" /> <result column="PHONE" jdbcType="VARCHAR" 
+		property="phone" /> <result column="USER_NAME" jdbcType="VARCHAR" property="userName" 
+		/> </resultMap> <select id="selectSignListBySchId" parameterType="java.lang.String" 
+		resultMap="signListResultMap"> SELECT t.USER_ID,t.LESS_ID,t.SCH_ID, DATE_FORMAT(t.S_TIME,'%Y-%m-%d 
+		%H:%i') S_TIME, t.SIGN_PIC_URL,t1.DEPT,t1.EMAIL,t1.PHONE,t1.USER_NAME FROM 
+		t_sign t LEFT JOIN t_users t1 on t1.USER_ID = t.USER_ID where SCH_ID=#{schId,jdbcType=VARCHAR} 
+		</select> -->
+	<resultMap id="signListResultMapForExport" type="com.web.data.bean.SignInfo">
+		<result column="SCH_ID" jdbcType="VARCHAR" property="schId" />
+		<result column="l_name" jdbcType="VARCHAR" property="lessName" />
+		<result column="sch_name" jdbcType="VARCHAR" property="schName" />
+		<result column="sch_s_time" jdbcType="TIMESTAMP" property="schStime" />
+		<result column="s_time" jdbcType="TIMESTAMP" property="signTime" />
+		<result column="sch_place" jdbcType="VARCHAR" property="place" />
+		<result column="sign_pic_url" jdbcType="VARCHAR" property="signPicUrl" />
+		<result column="dept" jdbcType="VARCHAR" property="dept" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="companyName" jdbcType="VARCHAR" property="companyName" />
+	</resultMap>
+	<select id="selectLessSignList" parameterType="java.lang.String"
+		resultMap="signListResultMapForExport">
+		select
+		e.SCH_ID,d.l_name,e.sch_name,e.sch_s_time,e.sch_place,c.user_name,
+		b.sign_pic_url,b.s_time,c.phone,c.email,c.dept,j.name as companyName
+		from t_less_student a left join t_sign b on a.less_id = b.less_id
+		join t_users c on a.s_user_id = c.user_id
+		join t_lesson d on a.less_id = d.less_id
+		join t_schedule e on a.less_id = e.less_id
+		join t_personal_info f on a.s_user_id = f.user_id
+		left join t_company j on f.company_id = j.id
+		where
+		a.less_id=#{lessId,jdbcType=CHAR}
+		order by SCH_ID, companyName,c.dept,c.user_name
+	</select>
+	<select id="selectSchSignListPage" parameterType="java.lang.String"
+		resultMap="signListResultMapForExport">
+		select
+		e.SCH_ID,d.l_name,e.sch_name,e.sch_s_time,e.sch_place,c.user_name,
+		b.sign_pic_url,b.s_time,c.phone,c.email,c.dept,j.name as companyName
+		from t_less_student a left join t_sign b on a.less_id = b.less_id
+		join t_users c on a.s_user_id = c.user_id
+		join t_lesson d on a.less_id = d.less_id
+		join t_schedule e on a.less_id = e.less_id
+		join t_personal_info f on a.s_user_id = f.user_id
+		left join t_company j on f.company_id = j.id
+		where
+		e.sch_id=#{schId,jdbcType=CHAR}
+		order by SCH_ID,companyName,c.dept,c.user_name
+	</select>
+</mapper>

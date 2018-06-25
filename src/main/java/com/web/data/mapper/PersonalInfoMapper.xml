@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.PersonalInfoMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.PersonalInfo">
+    <id column="PERSON_ID" jdbcType="CHAR" property="personId" />
+    <result column="USER_ID" jdbcType="CHAR" property="userId" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="PSEX" jdbcType="BIT" property="psex" />
+    <result column="PBirthday" jdbcType="TIMESTAMP" property="pbirthday" />
+    <result column="DEPT" jdbcType="VARCHAR" property="dept" />
+    <result column="SUBDEPT" jdbcType="VARCHAR" property="subdept" />
+    <result column="PPosition" jdbcType="VARCHAR" property="pposition" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="COMPANY_ID" jdbcType="CHAR" property="companyId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PERSON_ID, USER_ID, PHONE, EMAIL, USER_NAME, PSEX, PBirthday, DEPT, SUBDEPT, PPosition, 
+    REMARK,COMPANY_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_personal_info
+    where PERSON_ID = #{personId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_personal_info
+    where PERSON_ID = #{personId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.PersonalInfo">
+    insert into t_personal_info (PERSON_ID, USER_ID, PHONE, 
+      EMAIL, USER_NAME, PSEX, 
+      PBirthday, DEPT, SUBDEPT, 
+      PPosition, REMARK,COMPANY_ID)
+    values (#{personId,jdbcType=CHAR}, #{userId,jdbcType=CHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{psex,jdbcType=BIT}, 
+      #{pbirthday,jdbcType=TIMESTAMP}, #{dept,jdbcType=VARCHAR}, #{subdept,jdbcType=VARCHAR}, 
+      #{pposition,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{companyId,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.PersonalInfo">
+    insert into t_personal_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="personId != null">
+        PERSON_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="psex != null">
+        PSEX,
+      </if>
+      <if test="pbirthday != null">
+        PBirthday,
+      </if>
+      <if test="dept != null">
+        DEPT,
+      </if>
+      <if test="subdept != null">
+        SUBDEPT,
+      </if>
+      <if test="pposition != null">
+        PPosition,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="companyId != null">
+        COMPANY_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="personId != null">
+        #{personId,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="psex != null">
+        #{psex,jdbcType=BIT},
+      </if>
+      <if test="pbirthday != null">
+        #{pbirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dept != null">
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="subdept != null">
+        #{subdept,jdbcType=VARCHAR},
+      </if>
+      <if test="pposition != null">
+        #{pposition,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.PersonalInfo">
+    update t_personal_info
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="psex != null">
+        PSEX = #{psex,jdbcType=BIT},
+      </if>
+      <if test="pbirthday != null">
+        PBirthday = #{pbirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dept != null">
+        DEPT = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="subdept != null">
+        SUBDEPT = #{subdept,jdbcType=VARCHAR},
+      </if>
+      <if test="pposition != null">
+        PPosition = #{pposition,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        COMPANY_ID = #{companyId,jdbcType=CHAR},
+      </if>
+    </set>
+    where PERSON_ID = #{personId,jdbcType=CHAR}
+  </update>
+  <update id="updateByUserIdSelective" parameterType="com.web.data.pojo.PersonalInfo">
+    update t_personal_info
+    <set>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="psex != null">
+        PSEX = #{psex,jdbcType=BIT},
+      </if>
+      <if test="pbirthday != null">
+        PBirthday = #{pbirthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dept != null">
+        DEPT = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="subdept != null">
+        SUBDEPT = #{subdept,jdbcType=VARCHAR},
+      </if>
+      <if test="pposition != null">
+        PPosition = #{pposition,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        COMPANY_ID = #{companyId,jdbcType=CHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.PersonalInfo">
+    update t_personal_info
+    set USER_ID = #{userId,jdbcType=CHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      USER_NAME = #{userName,jdbcType=VARCHAR},
+      PSEX = #{psex,jdbcType=BIT},
+      PBirthday = #{pbirthday,jdbcType=TIMESTAMP},
+      DEPT = #{dept,jdbcType=VARCHAR},
+      SUBDEPT = #{subdept,jdbcType=VARCHAR},
+      PPosition = #{pposition,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      COMPANY_ID = #{companyId,jdbcType=CHAR}
+    where PERSON_ID = #{personId,jdbcType=CHAR}
+  </update>
+    <insert id="insertBatch">
+    insert into t_personal_info (PERSON_ID,USER_ID,PHONE,EMAIL,USER_NAME,PSEX,PBirthday,DEPT,SUBDEPT,PPosition,REMARK,COMPANY_ID) values 
+    <foreach collection ="list" item="item" separator =",">
+    ( #{item.personId,jdbcType=CHAR}, #{item.userId,jdbcType=CHAR}, #{item.phone,jdbcType=VARCHAR}, 
+      #{item.email,jdbcType=VARCHAR}, #{item.userName,jdbcType=VARCHAR}, #{item.psex,jdbcType=BIT}, 
+      #{item.pbirthday,jdbcType=TIMESTAMP}, #{item.dept,jdbcType=VARCHAR}, #{item.subdept,jdbcType=VARCHAR},
+      #{item.pposition,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},#{item.companyId,jdbcType=CHAR}
+    )
+    </foreach>
+  </insert> 
+</mapper>

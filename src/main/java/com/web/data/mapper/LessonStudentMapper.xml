@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.data.mapper.LessonStudentMapper">
+    <insert id="insertLessonStudent" parameterType="com.web.data.pojo.LessonStudent">
+        <!-- 在插入选课学员时，如果当前学员已经选上，则不作更改，否则，插入新学员 -->
+        insert into t_less_student (less_Id, s_user_id, s_status, rej_reason)
+        values (
+        #{lessonId}, #{userId}, #{status}, #{rejectReason}
+        ) on duplicate key update less_id = #{lessonId}, s_user_id = #{userId}
+    </insert>
+    <delete id="deleteLessonStudent" parameterType="com.web.data.pojo.LessonStudent">
+        delete from t_less_student where less_id = #{lessonId} and s_user_id = #{userId}
+    </delete>
+    <delete id="deleteLessonStudentNotInList" parameterType="String">
+        delete from t_less_student where less_id = #{lessonId} and s_user_id not in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

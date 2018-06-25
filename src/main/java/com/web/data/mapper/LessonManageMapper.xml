@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.data.mapper.LessonManageMapper">
+
+    <resultMap id="LessonResultMap" type="com.web.data.pojo.LessonCommon" >
+        <id column="less_id" property="lessonId" jdbcType="VARCHAR" />
+        <result column="l_name" property="lessonName" jdbcType="VARCHAR" />
+        <result column="l_type" property="lessonType" jdbcType="VARCHAR" />
+        <result column="l_status" property="lessonStatus" jdbcType="VARCHAR" />
+        <result column="l_intro" property="lessonInfo" jdbcType="VARCHAR" />
+        <result column="teacher_id" property="teacherId" jdbcType="VARCHAR"/>
+        <result column="less_pic_url" property="lessPicUrl" jdbcType="VARCHAR" />
+		<result column="ALL_COMM_FLAG" property="allCommFlag" jdbcType="VARCHAR" />
+        <result column="comm_tempids" property="commTempIds" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"  />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"  />
+        <association property="instructor" column="less_id"
+                     javaType="com.web.data.pojo.SysUser" select="getTeacherByLessonId"/>
+
+        <collection property="studentList" column="less_id" javaType="ArrayList"
+                    ofType="com.web.data.pojo.SysUser" select="getStudentListByLessonId"/>
+        <collection property="adminList" column="less_id" javaType="ArrayList"
+                    ofType="com.web.data.pojo.SysUser" select="getAdminListByLessonId"/>
+
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="com.web.data.pojo.SysUser" >
+        <id column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR"/>
+        <result column="admin_flag" property="adminFlag" jdbcType="VARCHAR"/>
+        <result column="u_status" property="ustatus" jdbcType="VARCHAR"/>
+        <result column="user_pic_url" property="userPicUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertLesson" parameterType="com.web.data.pojo.LessonCommon">
+        insert into t_lesson (LESS_ID,L_NAME,L_TYPE,L_STATUS,PLACE,
+        TEACHER_ID,teacher_name, CREATOR_ID,P_URL,L_INTRO,ALL_COMM_FLAG,LESS_PIC_URL,LESS_CYC_PIC_URL,COMM_TEMPIDS,CREATE_TIME,UPDATE_TIME)
+        values (
+        #{lessonId},
+        #{lessonName},
+        #{lessonType},
+        #{lessonStatus},
+        #{place},
+        #{teacherId},
+        #{teacherName},
+        #{creatorId},
+        #{purl},
+        #{lessonInfo},
+        #{allCommFlag},
+        #{lessPicUrl},
+        #{lessCycPicUrl},
+        #{commTempIds},
+        #{createTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <!-- 参考ScheduleMapper.xml -->
+    <!-- insert id="insertSchedule" parameterType="com.web.data.pojo.Schedule">
+        insert into t_schedule (LESS_ID, SCH_ID, SCH_NAME,SCH_PLACE,SCH_INTRO,SCH_S_TIME,SCH_LAST_M_NUM,
+        SIGN_FLAG,SIGN_S_TIME,SIGN_E_TIME,COMMENT_FLAG,TUTOR_ID,COMM_TEMPIDS,ALL_COMM_FLAG)
+        values (
+        #{lessonId,jdbcType=VARCHAR},
+        #{schId,jdbcType=VARCHAR},
+        #{schName,jdbcType=VARCHAR},
+        #{schPlace,jdbcType=VARCHAR},
+        #{schIntro,jdbcType=VARCHAR},
+        STR_TO_DATE(#{ssTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+        #{schLastMNum,jdbcType=INTEGER},
+        #{signFlag,jdbcType=VARCHAR},
+        STR_TO_DATE(#{signSTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+        STR_TO_DATE(#{signETime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+        #{commentFlag,jdbcType=VARCHAR},
+        #{tutorId,jdbcType=VARCHAR},
+        #{commTempIds,jdbcType=VARCHAR},
+        #{allCommFlag,jdbcType=VARCHAR})
+    </insert-->
+
+
+    <update id="updateLesson" parameterType="com.web.data.pojo.LessonCommon">
+        update t_lesson
+        <set>
+            <if test="lessonName!=null">
+                l_name = #{lessonName},
+            </if>
+            <if test="lessonType!=null">
+                l_type = #{lessonType},
+            </if>
+            <if test="lessonStatus!=null">
+                l_status = #{lessonStatus},
+            </if>
+            <if test="place!=null">
+                place = #{place},
+            </if>
+            <if test="lessonInfo!=null">
+                l_intro = #{lessonInfo},
+            </if>
+            <if test="purl!=null">
+                p_url = #{purl},
+            </if>
+            <if test="allCommFlag!=null">
+                all_comm_flag = #{allCommFlag},
+            </if>
+            <if test="teacherId!=null">
+                teacher_id = #{teacherId},
+            </if>
+            <if test="teacherName!=null">
+                teacher_name = #{teacherName},
+            </if>
+            <if test="creatorId!=null">
+                creator_id = #{creatorId},
+            </if>
+            <if test="lessPicUrl!=null">
+                less_pic_url = #{lessPicUrl},
+            </if>
+            <if test="lessCycPicUrl!=null">
+                less_cyc_pic_url = #{lessCycPicUrl},
+            </if>
+            <if test="commTempIds!=null">
+                comm_tempids = #{commTempIds},
+            </if>
+            <if test="updateTime != null">
+		        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+		      </if>
+        </set>
+        where less_id = #{lessonId}
+    </update>
+
+
+
+    <update id="deleteLesson" parameterType="com.web.data.pojo.LessonCommon">
+        update t_lesson
+        <set>
+            l_status = '-1'
+        </set>
+        where less_id = #{lessonId, jdbcType=VARCHAR}
+    </update>
+
+    <select id="getLessonListByUserId" resultMap="LessonResultMap">
+        select t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.teacher_id, t.less_pic_url,t.ALL_COMM_FLAG, t.comm_tempids
+        from (
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url, u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_users u
+        where  l.creator_id = u.user_id
+        and u.admin_flag = 20 and l_status != '-1' 
+        union all
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url, u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_users u
+        where  l.creator_id = u.user_id
+        and u.admin_flag = 30 and l_status != '-1'  ) t
+        where user_id = #{userId, jdbcType=VARCHAR}
+        order by sch_s_time desc, l_type desc
+        limit #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
+    </select>
+
+    <select id="getLessonByLessonId" resultMap="LessonResultMap">
+        select less_id, l_name, l_type, l_status, place, l_intro, teacher_id, less_pic_url,
+                all_comm_flag, comm_tempids
+        from t_lesson where less_id = #{lessonId, jdbcType=VARCHAR}
+
+    </select>
+
+    <sql id="Base_Column_List">
+        LESS_ID, SCH_ID, SCH_NAME, SCH_PLACE,SCH_INTRO,DATE_FORMAT(SCH_S_TIME,'%Y-%m-%d %H:%i') SCH_S_TIME,
+        SCH_LAST_M_NUM,SIGN_FLAG,
+        DATE_FORMAT(SIGN_S_TIME,'%Y-%m-%d %H:%i') SIGN_S_TIME,DATE_FORMAT(SIGN_E_TIME,'%Y-%m-%d %H:%i')  SIGN_E_TIME,
+        ALL_COMM_FLAG ,COMMENT_FLAG,COMM_TEMPIDS,TUTOR_ID
+    </sql>
+
+    <select id="getStudentListByLessonId" resultMap="UserResultMap" parameterType="java.lang.String" >
+        select t.* from t_users t, t_less_student s where s.s_user_id = t.user_id and s.less_id = #{lessonId, jdbcType=VARCHAR}
+    </select>
+    <select id="getAdminListByLessonId" resultMap="UserResultMap" parameterType="java.lang.String" >
+        select t.* from t_users t, t_less_admin s where s.user_id = t.user_id and s.less_id = #{lessonId, jdbcType=VARCHAR}
+    </select>
+    <select id="getScheduleByScheduleId" resultMap="com.web.data.mapper.ScheduleMapper.BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_schedule where sch_id = #{scheduleId, jdbcType=VARCHAR}
+    </select>
+    <select id="getScheduleByLessonId" resultMap="com.web.data.mapper.ScheduleMapper.BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_schedule where less_id = #{lessonId, jdbcType=VARCHAR} order by sch_s_time asc
+    </select>
+    <select id="getStartDateByLessonId" resultType="java.sql.Timestamp">
+        select min(s.sch_s_time) from t_schedule s where s.less_id = #{lessonId}
+    </select>
+    <!--  -->
+    <select id="getLessonsCount" resultType="java.lang.Integer">
+        select count(distinct t.less_Id)
+        from (
+        select l.less_id, u.user_id from t_lesson l, t_users u where
+        l.creator_id = u.user_id
+        and u.admin_flag = 20 and l_status != '-1' 
+        union all
+        select l.less_id, u.user_id from t_lesson l, t_users u where
+        l.creator_id = u.user_id and l_status != '-1' 
+        and u.admin_flag = 30) t
+        where user_id = #{userId, jdbcType=VARCHAR}
+
+
+    </select>
+    <select id="getEndDatetimeByLessonId" resultType="java.sql.Timestamp">
+        select max(date_add(sch_s_time, interval sch_last_m_num minute)) from t_schedule where less_Id = #{lessonId}
+    </select>
+    <select id="getTeacherByLessonId" resultMap="UserResultMap">
+        select u.* from t_users u, t_lesson l where u.user_id = l.teacher_id
+        and l.less_id = #{lessonId, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="searchByRoleListPage" resultMap="LessonResultMap">
+        select less_id, l_name, l_type, l_status, place, l_intro, teacher_id, less_pic_url
+        from  t_lesson
+        where l_status != '-1' 
+        <if test="userId != null and userId.length()>0">
+         and user_id = #{userId, jdbcType=VARCHAR}
+        </if>
+        <if test="searchKey != null and searchKey.length()>0">
+         and l_name like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        </if>
+        order by l_name
+    </select>
+    <select id="getLessonsStartTomorrow" resultMap="LessonResultMap">
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url
+        from  t_lesson l,
+        (select n.less_id, min(s.sch_s_time) as m
+        from t_lesson n, t_schedule s where n.less_id = s.less_id
+        and n.l_status = 1
+        group by n.less_id) c
+        where l.less_id = c.less_id
+        and date_add(date_format(now(),'%Y-%m-%d'), interval 1 day) = date_format(c.m ,'%Y-%m-%d')
+    </select>
+    <select id="getLessonsStart2Hours" resultMap="LessonResultMap">
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url
+        from  t_lesson l,
+        (select n.less_id, min(s.sch_s_time) as m
+        from t_lesson n, t_schedule s where n.less_id = s.less_id
+        and n.l_status = 1
+        group by n.less_id) c
+        where l.less_id = c.less_id
+        and TIMESTAMPDIFF(hour, now(), c.m) &lt;= 2
+        and TIMESTAMPDIFF(hour, now(), c.m) &gt;= 0
+        and not exists (select 1 from t_user_notification f where f.less_id = l.less_id
+        and f.notify_type = 'sms.message.2hours'
+        and TIMESTAMPDIFF(hour, f.notify_dttm, now()) &lt;= 2)
+    </select>
+    <select id="getLessonStatus" resultType="java.lang.Integer">
+        select l_status from t_lesson where less_id = #{less_id}
+    </select>
+    <select id="getFilesByLessonId" parameterType="java.util.HashMap"
+            resultMap="com.web.data.mapper.FileContentMapper.FileContentResultMap">
+        select * from (select f.* from t_filecontent f where exists
+        (select 1 from t_schedule s, t_sch_file l
+        where s.less_id = #{lessonId, jdbcType=VARCHAR} and s.sch_id = l.sch_id
+        and l.fileid = f.fileid)
+        <if test="scheduleId == null">
+
+        </if>
+        union
+        select f.* from t_filecontent f where exists
+        (select 1 from t_schedule s, t_sch_file l
+        where s.less_id = #{lessonId, jdbcType=VARCHAR} and s.sch_id = l.sch_id
+        and l.fileid = f.fileid
+        <if test="scheduleId != null">
+             and s.sch_id = #{scheduleId, jdbcType=VARCHAR}
+        </if>
+        )) e order by e.filename
+        limit #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
+    </select>
+    <select id="getFilesCountByLessonId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from (select f.* from t_filecontent f where exists
+        (select 1 from t_schedule s, t_sch_file l
+        where s.less_id = #{lessonId, jdbcType=VARCHAR} and s.sch_id = l.sch_id
+        and l.fileid = f.fileid)
+        <if test="scheduleId == null">
+
+        </if>
+        union
+        select f.* from t_filecontent f where exists
+        (select 1 from t_schedule s, t_sch_file l
+        where s.less_id = #{lessonId, jdbcType=VARCHAR} and s.sch_id = l.sch_id
+        and l.fileid = f.fileid
+        <if test="scheduleId != null">
+            and s.sch_id = #{scheduleId, jdbcType=VARCHAR}
+        </if>
+        )) e
+    </select>
+</mapper>

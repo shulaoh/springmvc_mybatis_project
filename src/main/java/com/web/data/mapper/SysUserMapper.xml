@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.web.data.pojo.SysUser">
+        <result column="USER_ID" jdbcType="VARCHAR" property="userId"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="U_STATUS" jdbcType="VARCHAR" property="ustatus"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="PHONE" jdbcType="VARCHAR" property="phone"/>
+        <result column="SIGN" jdbcType="VARCHAR" property="sign"/>
+        <result column="ADMIN_FLAG" jdbcType="VARCHAR" property="adminFlag"/>
+        <result column="DEPT" jdbcType="VARCHAR" property="dept"/>
+        <result column="TIME_STAMP" jdbcType="VARCHAR" property="timeStamp"/>
+        <result column="WECHATID" jdbcType="VARCHAR" property="wechatId"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <resultMap id="SysConfigMap" type="com.web.data.pojo.SysConfig">
+        <result column="KEY" jdbcType="VARCHAR" property="key"/>
+        <result column="PARAM_VALUE" jdbcType="VARCHAR" property="paramValue"/>
+    </resultMap>
+
+    <sql id="SysConfig_Column_List">
+        KEY, PARAM_VALUE
+    </sql>
+    <select id="getSysConfig" parameterType="java.lang.String" resultMap="SysConfigMap">
+        select
+        <include refid="SysConfig_Column_List"/>
+        from t_sysconfig
+    </select>
+
+    <sql id="Base_Column_List">
+        USER_ID, USER_NAME, U_STATUS, EMAIL, PHONE,SIGN,ADMIN_FLAG,DEPT,WECHATID,PASSWORD
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_users
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="userCheckIn" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,PASSWORD
+        from t_users
+        where PHONE = #{loginId,jdbcType=VARCHAR} or EMAIL=#{loginId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="userCheckInByWeixinID" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,PASSWORD
+        from t_users
+        where WECHATID = #{wechatId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from t_users
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.web.data.pojo.SysUser">
+        insert into t_users (USER_ID, USER_NAME, PASSWORD,U_STATUS, EMAIL, PHONE,SIGN,ADMIN_FLAG,DEPT,WECHATID,REMARK
+        )
+        values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{ustatus,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        #{sign,jdbcType=VARCHAR}, #{adminFlag,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}
+        ,#{wechatId,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertBatch">
+        insert into t_users (USER_ID, USER_NAME, PASSWORD,U_STATUS, EMAIL, PHONE,SIGN,ADMIN_FLAG,DEPT,WECHATID)
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.userId,jdbcType=VARCHAR}, #{item.userName,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR},
+            #{item.ustatus,jdbcType=VARCHAR}, #{item.email,jdbcType=VARCHAR}, #{item.phone,jdbcType=VARCHAR},
+            #{item.sign,jdbcType=VARCHAR}, #{item.adminFlag,jdbcType=VARCHAR}, #{item.dept,jdbcType=VARCHAR},
+            #{item.wechatId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.SysUser">
+        update t_users
+        <set>
+            <if test="userName != null and userName.length()>0">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <!--  if test="password != null and password.length()>0">
+              PASSWORD = #{password,jdbcType=VARCHAR},
+            </if-->
+            <if test="ustatus != null and ustatus.length()>0">
+                U_STATUS = #{ustatus,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null and email.length()>0">
+                EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone.length()>0">
+                PHONE = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="sign != null and sign.length()>0">
+                SIGN = #{sign,jdbcType=VARCHAR},
+            </if>
+            <if test="adminFlag != null and adminFlag.length()>0">
+                ADMIN_FLAG = #{adminFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="dept != null and dept.length()>0">
+                DEPT = #{dept,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatId != null and wechatId.length()>0">
+                WECHATID = #{wechatId,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null and companyId.equals('000') == true">
+                REMARK = #{companyName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updatePassword">
+        update t_users
+        <set>
+            PASSWORD = #{password,jdbcType=VARCHAR}
+        </set>
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateUserStatus">
+        update t_users
+        <set>
+            U_STATUS = #{ustatus,jdbcType=VARCHAR},
+        </set>
+        where USER_ID = #{userId,jdbcType=VARCHAR}
+    </update>
+
+
+    <!-- 依据关键字获取用户列表 -->
+    <select id="selectUserListPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_users
+        where
+        USER_NAME like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        or
+        EMAIL = #{searchKey,jdbcType=VARCHAR}
+        or
+        PHONE = #{searchKey,jdbcType=VARCHAR}
+        or
+        DEPT like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+        order by U_STATUS DESC
+    </select>
+
+    <select id="getWechatIdFlag" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from t_users
+        where WECHATID=#{wechatId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="checkPhone" resultType="java.lang.Integer">
+        select count(*)
+        from t_users
+        where PHONE in
+        <foreach item="item" collection="list" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="checkEmail" resultType="java.lang.Integer">
+        select count(*)
+        from t_users
+        where EMAIL in
+        <foreach item="item" collection="list" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="checkPhoneAndEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_users
+        where PHONE = #{phone,jdbcType=VARCHAR} or EMAIL=#{email,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectBySchId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        b.USER_ID, b.USER_NAME, b.REMARK, b.EMAIL, b.PHONE,b.DEPT
+        from t_sch_tea a left join t_users b on a.USER_ID = b.USER_ID
+        where a.SCH_ID = #{schId}
+    </select>
+
+    <!-- 分页列子 -->
+    <!--select id="selectUserListPage" resultType="com.web.data.pojo.SysUser">
+        select
+      <include refid="Base_Column_List" />
+      from sys_user
+      <where USER_ID != #{sysUser.userId,jdbcType=VARCHAR}>
+    </select-->
+</mapper>

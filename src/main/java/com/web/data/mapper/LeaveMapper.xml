@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.LeaveMapper">
+
+	<resultMap id="leaveListResultMap" type="com.web.data.pojo.Leave">
+	    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+	    <result column="TIME" jdbcType="VARCHAR" property="time" />
+	    <result column="SCH_ID" jdbcType="VARCHAR" property="schId" />
+	    <result column="CANCEL_FLAG" jdbcType="VARCHAR" property="cancelFlag" />
+	    <result column="REASON" jdbcType="VARCHAR" property="reason" />    
+	    <association column="USER_ID" property="user" javaType="com.web.data.pojo.Teacher" select="getLeaveTeacher" />
+	</resultMap>
+	
+	<insert id="addLeave" parameterType="java.util.HashMap">
+	    insert into t_leave(USER_ID, TIME,SCH_ID,CANCEL_FLAG,REASON)
+	    values (#{userId,jdbcType=VARCHAR}, 
+	    		now(),
+	    		#{schId,jdbcType=VARCHAR},
+	    		'N',
+	    		#{reason,jdbcType=VARCHAR}
+	    		)
+  	</insert>
+  	
+  	<update id="updateLeave" parameterType="com.web.data.pojo.Leave">
+	    update t_leave
+	    <set>
+	      <if test="time != null and time.length()>0">
+	        TIME = str_to_date(#{time,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+	      </if>
+	      <if test="cancelFlag != null and cancelFlag.length()>0">
+	        CANCEL_FLAG = #{cancelFlag,jdbcType=VARCHAR},
+	      </if>
+	       <if test="reason != null and reason.length()>0">
+	        REASON = #{reason,jdbcType=VARCHAR},
+	      </if>
+	    </set>
+	    where USER_ID=#{userId,jdbcType=VARCHAR}
+	          and SCH_ID=#{schId,jdbcType=VARCHAR}
+   </update>
+   
+   <select id="getLeaveTeacher" resultType="com.web.data.pojo.Teacher">
+	  	select USER_NAME name,PHONE phone,EMAIL email,DEPT dept
+		from t_users
+		where USER_ID=#{USER_ID,jdbcType=VARCHAR}
+   </select>
+   
+   <select id="selectLeaveList" resultMap="leaveListResultMap">
+	  	SELECT USER_ID,DATE_FORMAT(TIME,'%Y-%m-%d %H:%i') TIME,SCH_ID,CANCEL_FLAG,REASON 
+	  	FROM t_leave
+	    where SCH_ID=#{schId,jdbcType=VARCHAR}
+   </select> 
+   
+	
+</mapper>

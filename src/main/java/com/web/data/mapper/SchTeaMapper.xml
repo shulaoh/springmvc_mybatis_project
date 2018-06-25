@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.SchTeaMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.SchTeaLink">
+    <id column="SCH_ID" jdbcType="CHAR" property="schId" />
+    <id column="USER_ID" jdbcType="CHAR" property="userId" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SCH_ID, USER_ID, STATUS, REMARK
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.web.data.pojo.SchTeaLinkKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sch_tea
+    where SCH_ID = #{schId,jdbcType=CHAR}
+      and USER_ID = #{userId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.web.data.pojo.SchTeaLinkKey">
+    delete from t_sch_tea
+    where SCH_ID = #{schId,jdbcType=CHAR}
+      and USER_ID = #{userId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.SchTeaLink">
+    insert into t_sch_tea (SCH_ID, USER_ID, STATUS, 
+      REMARK)
+    values (#{schId,jdbcType=CHAR}, #{userId,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.SchTeaLink">
+    insert into t_sch_tea
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="schId != null">
+        SCH_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="schId != null">
+        #{schId,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.SchTeaLink">
+    update t_sch_tea
+    <set>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SCH_ID = #{schId,jdbcType=CHAR}
+      and USER_ID = #{userId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.SchTeaLink">
+    update t_sch_tea
+    set STATUS = #{status,jdbcType=CHAR},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where SCH_ID = #{schId,jdbcType=CHAR}
+      and USER_ID = #{userId,jdbcType=CHAR}
+  </update>
+  <delete id="deleteBySchId">
+    delete from t_sch_tea
+    where SCH_ID = #{schId,jdbcType=CHAR}
+  </delete>
+  <insert id="insertBatch">
+    insert into t_sch_tea (SCH_ID, USER_ID)
+     values 
+    <foreach collection ="list" item="item" separator =",">
+    ( #{item.schId,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR})
+    </foreach>
+  </insert> 
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.UserViewMapper">
+	<resultMap id="BaseResultMap" type="com.web.data.pojo.UserView">
+		<result column="USER_ID" jdbcType="CHAR" property="userId" />
+		<result column="WECHATID" jdbcType="CHAR" property="wechatId" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+		<result column="DEPT" jdbcType="VARCHAR" property="dept" />
+		<result column="TIME_STAMP" jdbcType="VARCHAR" property="timeStamp" />
+		<result column="ADMIN_FLAG" jdbcType="VARCHAR" property="adminFlag" />
+		<result column="SIGN" jdbcType="VARCHAR" property="sign" />
+		<result column="U_STATUS" jdbcType="VARCHAR" property="uStatus" />
+		<result column="USER_PIC_URL" jdbcType="VARCHAR" property="userPicUrl" />
+		<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+		<result column="REMARK1" jdbcType="VARCHAR" property="remark1" />
+		<result column="person_id" jdbcType="CHAR" property="personId" />
+		<result column="company_id" jdbcType="CHAR" property="companyId" />
+		<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		USER_ID, USER_NAME, U_STATUS, EMAIL,
+		PHONE,SIGN,ADMIN_FLAG,DEPT,WECHATID,PASSWORD,TIME_STAMP,
+		USER_PIC_URL,person_id,REMARK,REMARK1,company_id,company_name
+	</sql>
+	<!-- check是否受邀用户 -->
+	<select id="getInvitedUser" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where
+		USER_NAME = #{userName,jdbcType=VARCHAR}
+		<if test="email != null and email.length()>0">
+			and EMAIL = #{email,jdbcType=VARCHAR}
+		</if>
+		<if test="phone != null and phone.length()>0">
+			and PHONE = #{phone,jdbcType=VARCHAR}
+		</if>
+		and U_STATUS != 'DEL'
+	</select>
+	<!-- 依据关键字获取用户列表 -->
+	<select id="selectUserListPage" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where
+		(USER_NAME like concat('%',
+		#{searchKey,jdbcType=VARCHAR}, '%')
+		or
+		EMAIL =
+		#{searchKey,jdbcType=VARCHAR}
+		or
+		PHONE = #{searchKey,jdbcType=VARCHAR}
+		or
+		DEPT like concat('%', #{searchKey,jdbcType=VARCHAR}, '%'))
+		and
+		U_STATUS != 'DEL'
+		and ADMIN_FLAG != '100'
+		and ADMIN_FLAG != '30'
+		order by
+		U_STATUS DESC
+	</select>
+	<select id="getUserByRoleListPage" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where
+		U_STATUS != 'DEL'
+		<if test="adminFlag != null and adminFlag.length()>0 and (adminFlag2 != null and adminFlag2.length()>0)">
+			and (ADMIN_FLAG = #{adminFlag,jdbcType=VARCHAR}
+			or
+			ADMIN_FLAG = #{adminFlag2,jdbcType=VARCHAR})
+		</if>
+		<if test="adminFlag != null and adminFlag.length()>0 and (adminFlag2 == null or adminFlag2.length()==0)">
+			and ADMIN_FLAG = #{adminFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="searchKey != null and searchKey.length()>0">
+			and USER_NAME like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+		</if>
+		order by USER_NAME
+	</select>
+	<select id="getUserByUserId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where
+		USER_ID = #{userId,jdbcType=VARCHAR}
+		and
+		U_STATUS != 'DEL'
+	</select>
+	<select id="userCheckIn" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where (PHONE = #{loginId,jdbcType=VARCHAR} or
+		EMAIL=#{loginId,jdbcType=VARCHAR})
+		and U_STATUS != 'DEL'
+	</select>
+
+	<select id="userCheckInByWeixinID" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where WECHATID = #{wechatId,jdbcType=VARCHAR}
+		and U_STATUS != 'DEL'
+	</select>
+
+	<select id="userCheck" resultType="java.lang.Integer">
+		select count(*)
+		from v_user_personal
+		where U_STATUS != 'DEL'
+		<if test="email != null and email.length()>0">
+			and EMAIL = #{email,jdbcType=VARCHAR}
+		</if>
+		<if test="phone != null and phone.length()>0">
+			and PHONE = #{phone,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<select id="getUsersByPhone" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where PHONE in
+		<foreach item="item" collection="list" index="index" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<select id="getUsersByEmail" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where EMAIL in
+		<foreach item="item" collection="list" index="index" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+</mapper>

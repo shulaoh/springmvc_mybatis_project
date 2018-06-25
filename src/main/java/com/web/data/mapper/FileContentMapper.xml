@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.data.mapper.FileContentMapper">
+    <resultMap id="FileContentResultMap" type="com.web.data.pojo.FileContent">
+        <id column="fileid" property="fileId" jdbcType="VARCHAR"/>
+        <result column="sch_id" property="schId" jdbcType="VARCHAR"/>
+        <result column="filename" property="fileName" jdbcType="VARCHAR"/>
+        <result column="fileurl" property="fileURL" jdbcType="VARCHAR"/>
+        <result column="filetype" property="fileType" jdbcType="VARCHAR"/>
+        <result column="filecategory" property="fileCategory" jdbcType="VARCHAR"/>
+        <result column="fileenable" property="fileEnable" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.web.data.pojo.FileContent">
+
+        insert into t_filecontent (fileid, filename, filetype, fileurl, filecategory, fileenable)
+        values (
+        #{fileId, jdbcType=VARCHAR},
+        #{fileName, jdbcType=VARCHAR}, #{fileType, jdbcType=VARCHAR},
+        #{fileURL, jdbcType=VARCHAR}, #{fileCategory, jdbcType=VARCHAR},
+        #{fileEnable, jdbcType=VARCHAR})
+    </insert>
+    <delete id="deleteByFileId" parameterType="String">
+        delete from t_filecontent where fileid = #{fileId, jdbcType=VARCHAR}
+    </delete>
+    <update id="updateByFileId" parameterType="String">
+        update t_filecontent
+    <set>
+      <if test="fileName != null and fileName.length()>0">
+        filename = #{fileName,jdbcType=VARCHAR},
+      </if>
+     
+      <if test="fielType != null and fielType.length()>0">
+        filetype = #{fielType,jdbcType=VARCHAR},
+      </if>
+      <if test="fileURL != null and fileURL.length()>0">
+        fileurl = #{fileURL,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCategory != null and fileCategory.length()>0">
+        filecategory = #{fileCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="fileEnable != null and fileEnable.length()>0">
+        fileenable = #{fileEnable,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fileid = #{fileId,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByFileId" resultMap="FileContentResultMap">
+        select * from t_filecontent where fileid = #{fileId, jdbcType=VARCHAR}
+    </select>
+</mapper>

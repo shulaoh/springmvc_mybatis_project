@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.ScheduleMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.Schedule">
+    <result column="LESS_ID" jdbcType="CHAR" property="lessonId" />
+    <result column="SCH_ID" jdbcType="CHAR" property="schId" />
+    <result column="SCH_NAME" jdbcType="VARCHAR" property="schName" />
+     <result column="SCH_PLACE" jdbcType="VARCHAR" property="schPlace" /> 
+    <result column="SCH_INTRO" jdbcType="VARCHAR" property="schIntro" />    
+    <result column="SCH_S_TIME" jdbcType="TIMESTAMP" property="ssTime" />   
+    <result column="SCH_LAST_M_NUM" jdbcType="INTEGER" property="schLastMNum" />
+    <result column="SIGN_FLAG" jdbcType="VARCHAR" property="signFlag" />
+    <result column="SIGN_S_TIME" jdbcType="TIMESTAMP" property="signSTime" />
+    <result column="SIGN_E_TIME" jdbcType="TIMESTAMP" property="signETime" />
+    <result column="ALL_COMM_FLAG" jdbcType="VARCHAR" property="allCommFlag" />
+    <result column="COMMENT_FLAG" jdbcType="VARCHAR" property="commentFlag"  />
+    <result column="COMM_TEMPIDS" jdbcType="VARCHAR" property="commTempIds"  />  
+    <result column="TUTOR_ID" jdbcType="VARCHAR" property="tutorId"  />
+
+	<result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	<result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    
+    
+    <association column="TUTOR_ID" property="tutor" javaType="com.web.data.pojo.Teacher" select="getSchTeacher" />
+      <collection property="fileContentList" column="sch_id" javaType="ArrayList"
+                  ofType="com.web.data.pojo.FileContent" select="getFileContentListByScheduleId"/>
+  </resultMap>
+
+  <select id="getSchTeacher" resultType="com.web.data.pojo.Teacher">
+	  	select USER_NAME name,PHONE phone,EMAIL email,DEPT dept
+		from t_users
+		where USER_ID=#{TUTOR_ID,jdbcType=VARCHAR}
+   </select>
+  
+  <sql id="Base_Column_List">
+   LESS_ID, SCH_ID, SCH_NAME, SCH_PLACE,SCH_INTRO,DATE_FORMAT(SCH_S_TIME,'%Y-%m-%d %H:%i') SCH_S_TIME,
+   SCH_LAST_M_NUM,SIGN_FLAG,
+    DATE_FORMAT(SIGN_S_TIME,'%Y-%m-%d %H:%i') SIGN_S_TIME,DATE_FORMAT(SIGN_E_TIME,'%Y-%m-%d %H:%i')  SIGN_E_TIME,
+    ALL_COMM_FLAG ,COMMENT_FLAG,COMM_TEMPIDS,TUTOR_ID
+  </sql>
+  
+   <insert id="insert" parameterType="com.web.data.pojo.Schedule">
+    insert into t_schedule (LESS_ID, SCH_ID, SCH_NAME,SCH_PLACE,SCH_INTRO,SCH_S_TIME,SCH_LAST_M_NUM, 
+    SIGN_FLAG,SIGN_S_TIME,SIGN_E_TIME,COMMENT_FLAG,TUTOR_ID,COMM_TEMPIDS,ALL_COMM_FLAG,CREATE_TIME,UPDATE_TIME)
+    values (
+    #{lessonId,jdbcType=VARCHAR},
+    #{schId,jdbcType=VARCHAR},
+    #{schName,jdbcType=VARCHAR},
+    #{schPlace,jdbcType=VARCHAR},
+    #{schIntro,jdbcType=VARCHAR},
+    STR_TO_DATE(#{ssTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+    #{schLastMNum,jdbcType=INTEGER},
+    #{signFlag,jdbcType=VARCHAR},
+    STR_TO_DATE(#{signSTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+    STR_TO_DATE(#{signETime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+    #{commentFlag,jdbcType=VARCHAR},
+    #{tutorId,jdbcType=VARCHAR},
+    #{commTempIds,jdbcType=VARCHAR},
+    #{allCommFlag,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP})
+  </insert> 
+
+  <select id="selectSchedulesListPage" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_schedule
+    WHERE LESS_ID=#{lessonId,jdbcType=VARCHAR} 
+    order by SCH_S_TIME asc
+  </select>
+  
+  <select id="getSchedulesListByLessonId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_schedule
+    WHERE LESS_ID=#{lessonId,jdbcType=VARCHAR} 
+    order by SCH_S_TIME asc
+  </select>
+  
+  <select id="getSingleScheduleByScheduleId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_schedule
+    WHERE SCH_ID=#{scheduleId,jdbcType=VARCHAR} 
+  </select>
+
+    <select id="getFileContentListByScheduleId" resultMap="com.web.data.mapper.FileContentMapper.FileContentResultMap"
+            parameterType="java.lang.String" >
+        select t.*,s.sch_id from t_filecontent t, t_sch_file s where s.fileid = t.fileid and s.sch_id = #{scheduleId, jdbcType=VARCHAR}
+    </select>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.Schedule">
+    update t_schedule
+    <set>
+      <if test="schName != null and schName.length()>0">
+        SCH_NAME = #{schName,jdbcType=VARCHAR},
+      </if>
+      <if test="schPlace != null and schPlace.length()>0">
+        SCH_PLACE = #{schPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="schIntro != null and schIntro.length()>0">
+        SCH_INTRO = #{schIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="ssTime != null and ssTime.length()>0">
+        SCH_S_TIME = str_to_date(#{ssTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+      </if>
+      <if test="schLastMNum != null and schLastMNum.length()>0">
+        SCH_LAST_M_NUM = #{schLastMNum,jdbcType=VARCHAR},
+      </if>
+      <if test="signFlag != null and signFlag.length()>0">
+        SIGN_FLAG = #{signFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="signSTime != null and signSTime.length()>0">
+        SIGN_S_TIME = str_to_date(#{signSTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+      </if>  
+       <if test="signETime != null and signETime.length()>0">
+        SIGN_E_TIME = str_to_date(#{signETime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i'),
+      </if> 
+       <if test="allCommFlag != null and allCommFlag.length()>0">
+        ALL_COMM_FLAG = #{allCommFlag,jdbcType=VARCHAR},
+      </if> 
+       <if test="commentFlag != null and commentFlag.length()>0">
+        COMMENT_FLAG = #{commentFlag,jdbcType=VARCHAR},
+      </if> 
+      <if test="tutorId != null and tutorId.length()>0">
+        TUTOR_ID = #{tutorId,jdbcType=VARCHAR},
+      </if> 
+      <if test="commTempIds != null and commTempIds.length()>0">
+        COMM_TEMPIDS = #{commTempIds,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>     
+    </set>
+    where LESS_ID=#{lessonId,jdbcType=VARCHAR} and SCH_ID=#{schId,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteScheduleById">
+    delete from t_schedule where sch_id = #{scheduleId}
+  </delete>
+
+<resultMap id="ScheduleInfoMap" type="com.web.data.bean.ScheduleInfo">
+    <result column="USER_ID" jdbcType="CHAR" property="userId" />
+    <result column="SCH_ID" jdbcType="CHAR" property="schId" />
+    <result column="SCH_NAME" jdbcType="VARCHAR" property="schName" /> 
+    <result column="SCH_PLACE" jdbcType="VARCHAR" property="schPlace" /> 
+    <result column="SCH_S_TIME" jdbcType="VARCHAR" property="ssTime" />   
+    <result column="SCH_LAST_M_NUM" jdbcType="VARCHAR" property="schLastMNum" />
+  </resultMap>
+    <select id="getScheduleByTeaIds" resultMap="ScheduleInfoMap">
+  	select b.SCH_ID, b.SCH_NAME,DATE_FORMAT(b.SCH_S_TIME,'%Y-%m-%d %H:%i') SCH_S_TIME, b.SCH_LAST_M_NUM,b.SCH_PLACE ,c.USER_ID
+    from t_lesson a left join t_schedule b on a.less_id = b.less_id left join t_sch_tea c on b.sch_id = c.sch_id
+    WHERE a.l_status != '-1'
+    and c.USER_ID in
+    <foreach  item="item" collection="list" index="index"  open="(" separator="," close=")">
+		#{item}
+	</foreach>
+  </select>
+	<resultMap id="RemainInfo" type="com.web.data.bean.SchRemainInfo">
+		<result column="SCH_NAME" jdbcType="VARCHAR" property="schName" />
+		<result column="SCH_S_TIME" jdbcType="TIMESTAMP" property="schStime" />
+		<result column="SCH_PLACE" jdbcType="VARCHAR" property="schPlace" />
+		<result column="type" jdbcType="VARCHAR" property="userType" />
+		<result column="PHONE" jdbcType="VARCHAR" property="phone" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+	</resultMap>
+	<!-- teachers , students and admins -->
+	<select id="getRemainInfo" resultMap="RemainInfo">
+		(select
+		a.sch_name, a.sch_s_time,a.sch_place,c.user_name,c.phone,c.email,'t' as type
+		from t_schedule a left join t_sch_tea b on a.sch_id = b.sch_id
+		left join t_personal_info c on b.user_id = c.user_id
+		where
+		sch_s_time between #{startTime} and #{endTime})
+
+		UNION all
+
+		(select
+		a.sch_name, a.sch_s_time,a.sch_place,d.user_name,d.phone,d.email,'a' as type
+		from t_schedule a left join t_lesson b on a.less_id = b.less_id
+		left join t_less_admin c on a.less_id = c.less_id
+		left join t_personal_info d on c.user_id = d.user_id
+		where
+		sch_s_time between #{startTime} and #{endTime})
+
+		UNION all
+
+		(select
+		a.sch_name, a.sch_s_time,a.sch_place,d.user_name,d.phone,d.email,'s' as type
+		from t_schedule a left join t_lesson b on a.less_id = b.less_id
+		left join t_less_student c on a.less_id = c.less_id
+		left join t_personal_info d on c.s_user_id = d.user_id
+		where
+		sch_s_time between #{startTime} and #{endTime}
+		and c.s_status = 'CONF')
+	</select>
+	<select id="hasSchModRole" resultType="java.lang.Integer">
+        select count(*)
+        from t_lesson a left join t_less_admin b on a.less_id = b.less_id
+		where b.user_id = #{userId, jdbcType=VARCHAR} or a.creator_id = #{userId, jdbcType=VARCHAR}
+		and a.less_id = #{lessonId, jdbcType=VARCHAR}
+    </select>
+    <select id="getLessonIdByScheduleId" resultType="java.lang.String">
+        select less_id from t_schedule where sch_id = #{scheduleId, jdbcType=VARCHAR}
+    </select>
+    <select id="getScheduleCountByLessonId" resultType="java.lang.Integer">
+        select count(sch_id) from t_schedule where less_id = #{less_id,  jdbcType=VARCHAR}
+    </select>
+</mapper>

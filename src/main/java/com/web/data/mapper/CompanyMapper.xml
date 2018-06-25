@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.CompanyMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.Company">
+    <id column="ID" jdbcType="CHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ABB_NAME" jdbcType="VARCHAR" property="abbName" />
+    <result column="LOCATION" jdbcType="VARCHAR" property="location" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="ENABLE" jdbcType="BIT" property="enable" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, ABB_NAME, LOCATION, ADDRESS, ENABLE, REMARK
+  </sql>
+  <sql id="Sample_Column_List">
+    ID, NAME, ABB_NAME
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Sample_Column_List" />
+    from t_company
+    where ENABLE = 1
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_company
+    where ID = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_company
+    where ID = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.Company">
+    insert into t_company (ID, NAME, ABB_NAME, 
+      LOCATION, ADDRESS, ENABLE, 
+      REMARK)
+    values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{abbName,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.Company">
+    insert into t_company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="abbName != null">
+        ABB_NAME,
+      </if>
+      <if test="location != null">
+        LOCATION,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="enable != null">
+        ENABLE,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="abbName != null">
+        #{abbName,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.Company">
+    update t_company
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="abbName != null">
+        ABB_NAME = #{abbName,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        LOCATION = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="enable != null">
+        ENABLE = #{enable,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.Company">
+    update t_company
+    set NAME = #{name,jdbcType=VARCHAR},
+      ABB_NAME = #{abbName,jdbcType=VARCHAR},
+      LOCATION = #{location,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      ENABLE = #{enable,jdbcType=BIT},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

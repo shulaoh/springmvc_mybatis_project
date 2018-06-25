@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.web.data.mapper.LessonAdminMapper">
+    <resultMap id="LessonAdminResultMap" type="com.web.data.pojo.LessonAdmin">
+        <id column="less_id" property="lessonId" jdbcType="VARCHAR"/>
+        <id column="uer_id" property="adminId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertLessonAdmin" parameterType="com.web.data.pojo.LessonAdmin">
+        insert into t_less_admin (less_Id, user_id)
+        values (
+        #{lessonId}, #{adminId}
+        ) on duplicate key update less_id = #{lessonId}, user_id = #{adminId}
+
+    </insert>
+    <delete id ="deleteLessonAdmin">
+        delete from t_less_admin where less_id = #{lessonId} and user_id = #{userId}
+    </delete>
+    <delete id="deleteLessonAdminNotInList" parameterType="String">
+        delete from t_less_admin where less_id = #{lessonId} and user_id not in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

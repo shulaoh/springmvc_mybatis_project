@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.LessonFileMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.LessionFile">
+    <result column="TEMP_LESS_ID" jdbcType="CHAR" property="lessonId" />
+    <result column="TEMP_SCH_ID" jdbcType="CHAR" property="schId" />
+    <result column="F_NAME" jdbcType="VARCHAR" property="name" />
+     <result column="F_INTRO" jdbcType="VARCHAR" property="intro" />    
+    <result column="F_URL" jdbcType="VARCHAR" property="url" />   
+    <result column="SCH_NAME" jdbcType="VARCHAR" property="schName" />   
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+   t_less_file.LESS_ID TEMP_LESS_ID, t_less_file.SCH_ID TEMP_SCH_ID, F_NAME, F_INTRO,F_URL,SCH_NAME   
+  </sql>
+  
+   <select id="selectLessonFileListPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from t_less_file left join t_schedule on t_less_file.SCH_ID=t_schedule.SCH_ID
+    WHERE  t_less_file.LESS_ID=#{lessonId,jdbcType=VARCHAR}
+    <if test="schid!=null">
+    and  t_less_file.SCH_ID=#{schid,jdbcType=VARCHAR}
+    </if>
+  </select>  
+
+  <insert id="insert" parameterType="com.web.data.pojo.LessionFile">
+    insert into t_less_file (LESS_ID,SCH_ID,F_URL,F_NAME,F_INTRO)
+    values (
+	    #{lessonId,jdbcType=VARCHAR},
+	    #{schId,jdbcType=VARCHAR},
+	    #{url,jdbcType=VARCHAR},
+	    #{name,jdbcType=VARCHAR},
+	    #{intro,jdbcType=VARCHAR})
+  	</insert> 
+  
+</mapper>

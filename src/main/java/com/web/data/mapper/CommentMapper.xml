@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.data.mapper.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.web.data.pojo.Comment">
+    <id column="COMMENT_ID" jdbcType="CHAR" property="commentId" />
+    <result column="USER_ID" jdbcType="CHAR" property="userId" />
+    <result column="TEMP_RELATE_ID" jdbcType="CHAR" property="tempRelateId" />
+    <result column="TEMP_ITEM_ID" jdbcType="CHAR" property="tempItemId" />
+    <result column="TARGET_TYPE" jdbcType="VARCHAR" property="targetType" />
+    <result column="LESS_ID" jdbcType="CHAR" property="lessId" />
+    <result column="SCH_ID" jdbcType="CHAR" property="schId" />
+    <result column="SCORE" jdbcType="VARCHAR" property="score" />
+    <result column="TARGET_ID" jdbcType="CHAR" property="targetId" />
+    <result column="TYPE_KEY" jdbcType="CHAR" property="typeKey" />
+    <result column="COMM_TIME" jdbcType="TIMESTAMP" property="commTime" />
+    <result column="TEMP_ID" jdbcType="CHAR" property="tempId" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="REMARK1" jdbcType="VARCHAR" property="remark1" />
+    <result column="REMARK2" jdbcType="VARCHAR" property="remark2" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.web.data.pojo.Comment">
+    <result column="COMMENT" jdbcType="LONGVARCHAR" property="comment" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    COMMENT_ID, USER_ID, TEMP_RELATE_ID, TEMP_ITEM_ID, TARGET_TYPE, LESS_ID, SCH_ID, 
+    SCORE, TARGET_ID, TYPE_KEY, COMM_TIME, TEMP_ID, REMARK, REMARK1, REMARK2
+  </sql>
+  <sql id="Blob_Column_List">
+    COMMENT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_comment
+    where COMMENT_ID = #{commentId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_comment
+    where COMMENT_ID = #{commentId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.web.data.pojo.Comment">
+    <selectKey keyProperty="commentId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_comment (USER_ID, TEMP_RELATE_ID, TEMP_ITEM_ID, 
+      TARGET_TYPE, LESS_ID, SCH_ID, 
+      SCORE, TARGET_ID, TYPE_KEY, 
+      COMM_TIME, TEMP_ID, REMARK, 
+      REMARK1, REMARK2, COMMENT
+      )
+    values (#{userId,jdbcType=CHAR}, #{tempRelateId,jdbcType=CHAR}, #{tempItemId,jdbcType=CHAR}, 
+      #{targetType,jdbcType=VARCHAR}, #{lessId,jdbcType=CHAR}, #{schId,jdbcType=CHAR}, 
+      #{score,jdbcType=VARCHAR}, #{targetId,jdbcType=CHAR}, #{typeKey,jdbcType=CHAR}, 
+      #{commTime,jdbcType=TIMESTAMP}, #{tempId,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{comment,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.web.data.pojo.Comment">
+    <selectKey keyProperty="commentId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="tempRelateId != null">
+        TEMP_RELATE_ID,
+      </if>
+      <if test="tempItemId != null">
+        TEMP_ITEM_ID,
+      </if>
+      <if test="targetType != null">
+        TARGET_TYPE,
+      </if>
+      <if test="lessId != null">
+        LESS_ID,
+      </if>
+      <if test="schId != null">
+        SCH_ID,
+      </if>
+      <if test="score != null">
+        SCORE,
+      </if>
+      <if test="targetId != null">
+        TARGET_ID,
+      </if>
+      <if test="typeKey != null">
+        TYPE_KEY,
+      </if>
+      <if test="commTime != null">
+        COMM_TIME,
+      </if>
+      <if test="tempId != null">
+        TEMP_ID,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="remark1 != null">
+        REMARK1,
+      </if>
+      <if test="remark2 != null">
+        REMARK2,
+      </if>
+      <if test="comment != null">
+        COMMENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=CHAR},
+      </if>
+      <if test="tempRelateId != null">
+        #{tempRelateId,jdbcType=CHAR},
+      </if>
+      <if test="tempItemId != null">
+        #{tempItemId,jdbcType=CHAR},
+      </if>
+      <if test="targetType != null">
+        #{targetType,jdbcType=VARCHAR},
+      </if>
+      <if test="lessId != null">
+        #{lessId,jdbcType=CHAR},
+      </if>
+      <if test="schId != null">
+        #{schId,jdbcType=CHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=CHAR},
+      </if>
+      <if test="typeKey != null">
+        #{typeKey,jdbcType=CHAR},
+      </if>
+      <if test="commTime != null">
+        #{commTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tempId != null">
+        #{tempId,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null">
+        #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.web.data.pojo.Comment">
+    update t_comment
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=CHAR},
+      </if>
+      <if test="tempRelateId != null">
+        TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR},
+      </if>
+      <if test="tempItemId != null">
+        TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR},
+      </if>
+      <if test="targetType != null">
+        TARGET_TYPE = #{targetType,jdbcType=VARCHAR},
+      </if>
+      <if test="lessId != null">
+        LESS_ID = #{lessId,jdbcType=CHAR},
+      </if>
+      <if test="schId != null">
+        SCH_ID = #{schId,jdbcType=CHAR},
+      </if>
+      <if test="score != null">
+        SCORE = #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="targetId != null">
+        TARGET_ID = #{targetId,jdbcType=CHAR},
+      </if>
+      <if test="typeKey != null">
+        TYPE_KEY = #{typeKey,jdbcType=CHAR},
+      </if>
+      <if test="commTime != null">
+        COMM_TIME = #{commTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tempId != null">
+        TEMP_ID = #{tempId,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null">
+        REMARK1 = #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        REMARK2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        COMMENT = #{comment,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where COMMENT_ID = #{commentId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.web.data.pojo.Comment">
+    update t_comment
+    set USER_ID = #{userId,jdbcType=CHAR},
+      TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR},
+      TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR},
+      TARGET_TYPE = #{targetType,jdbcType=VARCHAR},
+      LESS_ID = #{lessId,jdbcType=CHAR},
+      SCH_ID = #{schId,jdbcType=CHAR},
+      SCORE = #{score,jdbcType=VARCHAR},
+      TARGET_ID = #{targetId,jdbcType=CHAR},
+      TYPE_KEY = #{typeKey,jdbcType=CHAR},
+      COMM_TIME = #{commTime,jdbcType=TIMESTAMP},
+      TEMP_ID = #{tempId,jdbcType=CHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      REMARK1 = #{remark1,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR},
+      COMMENT = #{comment,jdbcType=LONGVARCHAR}
+    where COMMENT_ID = #{commentId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.web.data.pojo.Comment">
+    update t_comment
+    set USER_ID = #{userId,jdbcType=CHAR},
+      TEMP_RELATE_ID = #{tempRelateId,jdbcType=CHAR},
+      TEMP_ITEM_ID = #{tempItemId,jdbcType=CHAR},
+      TARGET_TYPE = #{targetType,jdbcType=VARCHAR},
+      LESS_ID = #{lessId,jdbcType=CHAR},
+      SCH_ID = #{schId,jdbcType=CHAR},
+      SCORE = #{score,jdbcType=VARCHAR},
+      TARGET_ID = #{targetId,jdbcType=CHAR},
+      TYPE_KEY = #{typeKey,jdbcType=CHAR},
+      COMM_TIME = #{commTime,jdbcType=TIMESTAMP},
+      TEMP_ID = #{tempId,jdbcType=CHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      REMARK1 = #{remark1,jdbcType=VARCHAR},
+      REMARK2 = #{remark2,jdbcType=VARCHAR}
+    where COMMENT_ID = #{commentId,jdbcType=CHAR}
+  </update>
+  <resultMap id="CommResultMap" type="com.web.data.bean.CommentList">
+    <id column="COMMENT_ID" jdbcType="CHAR" property="commentId" /> 
+    <result column="TEMP_ITEM_NAME" jdbcType="VARCHAR" property="tempItemName" />   
+    <result column="SCORE" jdbcType="VARCHAR" property="score" />
+    <result column="COMMENT" jdbcType="LONGVARCHAR" property="comment" />
+    <result column="COMM_TIME" jdbcType="TIMESTAMP" property="commTime" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />    
+    <result column="SIGN" jdbcType="VARCHAR" property="sign" /> 
+    <result column="TARGET_TYPE" jdbcType="VARCHAR" property="targetType" />
+  </resultMap>
+
+  <select id="selectCommentsListPage" parameterType="java.util.HashMap" resultMap="CommResultMap">
+  	select a.comment_id, c.temp_item_name, a.score, a.comment,a.comm_time, b.USER_NAME, b.SIGN,a.TARGET_TYPE
+	from t_comment a left join t_users b on a.USER_ID = b.USER_ID 
+	left join t_comm_template_item c on a.temp_item_id = c.temp_item_id 
+    WHERE 
+   	a.LESS_ID = #{lessonId,jdbcType=VARCHAR} 
+   	<if test="TARGET_TYPE != null and TARGET_TYPE.length()>0">
+    and a.TARGET_TYPE = #{targetType,jdbcType=VARCHAR}
+    </if>
+    <if test="TARGET_ID != null and TARGET_ID.length()>0">
+    and a.TARGET_ID = #{targetId,jdbcType=VARCHAR}
+    </if>
+    <if test="schId != null and schId.length()>0">
+   	and a.SCH_ID = #{schId,jdbcType=VARCHAR} 
+   	</if>
+  </select>  
+  <insert id="insertBatch">
+  <!--   <selectKey keyProperty="commentId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey> -->
+    insert into t_comment (COMMENT_ID,USER_ID, TEMP_RELATE_ID, TEMP_ITEM_ID, 
+      TARGET_TYPE, LESS_ID, SCH_ID, 
+      SCORE, TARGET_ID, TYPE_KEY, 
+      COMM_TIME, TEMP_ID, REMARK, 
+      REMARK1, REMARK2, COMMENT
+      )
+    values 
+    <foreach collection ="list" item="comm" separator =",">
+    (#{comm.commentId,jdbcType=CHAR},
+    #{comm.userId,jdbcType=CHAR}, #{comm.tempRelateId,jdbcType=CHAR}, #{comm.tempItemId,jdbcType=CHAR}, 
+      #{comm.targetType,jdbcType=VARCHAR}, #{comm.lessId,jdbcType=CHAR}, #{comm.schId,jdbcType=CHAR}, 
+      #{comm.score,jdbcType=VARCHAR}, #{comm.targetId,jdbcType=CHAR}, #{comm.typeKey,jdbcType=CHAR}, 
+      #{comm.commTime,jdbcType=TIMESTAMP}, #{comm.tempId,jdbcType=CHAR}, #{comm.remark,jdbcType=VARCHAR}, 
+      #{comm.remark1,jdbcType=VARCHAR}, #{comm.remark2,jdbcType=VARCHAR}, #{comm.comment,jdbcType=LONGVARCHAR}
+      )
+     </foreach>
+  </insert>
+</mapper>
