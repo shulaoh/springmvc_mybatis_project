@@ -12,9 +12,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.mysql.jdbc.StringUtils;
+import com.web.data.mapper.CompanyMapper;
 import com.web.data.mapper.PersonalInfoMapper;
 import com.web.data.mapper.SysUserMapper;
 import com.web.data.mapper.UserViewMapper;
+import com.web.data.pojo.Company;
 import com.web.data.pojo.PersonalInfo;
 import com.web.data.pojo.SysConfig;
 import com.web.data.pojo.SysUser;
@@ -37,6 +39,9 @@ public class UserServiceImpl implements IUserService {
 	
 	@Resource
 	private UserViewMapper userViewMapper;
+	
+	@Resource
+	private CompanyMapper companyMapper;
 
 	public SysUser getUserById(String userId) {
 		return this.sysUserMapper.selectByPrimaryKey(userId);
@@ -92,6 +97,7 @@ public class UserServiceImpl implements IUserService {
 
 			if (reduceUsers(users, errs)) {
 				List<SysUser> insertUsers = needInsert(users);
+				setCompanyId(insertUsers);
 				if (!insertUsers.isEmpty()) {
 					// insert users
 					if (sysUserMapper.insertBatch(insertUsers) > 0) {
@@ -103,12 +109,29 @@ public class UserServiceImpl implements IUserService {
 		return users;
 	}
 
+	private void setCompanyId(List<SysUser> insertUsers) {
+		List<Company> companyList = companyMapper.selectAll();
+		for (SysUser user : insertUsers) {
+			for(Company company : companyList) {
+				if (!StringUtils.isEmptyOrWhitespaceOnly(user.getCompanyName())
+						&& company.getName().equals(user.getCompanyName().trim())) {
+					user.setCompanyId(company.getId());
+					break;
+				}
+			}
+			if (StringUtils.isEmptyOrWhitespaceOnly(user.getCompanyId())) {
+				user.setRemark(user.getCompanyName());
+			}
+		}
+	}
+
 	private List<PersonalInfo> createPInfoList(List<SysUser> insertUsers) {
 		List<PersonalInfo> pList = new ArrayList<PersonalInfo>();
 		PersonalInfo pInfo = null;
 		for (SysUser user : insertUsers) {
 			pInfo = new PersonalInfo();
 			BeanUtils.copyProperties(user, pInfo);
+			pInfo.setCompanyId(user.getCompanyId());
 			pInfo.setPersonId(Tools.generateID());
 			pList.add(pInfo);
 		}
@@ -286,6 +309,7 @@ public class UserServiceImpl implements IUserService {
 		BeanUtils.copyProperties(newUser, pInfo);
 		SysUser user = new SysUser();
 		BeanUtils.copyProperties(newUser, user);
+		user.setUstatus(newUser.getuStatus());
 		if (sysUserMapper.updateByPrimaryKeySelective(user) > 0) {
 			pInfo.setUserId(newUser.getUserId());
 			if (!StringUtils.isEmptyOrWhitespaceOnly(pInfo.getPersonId())) {

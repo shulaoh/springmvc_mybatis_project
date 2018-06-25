@@ -1,0 +1,1012 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="imagetoolbar" content="no" />
+<title>接口测试</title>
+<link rel="stylesheet"  href="common/MetroUICSS4/css/metro-all.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-colors.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-icons.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-rtl.css" type="text/css">
+<style type="text/css">
+html,body{
+	height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* background-color : black;
+	background-image: url(images/login/loginbg.jpg);
+	background-repeat: no-repeat;
+	background-size:100% 100%; */
+	font-family: "Arial","Microsoft YaHei","黑体","宋体","sans-serif";
+}
+::-webkit-scrollbar{
+	width:0px;
+}
+.fontStyleB {
+    margin-left: 32rem;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    width: 100%;
+    height: 78px;
+    line-height: 78px;
+    text-align: center;
+    font-size: 28px;
+    font-family: "微软雅黑";
+    font-weight: normal;
+}
+.tabs.vertical > ul > li.active {
+    border: 1px solid #2ac4f4;
+    border-right: 1px solid #2ac4f4; 
+}
+.tabs.vertical > ul > li {
+    border-right: 1px solid #2ac4f4;
+}
+</style>
+</head>
+<script type="text/javascript" src="common/MetroUICSS4/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="common/MetroUICSS4/js/metro.js"></script>
+<script type="text/javascript" src="js/test2.js"></script>
+<body oncontextmenu="return true;" onselectstart="return true;" ondragstart="return true;">
+<div class="row">
+	<div class="cell-12">
+		<span class="fontStyleB">接口测试页面</span><span style="font-size:16px;">(必须调用用户登录接口登录用户,不然无法获取session)</span>
+	</div>
+</div>
+<div class="row" style="height: 85%;">
+	<div class="cell-2">
+		<ul class="vertical tabs-expand-fs" data-role="tabs" style="width: 100%">
+			<li><a href="#_target_1" id="portName" portId="login">1、用户登录验证</a></li>
+		    <li><a href="#_target_2" id="portName" portId="getSchLeaves">2、获取日程中的所有请假信息</a></li>
+		    <li><a href="#_target_3" id="portName" portId="getSignListBySchId">3、获取日程全部签到信息信息</a></li>
+		    <li><a href="#_target_4" id="portName" portId="getUserList">4、获取用户信息列表</a></li>
+		    <li><a href="#_target_5" id="portName" portId="addLesson">5、添加课程接口</a></li>
+		    <li><a href="#_target_6" id="portName" portId="getLessons">6、添加日程接口</a></li>
+		    <li><a href="#_target_7" id="portName" portId="updateLessStatus">7、更新课程发布状态接口</a></li>
+		    <li><a href="#_target_8" id="portName" portId="updateUserStatus">8、用户审批接口</a></li>
+		    <li><a href="#_target_9" id="portName" portId="getAllLessons">9、获取全部课程</a></li>
+		    <li><a href="#_target_10" id="portName" portId="addLessFile">10、给日程和课程添加附件接口</a></li>
+		    <li><a href="#_target_11" id="portName" portId="getCommTemps">11、获取评价模板列表</a></li>
+			<li><a href="#_target_12" id="portName" portId="updateLesson">12、修改课程接口</a></li>
+		    <li><a href="#_target_13" id="portName" portId="getDefPics">13、获取默认图片列表</a></li>
+		    <li><a href="#_target_14" id="portName" portId="addLeave">14、学员请假</a></li>
+		    <li><a href="#_target_15" id="portName" portId="updateLeave">15、学员请假状态修改</a></li>
+			<li><a href="#_target_16" id="portName" portId="loginByWeChatId">16、微信用户直接登录验证</a></li>
+			<li><a href="#_target_17" id="portName" portId="getLessonById">17、获取单个课程信息</a></li>
+		</ul>
+	</div>
+	<div class="cell-5">
+		<div style="width:100%;height:100%" id="targetDiv">
+		    <div id="_target_1">
+		        <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="login"
+					data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								login
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_login">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">登录标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="loginId" placeholder="登录标识，可为电话号码或邮箱地址  ">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">登录密码</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="password" placeholder="Md5加密密文  ">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_2">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getSchLeaves"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getSchLeaves
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_sch_leaves">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">日程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="schId" placeholder="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_3">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getSignListBySchId"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getSignListBySchId
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_get_leaves">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">日程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="schId" placeholder="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_4">
+			     <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getUserList"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getUserList
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_get_userList">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">用户状态</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="ustatus" placeholder="ALL：全部 WAIT：待审核 INFO：信息待补全 REGI：注册用户 DEL：注销用户">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">单页记录数</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="showCount" placeholder="每页返回的记录数">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">页编号</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="pageNum" placeholder="请求的页面编号，编号从1开始">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_5">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="addLesson"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								addLesson
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_add_lesson">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">课程名称</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="lessonName" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonType" placeholder="L：课程 M：会议">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">课程地点</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="place" placeholder="当前用户状态为”WAIT”时为空">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程二维码图片</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="purl" placeholder="课程二维码地址">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程简介</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonInfo" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">班主任ID</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="teacherId" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">创建者ID</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="creatorId" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程题图地址</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessPicUrl" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程轮播图地址</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessCycPicUrl" placeholder="如为空则显示默认图">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程受邀用户</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="inviUserIds" placeholder="“,”分割的用户Id">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">模板ID列表</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="commTempIds" placeholder="评价模板ID列表多个的话用英文逗号分隔">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_6">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="addSch"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								addSch
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_add_shc">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">日程名称</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="schName" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">日程地址</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="schPlace" placeholder="">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">日程简介</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="schIntro" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">开始时间</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="ssTime" placeholder="yyyy-MM-dd HH24:mm">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">日程时长</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="schLastMNum" placeholder="以15分钟为单位">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">是否可签到</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="signFlag" placeholder="Y：需要签到 N：不需要签到">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">签到开始时间</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="signSTime" placeholder="yyyy-MM-dd HH24:mm">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">签到结束时间</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="signETime" placeholder="yyyy-MM-dd HH24:mm">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">是否可评价</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="commentFlag" placeholder="Y：是 N：否">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">评价信息显示标记</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="allCommFlag" placeholder="Y：不显示(默认) N：显示">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">教授人</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="tutorId" placeholder="教授人ID">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">评价模板IDs</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="commTempIds" placeholder="评价模板ID列表多个的话用英文逗号分隔">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_7">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="updateLessStatus"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								updateLessStatus
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_update_status_shc">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">课程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="lessonId" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程状态</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonStatus" placeholder="0：未发布 1：已发布">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_8">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="updateUserStatus"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								updateUserStatus
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_update_user_status">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">课程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="lessonId" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">用户状态</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="ustatus" placeholder="REGI：注册用户 REJ：审核未通过">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_9">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getAllLessons"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getAllLessons
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_get_all_lessons">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">用户标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="creatorId" placeholder="如果传空则返回全部">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">单页记录数</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="showCount" placeholder="每页返回的记录数">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">页编号</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="pageNum" placeholder="请求的页面编号，编号从1开始">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_10">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="addLessFile"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								addLessFile
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_add_less_file">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">课程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="lessonId" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">日程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="schId" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">文件URL</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="url" placeholder="上传成功之后后台返回给前台的文件名">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">文件名</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="name" placeholder="显示给用户的文件名称">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">文件简介</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="intro" placeholder="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_11">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getCommTemps"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getCommTemps
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_comm_temps">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">角色类型</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="roleType" placeholder="STU：学员 TEA：班主任">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">目标类型</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="targetType" placeholder="LES：课程 SCH：日程 TUT：讲授者">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_12">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="updateLesson"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								updateLesson
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为::tid_update_lesson">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">课程名称</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="lessonName" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonType" placeholder="L：课程 M：会议">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">课程地点</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="place" placeholder="当前用户状态为”WAIT”时为空">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程二维码图片</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="purl" placeholder="课程二维码地址">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程简介</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonInfo" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">班主任ID</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="teacherId" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">创建者ID</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="creatorId" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程题图地址</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessPicUrl" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程轮播图地址</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessCycPicUrl" placeholder="如为空则显示默认图">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">课程受邀用户</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="inviUserIds" placeholder="“,”分割的用户Id">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">模板ID列表</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="commTempIds" placeholder="评价模板ID列表多个的话用英文逗号分隔">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_13">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getDefPics"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getDefPics
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_def_pics">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">图片类型</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="picType" placeholder="HEAD：默认头像 LES:课程图 LES_CYC：课程轮播图">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">目标类型</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="subType" placeholder="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_14">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="addLeave"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								addLeave
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_add_leave">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">日程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="schId" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">请假理由</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="reason" placeholder="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_15">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="updateLeave"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								updateLeave
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_add_leave">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">日程标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="schId" placeholder="">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">请假标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="cancelFlag" placeholder="Y：取消 N：不取消">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_16">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="loginByWeChatId"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								loginByWeChatId
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_login">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">标识码</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="jscode" placeholder="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_17">
+				<div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getLessonById"
+						data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								getLessonById
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_all_lessons">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">用户标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="lessonId" placeholder="课程ID">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row">
+		        <div class="cell">
+		            <button class="button primary place-right" style="width:8rem;margin-right:1.5rem;" onclick="testConmit()">生成请求参数</button>
+		        </div>
+		    </div>	
+		</div>
+	</div>	
+	
+	<div class="cell-5" id="requestId">
+		<div class="row" style="height:65%;">
+			<p>请求参数集</p>
+			<div style="width:80%;border: 1px solid #ff9447;margin-bottom: 2rem;margin-left: 1rem;">
+				<textarea data-role="textarea" style="height:22rem;" id="requestParam"></textarea>
+				<div style="position: absolute;right: 1rem;bottom: .5rem;">
+					<button class="button primary" style="width:8rem" onclick="sendRequest()">发送请求</button>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="height:65%;">
+			<p>返回结果集</p>
+			<div style="width:80%;border: 1px solid #ff9447;margin-left: 1rem;" id="resultJson"></div>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>

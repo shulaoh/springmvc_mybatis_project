@@ -40,7 +40,7 @@
       )
     values 
     <foreach collection ="list" item="item" separator =",">
-    (#{item.tempGroupId,jdbcType=CHAR}, #{item.tempGroupName,jdbcType=VARCHAR}, #{item.tempGroupDecs,jdbcType=VARCHAR}, #{item.tempGroupEnable,jdbcType=INTEGER},#{tempGroupOwerId,jdbcType=CHAR}
+    (#{item.tempGroupId,jdbcType=CHAR}, #{item.tempGroupName,jdbcType=VARCHAR}, #{item.tempGroupDecs,jdbcType=VARCHAR}, #{item.tempGroupEnable,jdbcType=INTEGER},#{item.tempGroupOwerId,jdbcType=CHAR}
       )
      </foreach>
   </insert>
@@ -104,4 +104,23 @@
       TEMP_GROUP_OWER_ID = #{tempGroupOwerId,jdbcType=INTEGER}
     where TEMP_GROUP_ID = #{tempGroupId,jdbcType=CHAR}
   </update>
+   <resultMap id="CommItemMap" type="com.web.data.bean.CommImportItem">
+    <result column="TEMP_ITEM_Name" jdbcType="VARCHAR" property="itemName" />
+    <result column="TEMP_ITEM_Type" jdbcType="VARCHAR" property="itemType" />
+    <result column="ROLE_TYPE" jdbcType="VARCHAR" property="roleType" />
+    <result column="TARGET_TYPE" jdbcType="VARCHAR" property="targetType" />
+  </resultMap>
+  <select id="selectCommGroupItem" parameterType="java.lang.String" resultMap="CommItemMap">
+	select 
+	c.role_type,c.target_type, b.temp_item_name,b.temp_item_type
+	from 
+	t_comm_template_group a,
+	t_comm_template_item b,
+	t_comm_template_relate c
+	where 
+	a.temp_group_id = #{tempGroupId,jdbcType=CHAR}
+	and a.temp_group_id = c.temp_group_id
+	and b.temp_item_id = c.temp_item_id
+	order by c.role_type,c.target_type
+  </select>
 </mapper>

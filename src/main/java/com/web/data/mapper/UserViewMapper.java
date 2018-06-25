@@ -34,4 +34,5 @@ public interface UserViewMapper {
 	List<UserView> getUsersByPhone(List<String> phones);
 
 	List<UserView> getUsersByEmail(List<String> emails);
+
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.web.data.pojo.SysConfig;
 import com.web.data.pojo.SysUser;
 
@@ -38,4 +40,6 @@ public abstract interface SysUserMapper
   int checkEmail(List<String> records);
   
   List<SysUser> selectBySchId(String schId);
+
+  public abstract List<SysUser> getUserByUserIds(String[] userIds);
 }

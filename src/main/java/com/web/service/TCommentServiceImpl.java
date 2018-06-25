@@ -134,5 +134,10 @@ public class TCommentServiceImpl implements ICommentService {
 	public List<TCommTemplateGroup> getTemplateGroupList(String userId) {
 		return this.groupMapper.selectAll(userId);
 	}
+
+	@Override
+	public List<CommImportItem> selectCommGroupItem(String tempGroupId) {
+		return groupMapper.selectCommGroupItem(tempGroupId);
+	}
 	
 }

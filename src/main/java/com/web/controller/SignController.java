@@ -77,20 +77,21 @@ public class SignController {
 
 	@RequestMapping({ "/getSignListBySchId" })
 	@ResponseBody
-	public Map<String, Object> getSignListBySchId(@RequestParam String schId, Integer showCount, Integer pageNum) {
+	public Map<String, Object> getSignListBySchId(HttpServletRequest request,@RequestParam String schId, Integer showCount, Integer pageNum) {
 		HashMap map = new HashMap();
 		Result result = new Result();
 		map.put("result", result);
 		Page page = new Page();
 		page.setCurrentPage(pageNum == null ? 1 : pageNum.intValue());
 		page.setShowCount(showCount == null ? 10 : showCount.intValue());
+		String imagePath = request.getServletContext().getRealPath("/image/");
 		try {
 			List<SignInfo> data = this.signService.getSignListBySchId(schId, page);
 
 			if (data != null && data.size() >= 0) {
 				for (int i = 0; i < data.size(); ++i) {
 					data.get(i).setSignPicUrl(
-							Const.IMAGE_FILE_PATH + data.get(i).getSignPicUrl().replaceAll("\"", ""));
+							imagePath + data.get(i).getSignPicUrl().replaceAll("\"", ""));
 				}
 				boolean paging = page.caculatePageing();
 				DataDesc datadesc = new DataDesc();
@@ -116,11 +117,11 @@ public class SignController {
 	@ResponseBody
 	public ResponseEntity<byte[]> exportLessSignInfo(HttpServletRequest request, @RequestParam String lessId) {
 			List<SignInfo> data = this.signService.getSignListByLessId(lessId);
-
+			String imagePath = request.getServletContext().getRealPath("/image/");
 			for (int i = 0; i < data.size(); ++i) {
 				if (StringUtils.isNotEmpty(data.get(i).getSignPicUrl())) {
 					data.get(i).setSignPicUrl(
-							Const.IMAGE_FILE_PATH + data.get(i).getSignPicUrl().replaceAll("\"", ""));
+							imagePath + data.get(i).getSignPicUrl().replaceAll("\"", ""));
 				}
 			}
 	        String path = request.getServletContext().getRealPath("/tmp/");

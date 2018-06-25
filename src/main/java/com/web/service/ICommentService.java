@@ -3,6 +3,9 @@ package com.web.service;
 import java.io.File;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.web.data.bean.CommImportItem;
 import com.web.data.bean.CommType;
 import com.web.data.bean.CommentList;
 import com.web.data.pojo.Comment;
@@ -54,4 +57,11 @@ public abstract interface ICommentService {
 	 * @return
 	 */
 	List<TCommTemplateGroup> getTemplateGroupList(String userId);
+	
+	/**
+	 * 查询指定模板id的评价条目明细
+	 * @param tempGroupId
+	 * @return
+	 */
+	List<CommImportItem> selectCommGroupItem(String tempGroupId);
 }

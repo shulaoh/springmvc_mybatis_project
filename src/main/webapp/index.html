@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="imagetoolbar" content="no" />
+<title>北京人力培训系统</title>
+<link rel="stylesheet"  href="common/MetroUICSS4/css/metro-all.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-colors.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-icons.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-rtl.css" type="text/css">
+<link rel="stylesheet" href="common/zyUploadFile/zyUpload.css" type="text/css">
+<style type="text/css">
+html,body{
+	height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* background-color : black;
+	background-image: url(images/login/loginbg.jpg);
+	background-repeat: no-repeat;
+	background-size:100% 100%; */
+	font-family: "Arial","Microsoft YaHei","黑体","宋体","sans-serif";
+}
+::-webkit-scrollbar{
+	width:0px;
+}
+.titleStyle{
+	position: fixed;
+	left: 0px;
+	right:0px;
+	top:0px;
+	z-index: 10000;
+	height: 62px;
+    background-color: #87cbff;
+    line-height:62px;
+}
+.lessStyle{
+	height:20rem;
+	background-color:#f8f8ff;
+	border: 1px solid #dfdfdf;
+	margin: 1rem 2rem;
+}
+.fontStyleB {
+    margin-bottom: 10px;
+    padding-top: 20px;
+    width: 100%;
+    height: 78px;
+    line-height: 78px;
+    text-align: center;
+    font-size: 28px;
+    font-family: "微软雅黑";
+    font-weight: normal;
+}
+* + p {
+    margin-top: 0rem;
+}
+</style>
+</head>
+<body oncontextmenu="return true;" onselectstart="return true;" ondragstart="return true;">
+<div class="titleStyle">
+	<div class="row">
+		<div class="cell-8" style="font-size:xx-large;padding-left: 4rem;">北京人力培训系统</div>
+		<div class="cell-4">
+			<div class="row">
+				<div class="cell-8">
+					<span class="mif-tux mif-3x"></span>
+					<span style="font-size:large;"><span style="margin: 0 2rem 0 1rem;" id="userNameId">amdin</span><span id="userDeptId">测试部</span></span>
+				</div>
+				<div class="cell">
+					<span class="mif-tux mif-3x" data-role="hint" data-hint-position="bottom" data-hint-text="修改密码"></span>
+				</div>
+				<div class="cell">
+					<span class="mif-tux mif-3x" data-role="hint" data-hint-position="bottom" data-hint-text="添加用户"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-top:62px;">
+	<div class="cell-9">
+		<div style="background-color:#dcdcdc;">
+			<div class="fontStyleB" style="height:3rem;line-height: 3rem;">
+				<div class="row">
+					<div class="cell-12">
+						课程及会议<span class="mif-plus place-right"  style="right: 6rem;" data-role="hint" data-hint-position="right" data-hint-text="添加课程或会议"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cell-3 lessStyle" style="margin-left: 6.5%;">
+					<div class="row" id="lessonImg"></div>
+					<div style="font-size:14px;" id="lessonInfo"></div>
+				</div>
+				<div class="cell-3 lessStyle">
+					<div class="row">
+						<img alt="" src="image/con1-eubg2.png" style="height: 10rem;width: 100%;">
+					</div>
+				</div>
+				<div class="cell-3 lessStyle">
+					<div class="row">
+						<img alt="" src="image/con1-eubg3.png" style="height: 10rem;width: 100%;">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cell-3 lessStyle" style="margin-left: 6.5%;"></div>
+				<div class="cell-3 lessStyle"></div>
+				<div class="cell-3 lessStyle"></div>
+			</div>
+		</div>
+	</div>
+	<div class="cell-3">
+		<div class="fontStyleB" style="height:3rem;line-height: 3rem;">审批信息</div>
+		<ul data-role="listview" data-view="content" data-select-node="true" style="margin:2rem 2rem 0rem 0rem;">
+		    <li data-icon="<span class='mif-folder fg-orange'>"
+		        data-caption="Video"
+		        data-content="<div class='mt-1' data-role='progress' data-value='35' data-small='true'>"></li>
+		    <li data-icon="<span class='mif-folder fg-cyan'>"
+		        data-caption="Images"
+		        data-content="<div class='mt-1' data-role='progress' data-value='78' data-small='true'>"></li>
+		    <li data-icon="<span class='mif-file-empty'>"
+		        data-caption="desktop.ini"
+		        data-content="<span class='text-muted'>Created: 12.21.2017</span>"></li>
+		    <li data-icon="images/setup.png"
+		        data-caption="setup.exe"
+		        data-content="<span class='text-muted'>Executable</span>"></li>
+		    <li data-icon="<span class='mif-file-empty'>"
+		        data-caption="file1.dat"
+		        data-content="<span class='text-muted'>Data file</span>"></li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="cell-9">
+		<div class="fontStyleB" style="height:3rem;line-height: 3rem;">
+			添加用户信息<button class="button primary place-right" style="width:8rem;margin-right: 4rem;
+    		margin-top: .5rem;">学员信息导入</button>
+		</div>
+		<form style="margin: 2rem;" data-role="validator" action="javascript:">
+			<div class="row mb-2">
+		        <label class="cell-sm-2">姓名</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">邮箱</label>
+		        <div class="cell-sm-10">
+		            <input type="email" data-role="input" data-validate="required email">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">手机号码</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required integer length=11">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">密码</label>
+		        <div class="cell-sm-10">
+		            <input type="password" class="success" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">工作单位</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">人员角色</label>
+		        <div class="cell-sm-10">
+		            <input name="horizontal_form_r1" type="radio"
+		                data-role="radio" data-caption="学员" checked>
+		            <input name="horizontal_form_r1" type="radio"
+		                data-role="radio" data-caption="讲师">
+		            <input name="horizontal_form_r1" type="radio"
+		                data-role="radio" data-caption="二级管理员">
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="cell">
+		            <button class="button primary" style="width:8rem">提交</button>
+		        </div>
+		    </div>
+		</form>
+	</div>
+</div>
+<div class="row">
+	<div class="cell-9">
+		<div class="fontStyleB" style="height:3rem;line-height: 3rem;">
+			添加课程或者会议<button class="button primary place-right" style="width:8rem;margin-right: 4rem;
+    		margin-top: .5rem;">学员信息导入</button>
+		</div>
+		<form style="margin: 2rem;" data-role="validator" action="javascript:">
+			<div class="row mb-2">
+		        <label class="cell-sm-2">课程或日程名称</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">开始时间</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">结束时间</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">地点</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">讲师或主持人</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">讲师或主持人电话\邮箱</label>
+		        <div class="cell-sm-10">
+		            <input type="text" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div class="row mb-2">
+		        <label class="cell-sm-2">课程或日程简介</label>
+		        <div class="cell-sm-10">
+		            <input type="textarea" data-role="input" data-validate="required">
+		        </div>
+		    </div>
+		    <div id="demo" class="demo"></div>
+		    <div class="row">
+		        <div class="cell">
+		            <button class="button primary" style="width:8rem">提交</button>
+		        </div>
+		    </div>
+		</form>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="common/MetroUICSS4/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="common/MetroUICSS4/js/metro.js"></script>
+<script type="text/javascript" src="common/MetroUICSS4/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="common/zyUploadFile/zyFile.js"></script>
+<script type="text/javascript" src="common/zyUploadFile/zyUpload.js"></script>
+<script type="text/javascript" src="js/sysManage.js"></script>
+<script type="text/javascript">
+$(function(){
+	// 初始化插件
+	$("#demo").zyUpload({
+		width            :   "650px",                 // 宽度
+		height           :   "400px",                 // 宽度
+		itemWidth        :   "120px",                 // 文件项的宽度
+		itemHeight       :   "100px",                 // 文件项的高度
+		url              :   "/upload/UploadAction",  // 上传文件的路径
+		multiple         :   true,                    // 是否可以多个文件上传
+		dragDrop         :   true,                    // 是否可以拖动上传文件
+		del              :   true,                    // 是否可以删除文件
+		finishDel        :   false,  				  // 是否在上传文件完成后删除预览
+		/* 外部获得的回调接口 */
+		onSelect: function(files, allFiles){                    // 选择文件的回调方法
+			console.info("当前选择了以下文件：");
+			console.info(files);
+			console.info("之前没上传的文件：");
+			console.info(allFiles);
+		},
+		onDelete: function(file, surplusFiles){                     // 删除一个文件的回调方法
+			console.info("当前删除了此文件：");
+			console.info(file);
+			console.info("当前剩余的文件：");
+			console.info(surplusFiles);
+		},
+		onSuccess: function(file){                    // 文件上传成功的回调方法
+			console.info("此文件上传成功：");
+			console.info(file);
+		},
+		onFailure: function(file){                    // 文件上传失败的回调方法
+			console.info("此文件上传失败：");
+			console.info(file);
+		},
+		onComplete: function(responseInfo){           // 上传完成的回调方法
+			console.info("文件上传完成");
+			console.info(responseInfo);
+		}
+	});
+});
+
+</script>
+</html>

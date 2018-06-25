@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Tables</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content=""/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <!-- Graph CSS -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- jQuery -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet'
+          type='text/css'>
+    <!-- lined-icons -->
+    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css'/>
+    <!-- /js -->
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.simple-dtpicker.js"></script>
+    <link type="text/css" href="css/jquery.simple-dtpicker.css" rel="stylesheet" />
+    <!-- //js-->
+</head>
+<body>
+<div class="page-container">
+    <!--/content-inner-->
+    <div class="left-content">
+        <div class="inner-content">
+            <!-- header-starts -->
+            <div class="header-section">
+                <!--menu-right-->
+                <div class="top_menu">
+                    <div class="main-search">
+                        <div class="close"></div>
+                    </div>
+                    <div class="srch"><span
+                            style="position: absolute;top: 13px;left: 260px;font-size: 30px;color: white;">北京人力培训系统</span>
+                    </div>
+                    <script type="text/javascript">
+                        $('.main-search').hide();
+                        $('button').click(function () {
+                                    $('.main-search').show();
+                                    $('.main-search text').focus();
+                                }
+                        );
+                        $('.close').click(function () {
+                            $('.main-search').hide();
+                        });
+                    </script>
+                    <!--/profile_details-->
+                    <div class="profile_details_left">
+                        <ul class="nofitications-dropdown">
+
+                            <li class="dropdown note">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                                        class="fa fa-envelope-o"></i> <span>赵总经(二级管理)</span></a>
+
+                            </li>
+
+
+                            <div class="clearfix"></div>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!--//profile_details-->
+                </div>
+                <!--//menu-right-->
+                <div class="clearfix"></div>
+            </div>
+            <!-- //header-ends -->
+            <!--outter-wp-->
+            <div class="outter-wp">
+                <!--sub-heard-part-->
+                <!--<div class="sub-heard-part">
+                 <ol class="breadcrumb m-b-0">
+                      <li><a href="index.html">Home</a></li>
+                      <li class="active">Tables</li>
+                  </ol>
+                 </div>-->
+                <!--//sub-heard-part-->
+                <h3 class="inner-tittle two">添加日程</h3>
+
+                <div class="grid-1">
+                    <div class="form-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="focusedinput" class="col-sm-2 control-label">日程名称</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control1" id="focusedinput" placeholder="请输入日程名称">
+                                </div>
+                                <!-- <div class="col-sm-2">
+                                     <p class="help-block">Your help text!</p>
+                                 </div>-->
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">课程时长</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline"><input type="radio" id="radio1" name="scheduleTime"
+                                                                     checked="checked"><label for="radio1">30</label>
+                                    </div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">45</label></div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">60</label></div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">75</label></div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">90</label></div>
+                                    <div class="radio-inline">单位：分钟</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="focusedinput1" class="col-sm-2 control-label">是否可签到</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline"><input type="radio" id="radio1" name="scheduleTime"
+                                                                     checked="checked"><label for="radio1">是</label>
+                                    </div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">否</label></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="focusedinput1" class="col-sm-2 control-label">是否可评价</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline"><input type="radio" id="radio1" name="scheduleTime"
+                                                                     checked="checked"><label for="radio1">是</label>
+                                    </div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">否</label></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="focusedinput1" class="col-sm-2 control-label">是否显示评价</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline"><input type="radio" id="radio1" name="scheduleTime"
+                                                                     checked="checked"><label for="radio1">是</label>
+                                    </div>
+                                    <div class="radio-inline"><input type="radio" id="radio2" name="scheduleTime"><label
+                                            for="radio2">否</label></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="focusedinput1" class="col-sm-2 control-label">详细地点</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control1" id="focusedinput1"
+                                           placeholder="请输入详细地点">
+                                </div>
+                                <!-- <div class="col-sm-2">
+                                     <p class="help-block">Your help text!</p>
+                                 </div>-->
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="focusedinput1" class="col-sm-2 control-label">开始时间</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control1" id="focusedinput1"
+                                           placeholder="请输入课程或会议开始时间" name="beginDate">
+                                    <script type="text/javascript">
+                                        $(function(){
+                                            $('[name=beginDate]').appendDtpicker();
+                                        });
+                                    </script>
+                                </div>
+                                <!-- <div class="col-sm-2">
+                                     <p class="help-block">Your help text!</p>
+                                 </div>-->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="focusedinput1" class="col-sm-2 control-label">签到时间</label>
+
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control1" id="focusedinput1"
+                                           placeholder="签到开始时间" name="signInBeginDate">
+                                    <script type="text/javascript">
+                                        $(function(){
+                                            $('[name=signInBeginDate]').appendDtpicker();
+                                        });
+                                    </script>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control1" id="focusedinput1"
+                                           placeholder="签到结束时间" name="signInEndDate">
+                                    <script type="text/javascript">
+                                        $(function(){
+                                            $('[name=signInEndDate]').appendDtpicker();
+                                        });
+                                    </script>
+                                </div>
+                                <!-- <div class="col-sm-2">
+                                     <p class="help-block">Your help text!</p>
+                                 </div>-->
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="txtarea1" class="col-sm-2 control-label">日程简介</label>
+
+                                <div class="col-sm-6"><textarea name="txtarea1" id="txtarea1" cols="50" rows="8"
+                                                                style="height: auto;"
+                                                                class="form-control1"></textarea></div>
+                            </div>
+
+
+                            <div class="col-md-12 form-group button-2" style="float: none;margin-left: 430px;">
+                                <a class="btn green fifth " style="background:#e74c3c">新 增</a>
+                                <a class="btn green fifth "
+                                   style="display: inline-block;margin-left: 180px;background:#55acee;;">取 消</a>
+                                <!-- <button type="submit" class="btn btn-primary">新增</button>
+                                 <button type="reset" class="btn btn-default" style="display: inline-block;margin-left: 200px;">取消</button>-->
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <!--//graph-visual-->
+            </div>
+            <!--//outer-wp-->
+            <!--footer section start-->
+            <footer>
+                <p>Copyright &copy; 2016.Company name All rights reserved.More Templates <a
+                        href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a
+                        href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+            </footer>
+            <!--footer section end-->
+        </div>
+    </div>
+    <!--//content-inner-->
+    <!--/sidebar-menu-->
+    <div class="sidebar-menu">
+        <header class="logo">
+            <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="index.html"> <span
+                id="logo"> <h1>菜单</h1></span>
+            <!--<img id="logo" src="" alt="Logo"/>-->
+        </a>
+        </header>
+        <div style="border-top:1px solid rgba(69, 74, 84, 0.7)"></div>
+
+        <div class="menu">
+            <ul id="menu">
+                <li><a href="#"><i class="fa fa-tachometer"></i> <span>主页</span></a></li>
+                <li><a href="./classTab.html"><i class="fa fa-table"></i></i> <span>课程/会议管理</span></a></li>
+                <li><a href="./addUser.html"><i class="fa fa-file-text-o"></i> <span>用户管理</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    var toggle = true;
+
+    $(".sidebar-icon").click(function () {
+        if (toggle) {
+            $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+            $("#menu span").css({"position": "absolute"});
+        }
+        else {
+            $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+            setTimeout(function () {
+                $("#menu span").css({"position": "relative"});
+            }, 400);
+        }
+
+        toggle = !toggle;
+    });
+</script>
+<!--js -->
+<script src="js/jquery.nicescroll.js"></script>
+<script src="js/scripts.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

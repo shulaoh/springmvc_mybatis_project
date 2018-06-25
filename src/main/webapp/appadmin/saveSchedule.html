@@ -1,0 +1,436 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Tables</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content=""/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <!-- Graph CSS -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- jQuery -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet'
+          type='text/css'>
+    <!-- lined-icons -->
+    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css'/>
+    <!-- /js -->
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.simple-dtpicker.js"></script>
+    <link type="text/css" href="css/jquery.simple-dtpicker.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/bootstrapValidator.js"></script>
+    <link rel="stylesheet" href="css/bootstrapValidator.css"/>
+    <script src="js/bootbox.js"></script>
+    <script src="js/util.js"></script>
+    <!-- //js-->
+
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        input[type="number"]{
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <!--/content-inner-->
+    <div class="left-content">
+        <div class="inner-content">
+            <!-- header-starts -->
+            <div class="header-section">
+                <!--menu-right-->
+                <div class="top_menu">
+                    <div class="main-search">
+                        <div class="close"></div>
+                    </div>
+                    <div class="srch"><span
+                            style="position: absolute;top: 13px;left: 260px;font-size: 30px;color: white;">北京人力培训系统</span>
+                    </div>
+                    <script type="text/javascript">
+                        $('.main-search').hide();
+                        $('button').click(function () {
+                                    $('.main-search').show();
+                                    $('.main-search text').focus();
+                                }
+                        );
+                        $('.close').click(function () {
+                            $('.main-search').hide();
+                        });
+                    </script>
+                    <!--/profile_details-->
+                    <div class="profile_details_left">
+                        <ul class="nofitications-dropdown">
+
+                            <li class="dropdown note">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                                        class="fa fa-envelope-o"></i> <span id="userInfo"></span></a>
+
+                            </li>
+
+
+                            <div class="clearfix"></div>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!--//profile_details-->
+                </div>
+                <!--//menu-right-->
+                <div class="clearfix"></div>
+            </div>
+            <!-- //header-ends -->
+            <!--outter-wp-->
+            <div class="outter-wp">
+
+                <!--//sub-heard-part-->
+                <h3 class="inner-tittle two">添加日程</h3>
+
+                <div class="grid-1">
+                    <div class="form-body">
+                        <form class="form-horizontal">
+                            <input type="hidden" name="service_version" value="1">
+                            <input type="hidden" name="tid" value="tid_add_shc">
+                            <input type="hidden" name="lessonId" value="" id="lessonId">
+
+
+                            <div class="form-group">
+                                <label for="focusedinput" class="col-sm-2 control-label">日程名称</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" name="schName" class="form-control1" id="focusedinput"
+                                           placeholder="请输入日程名称">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">课程时长<br><span style="font-size: 12px;">(单位：分钟)</span></label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio1" checked="checked" value="15"><label for="radio1">15</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio2"  name="schLastMNum" value="30"><label for="radio2">30</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio3" name="schLastMNum" value="45"><label for="radio3">45</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio4" name="schLastMNum" value="60"><label for="radio4">60</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio5" name="schLastMNum" value="120"><label for="radio5">120</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio6" name="schLastMNum" value="180"><label for="radio6">180</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio7" name="schLastMNum" value="360"><label for="radio7">360</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline">
+                                        <input type="radio" name="schLastMNum" id="radio8" name="schLastMNum" value="480"><label for="radio8">480</label>
+                                    </div>&nbsp;
+                                    <div class="radio-inline" >
+                                        <input type="radio"  id="radio9" name="schLastMNum"  value=""><label for="radio9">自定义</label>
+                                    </div>
+
+                                    <div class="col-sm-5" id="customInput" style="display: none;">
+                                       <input  type="number" placeholder="请输入课程时长" name="customTime" id="customTime" class="form-control1" min="1" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">是否可签到</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline">
+                                        <input type="radio" id="signFlag1" name="signFlag" checked="checked" value="Y"><label for="signFlag1">是</label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <input type="radio" id="signFlag2" name="signFlag" value="N"><label for="signFlag2">否</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="signTimeDiv" >
+                                <label  class="col-sm-2 control-label">签到时间</label>
+
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline">
+                                        <input type="radio" id="signTime1" name="signTime" checked="checked" value="-5"><label for="signTime1">开课前5分钟</label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <input type="radio" id="signTime2" name="signTime" value="-15"><label for="signTime2">开课前15分钟</label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <input type="radio" id="signTime3" name="signTime" value="30"><label for="signTime3">开课前后30分钟</label>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="signSTime" name="signSTime">
+                                <input type="hidden" id="signETime" name="signETime">
+                            </div>
+
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">是否可评价</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline">
+                                        <input type="radio" id="commentFlag1" name="commentFlag" checked="checked" value="Y"><label for="commentFlag1">是</label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <input type="radio" id="commentFlag2" name="commentFlag" value="N"><label for="commentFlag2">否</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label">是否显示评价</label>
+
+                                <div class="col-sm-6">
+                                    <div class="radio-inline">
+                                        <input type="radio" id="allCommFlag1" name="allCommFlag" checked="checked" value="Y"><label for="allCommFlag1">是</label>
+                                    </div>
+                                    <div class="radio-inline">
+                                        <input type="radio" id="allCommFlag2" name="allCommFlag"><label for="allCommFlag2" value="N">否</label></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="schPlace" class="col-sm-2 control-label">详细地点</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control1" id="schPlace" name="schPlace"
+                                           placeholder="请输入详细地点">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="ssTime" class="col-sm-2 control-label">开始时间</label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control1" id="ssTime"
+                                           placeholder="请输入课程或会议开始时间" name="ssTime">
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            $('[name=ssTime]').appendDtpicker();
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group">
+                                <label for="txtarea1" class="col-sm-2 control-label">日程简介</label>
+
+                                <div class="col-sm-6"><textarea name="schIntro" id="txtarea1" cols="50" rows="8"
+                                                                style="height: auto;"
+                                                                class="form-control1"></textarea></div>
+                            </div>
+
+
+                            <div class="col-md-12 form-group button-2" style="float: none;margin-left: 430px;">
+                                <a class="btn green fifth " style="background:#e74c3c" onclick="submitForm();">新 增</a>
+                                <a class="btn green fifth " href="javascript:history.go(-1);"
+                                   style="display: inline-block;margin-left: 180px;background:#55acee;;">取 消</a>
+                                <!-- <button type="submit" class="btn btn-primary">新增</button>
+                                 <button type="reset" class="btn btn-default" style="display: inline-block;margin-left: 200px;">取消</button>-->
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <!--//graph-visual-->
+            </div>
+            <!--//outer-wp-->
+            <!--footer section start-->
+            <footer>
+                <p>Copyright &copy; 2016.Company name All rights reserved.More Templates <a
+                        href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a
+                        href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+            </footer>
+            <!--footer section end-->
+        </div>
+    </div>
+    <!--//content-inner-->
+    <!--/sidebar-menu-->
+    <div class="sidebar-menu">
+        <header class="logo">
+            <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="index.html"> <span
+                id="logo"> <h1>菜单</h1></span>
+            <!--<img id="logo" src="" alt="Logo"/>-->
+        </a>
+        </header>
+        <div style="border-top:1px solid rgba(69, 74, 84, 0.7)"></div>
+
+        <div class="menu">
+            <ul id="menu">
+                <li><a href="#"><i class="fa fa-tachometer"></i> <span>主页</span></a></li>
+                <li><a href="./classTab.html"><i class="fa fa-table"></i></i> <span>课程/会议管理</span></a></li>
+                <li><a href="./addUser.html"><i class="fa fa-file-text-o"></i> <span>用户管理</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script src="js/menuUtil.js"></script>
+<script>
+    var id = getUrlParam();
+
+
+    function submitForm() {
+        $("form").submit();
+    }
+
+    $(function () {
+        getCurrentUserInfo();
+
+        $("input[name='schLastMNum']").click(function(){
+            if($(this).val() == ''){
+                $("#customInput").attr("style","padding-left: 0px;");
+            }else {
+                $("#customInput").attr("style","display:none;");
+            }
+        });
+
+        $("input[name='signFlag']").click(function(){
+            if($(this).val() == 'Y'){
+                $("#signTimeDiv").attr("style","");
+            }else {
+                $("#signTimeDiv").attr("style","display:none;");
+            }
+        });
+
+
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+
+            fields: {
+                schName: {
+                    validators: {
+                        notEmpty: {
+                            message: '日程名称不能为空'
+                        }
+                    }
+                },
+                schPlace: {
+                    validators: {
+                        notEmpty: {
+                            message: '地点不能为空'
+                        }
+                    }
+                },
+                schIntro: {
+                    validators: {
+                        notEmpty: {
+                            message: '日程简介不能为空'
+                        }
+                    }
+                },
+                ssTime: {
+                    validators: {
+                        notEmpty: {
+                            message: '开始时间不能为空'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.bv', function(e) {
+            // Prevent form submission
+            e.preventDefault();
+
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+
+            var schTimes = $("input[name='schLastMNum']:checked");
+            if($(schTimes).val() == ''){
+                if($("#customTime").val() == ''){
+                    bootbox.alert("请输入日程时长！", function () {});
+                    return;
+                }
+                $(schTimes).val($("#customTime").val());
+            }
+
+            $("#lessonId").val(id);
+
+            var schSignFlag = $("input[name='signFlag']:checked").val();
+            var beginTime = $("input[name='ssTime']").val();
+            var beginTimeMillsec= new Date(beginTime.replace(/-/g,  "/")).getTime();
+            var signSTime;
+            var signETime;
+
+            if(schSignFlag == 'Y'){
+                var schSignTime = $("input[name='signTime']:checked").val();
+                var schBegin
+                if(schSignTime == -5){
+                    signSTime = beginTimeMillsec - 5*60*1000;
+                    signETime = beginTime;
+                }else if(schSignTime == -15){
+                    signSTime = beginTimeMillsec - 15*60*1000;
+                    signETime = beginTime;
+                }else {
+                    signSTime = beginTimeMillsec - 30*60*1000;
+                    signETime = beginTimeMillsec + 30*60*1000;
+                }
+                var signSTimeStr = formatDateTime(new Date(signSTime));
+                var signETimeStr = formatDateTime(new Date(signETime));
+
+                $("#signSTime").val(signSTimeStr);
+                $("#signETime").val(signETimeStr);
+            }
+
+
+            // Use Ajax to submit form data
+            $.ajax({
+                url: "https://lpg.tianmengit.com/cnooc_training/addSch.do",
+                data: $("form").serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.result.retcode > 0) {
+                        bootbox.alert("新增日程信息成功！", function () {});
+                        window.location.href = "https://lpg.tianmengit.com/cnooc_training/classTab.html";
+                    } else {
+                        bootbox.alert(result.result.retmsg, function () {});
+                    }
+                },
+                error: function () {
+                    bootbox.alert("系统错误，请联系管理员", function () {});
+                }
+            });
+        });
+    });
+
+
+</script>
+<!--js -->
+<script src="js/jquery.nicescroll.js"></script>
+<script src="js/scripts.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

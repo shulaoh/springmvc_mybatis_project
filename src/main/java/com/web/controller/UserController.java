@@ -157,6 +157,7 @@ public class UserController {
 			if (this.userService.updatePassword(sysUser) > 0) {
 				((SysUser) session.getAttribute("userSession")).setPassword(newPassword);
 				result.setRetcode(1);
+				result.setRetmsg("修改密码成功");
 			} else {
 				result.setRetcode(-1);
 				result.setRetmsg("修改密码失败");

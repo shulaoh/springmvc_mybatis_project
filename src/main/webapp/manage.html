@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="imagetoolbar" content="no" />
+<title>北京人力培训系统</title>
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-all.css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-colors.css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-icons.css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-rtl.css">
+<link rel="stylesheet" href="common/jquery/jquery.dataTables.css">
+<link rel="stylesheet" href="common/jquery/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="common/zyUploadFile/zyUpload.css" type="text/css">
+<link rel="stylesheet" href="common/jedate/skin/jedate.css"/>
+<link rel="stylesheet" href="common/artDialog-master/css/ui-dialog.css"/>
+<link rel="stylesheet" href="css/sysManage.css"/>
+<script src="common/MetroUICSS4/js/jquery-3.3.1.min.js"></script>
+<script src="common/MetroUICSS4/js/jquery.dataTables.js"></script>
+<script src="common/MetroUICSS4/js/metro.js"></script>
+<script type="text/javascript" src="common/zyUploadFile/zyFile.js"></script>
+<script type="text/javascript" src="common/zyUploadFile/zyUpload.js"></script>
+<script type="text/javascript" src="common/jedate/jquery.jedate.js"></script>
+<style type="text/css">
+.notify-container {
+    position: relative;
+}
+/* ::-webkit-scrollbar{
+	width:0px;
+} */
+html,body{
+	height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+	font-family: "Arial","Microsoft YaHei","黑体","宋体","sans-serif";
+}
+.ui-dialog-footer button.ui-dialog-autofocus {
+    width: 5rem;
+}
+.ui-dialog-footer button {
+    width: 5rem;
+}
+</style>
+</style>
+</head>
+<body oncontextmenu="return true;" onselectstart="return true;" ondragstart="return true;">
+<div class="titleStyle">
+	<div class="row">
+		<div class="cell-8" style="font-size:xx-large;padding-left: 4rem;">北京人力培训系统</div>
+		<div class="cell-4">
+			<div class="row">
+				<div class="cell-5">&nbsp;</div>
+				<div class="cell-7">
+					<span class="mif-user mif-3x fg-white"></span>
+					<span style="margin: 0 2rem 0 1rem;" id="userNameId"></span>
+					<span id="userDeptId" style="display:none;"></span>
+				</div>
+				<!-- <div class="cell">
+					<span class="mif-pencil mif-2x fg-white" onclick="updatePsw()" title="修改密码" id="updatePsw" ></span>
+				</div>
+				<div class="cell">
+					<span class="mif-pencil mif-2x fg-white" onclick="updatePsw()" title="退出登录"></span>
+				</div> -->
+			</div>
+		</div>
+	</div>
+</div>
+<div style="position: fixed;left: 0px;height: 100%;top: 62px;background-color:#404040;z-index: 100;width:200px;">
+	<ul class="vertical tabs-expand-fs" data-role="tabs" style="width: 100%;height: 100%;color:#fff">
+		<li><a href="#_target_home" >主页</a></li>
+		<!-- <li style="font-size:18px;color:#fff;background-color:#404040;height:48px;line-height:48px;"><span style="position: absolute;right:1rem;">系统管理</span></li> -->
+		<li><a href="#_target_less" >课程/会议管理</a></li>
+		<li><a href="#_target_user" >用户管理</a></li>
+		<!-- <li><a href="#_target_meet" >会议管理</a></li>
+		<li><a href="#_target_sch" >日程</a></li>
+		<li><a href="#_target_log" >日志查看</a></li> -->
+	</ul>
+</div>
+<div style="height: 100%;margin-top: 65px;margin-left: 200px;" id="lessBodyId">
+	<div style="height: 100%;margin: .5rem 1rem .5rem 1.5rem;">
+		<div id="_target_home">
+			<div class="row">
+				<div class="cell-12" style="background-color:#dcdcdc;" id="lessListId">
+				</div>
+				<!-- <div class="cell-3" id="approveInfoId">
+					<div class="fontStyleB" style="height:3rem;line-height: 3rem;">审批信息</div>
+				</div> -->
+			</div>
+		</div>
+		<div id="_target_user">
+			<ul class="tabs-expand-md"  data-role="tabs">
+				<li><a href="#addUserTarget">添加学员</a></li>
+				<!-- <li><a href="#userManageTarget" >学员管理</a></li> -->
+			</ul>
+			<div id="addUserTarget">
+				<form style="margin: 1rem;width:60%;" data-role="validator" action="javascript:"
+					data-on-error="$('#errorLogId').css('color','#ff4500');$('#errorLogId').html('填入信息错误，请查看空色输入框')" data-on-submit="userRegister(this)">
+					<div class="row mb-4" style="margin-top:2rem;">
+						<label class="cell-sm-2">人员角色</label>
+						<div class="cell-sm-10">
+							<input name="userRadio" type="radio" value="0" data-role="radio" data-caption="学员" checked>
+							<input name="userRadio" type="radio" value="10" data-role="radio" data-caption="讲师">
+							<input name="userRadio" type="radio" value="20" data-role="radio" data-caption="二级管理员">
+						</div>
+					</div>
+					<div class="row mb-4">
+						<label class="cell-sm-2">姓名</label>
+						<div class="cell-sm-10">
+							<input type="text" data-role="input" data-validate="required" name="userName" placeholder="必填">
+						</div>
+					</div>
+					<div class="row mb-4">
+						<label class="cell-sm-2">邮箱</label>
+						<div class="cell-sm-10">
+							<input type="text" data-role="input" data-validate="required email" name="email" placeholder="如:12345@qq.com">
+						</div>
+					</div>
+					<div class="row mb-4">
+						<label class="cell-sm-2">手机号码</label>
+						<div class="cell-sm-10">
+							<input type="text" data-role="input" data-validate="required number length=11" name="phone" placeholder="十一位的数字">
+						</div>
+					</div>
+					<div class="row mb-4">
+						<label class="cell-sm-2">密码</label>
+						<div class="cell-sm-10">
+							<input type="password" class="success" data-role="input" data-validate="required" id="userPassword" placeholder="必填">
+						</div>
+					</div>
+					<div class="row mb-4">
+						<label class="cell-sm-2">工作单位</label>
+						<div class="cell-sm-10">
+							<input type="text" data-role="input" data-validate="required" name="dept" placeholder="必填">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="cell-sm-2">个性签名</label>
+						<div class="cell-sm-10">
+							<textarea data-role="textarea" data-auto-size="true" data-max-height="200" id="userIntroId"></textarea>
+						</div>
+					</div>
+					<div class="row mb-2">
+						<div class="cell-sm-10">
+							<span id="errorLogId"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="cell">
+							<button class="button primary" style="width:8rem">提交学员信息</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="userManageTarget">
+			</div>
+		</div>
+		<div id="_target_less">
+			<ul class="tabs-expand-md"  data-role="tabs" id="lessUiId">
+				<li id="lessListLiId" ><a href="#lessManageTarget" >课程列表</a></li>
+				<li id="addLessLiId" style="display:none;"><a href="#addLessTarget" id="addLessTitleName"></a></li>
+				<li id="showSchListLiId" style="display:none;"><a href="#schListTarget" >日程列表</a></li>
+			</ul>
+			<div id="addLessTarget">
+				<div class="row">
+					<div class="cell-9">
+						<div class="row">
+							<div class="cell-8">&nbsp;</div>
+							<div class="cell-4">
+								<button class="button success place-right" style="width:8rem;" onclick="closeAddLess()">返回课程列表</button>
+							</div>
+						</div>
+						<form style="margin: 1rem 1rem;" data-role="validator" action="javascript:"
+						data-on-error="$('#errorLessId').html('填入信息错误，请查看空色输入框')" data-on-submit="requestLesson(this)">
+							<div class="row mb-4">
+								<label class="cell-sm-2">类型</label>
+								<div class="cell-sm-8">
+									<input name="lessType" type="radio" value="L" data-role="radio" data-caption="课程" checked>
+									<input name="lessType" type="radio" value="M" data-role="radio" data-caption="会议">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">课程名称</label>
+								<div class="cell-sm-10">
+									<input type="text" data-role="input" data-validate="required" id="lessNameId">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">开始时间</label>
+								<div class="cell-sm-10">
+									<input type="text" data-role="input" class="jeinput" data-validate="required date" id="lessStimeL">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">结束时间</label>
+								<div class="cell-sm-10">
+									<input type="text" data-role="input" class="jeinput" data-validate="required date" id="lessEtimeL">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">地点</label>
+								<div class="cell-sm-10">
+									<input type="text" data-role="input" data-validate="required" id="lessAddressId">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">选择讲师</label>
+								<div class="cell-sm-10" id="teacherListId">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">受邀学员</label>
+								<div class="cell-sm-10" id="chooseUserListId">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<label class="cell-sm-2">课程简介</label>
+								<div class="cell-sm-10">
+									<textarea data-role="textarea" data-auto-size="true" data-max-height="200" id="lessIntroId"></textarea>
+								</div>
+							</div>
+							<div class="row mb-2" style="display:none;" id="chooseUserId">
+								<label class="cell-sm-2">受邀学员</label>
+								<div class="cell-sm-10" id="chooseUserListId">
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="cell-sm-10">
+									<span style="color:#ff4500" id="errorLessId"></span>
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="cell-sm-8">
+									&nbsp;
+								</div>
+								<div class="cell-sm-4">
+									<button class="button success place-right" style="width:8rem">提交课程信息</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="cell-3">
+						<!-- <div class="fontStyleB" style="height:3rem;line-height: 3rem;">
+							课程资料上传
+						</div>
+						<form action="upload.do" enctype="multipart/form-data" method="post">
+					        <table>
+					            <tr>
+					                <td>文件描述:</td>
+					                <td><input type="text" name="fileDesc"></td>
+					            </tr>
+					            <tr style="margin-top:1rem">
+					                <td>请选择文件:</td>
+					                <td><input type="file" name="image"></td>
+					            </tr>
+					            <tr style="margin-top:1rem">
+					                <td><button class="button success" type="submit">资料上传</button></td>
+					            </tr>
+					        </table>
+					    </form> -->
+						<!-- <div id="uploadFile"></div> -->
+					</div>
+				</div>
+			</div>
+			<div id="lessManageTarget" style="width:100%;display:none;">
+				<div class="fontStyleB" style="height:3rem;line-height: 3rem;">
+					<button class="button success place-left" onclick="openAddLess()" style="width:8rem;margin: .5rem 0 .5rem 2rem;">添加课程</button>
+				</div>
+				<table id="lessManageTable" class="table table-border cell-border striped" width="100%"></table>
+			</div>
+			<div id="schListTarget" style="width:100%">
+				<div class="row" style="margin: 1rem;">
+					<div class="cell-3" id="sch_less_name" style="font-size:24px;"></div>
+					<div class="cell-3" id="sch_less_teacher" style="line-height: 42px;"></div>
+					<div class="cell-2">&nbsp;</div>
+					<div class="cell-4">
+						<button class="button success place-right" style="width:8rem;" onclick="closeLessSch()">返回课程列表</button>
+						<button class="button success place-right" id="add_Less_Sch" style="width:8rem;margin-right: 1rem;" onclick="open_Add_Sch(this)">添加日程信息</button>
+					</div>
+				</div>
+				<table id="schListTable" class="table table-border cell-border striped" width="100%"></table>
+				<div class="row" id="lessSchId" style="margin-top: .5rem;">
+					<div class="fontStyleB" style="height:3rem;line-height: 3rem;">
+						日程信息
+					</div>
+					<div class="row" style="width:100%;margin-top: .5rem;">
+						<label class="cell-2"><span class="place-right" style="height:36px;line-height: 36px;">日程名称</span></label>
+						<div class="cell-4" style="width:100%;">
+							<input type="text" data-role="input" id="schName">
+						</div>
+					</div>
+					<div class="row" style="width:100%;margin-top: .5rem;">
+						<label class="cell-2"><span class="place-right" style="line-height: 36px;">课程时长</span></label>
+						<div class="cell-10" style="line-height: 36px;">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="30" value="2">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="45" checked value="3">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="60" value="4">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="75" value="5">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="90" value="6">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="105" value="7">
+							<input name="schLastMNum" type="radio" data-role="radio" data-caption="120" value="8">
+							<span>单位:分钟</span>
+						</div>
+					</div>
+					<div class="row" style="width:100%;">
+						<label class="cell-2"><span class="place-right" style="line-height: 36px;">是否可签到</span></label>
+						<div class="cell-10" style="line-height: 36px;">
+							<input name="signFlag" type="radio" data-role="radio" data-caption="是" checked value="Y" onclick="showsingFlag('Y')">
+							<input name="signFlag" type="radio" data-role="radio" data-caption="否" value="N" onclick="showsingFlag('N')">
+						</div>
+					</div>
+					<div class="row" style="width:100%;">
+						<label class="cell-2"><span class="place-right" style="line-height: 36px;">是否可评价</span></label>
+						<div class="cell-10" style="line-height: 36px;">
+							<input name="commentFlag" type="radio" data-role="radio" data-caption="是" checked value="Y">
+							<input name="commentFlag" type="radio" data-role="radio" data-caption="否" value="N">
+						</div>
+					</div>
+					<div class="row" style="width:100%;">
+						<label class="cell-2"><span class="place-right" style="line-height: 36px;">是否显示评价</span></label>
+						<div class="cell-10" style="line-height: 36px;">
+							<input name="allCommFlag" type="radio" data-role="radio" data-caption="是" checked value="Y">
+							<input name="allCommFlag" type="radio" data-role="radio" data-caption="否" value="N">
+						</div>
+					</div>
+					<div class="row" style="width:100%;margin-bottom:1rem;">
+						<label class="cell-2"><span class="place-right" style="line-height: 36px;">日程简介</span></label>
+						<div class="cell-8" style="line-height: 36px;">
+							<textarea data-role="textarea" data-auto-size="true" data-max-height="200" id="schIntro"></textarea>
+						</div>
+					</div>
+					<div class="row">
+				</div>
+				</div>
+				<div class="row">
+					<div class="cell-10">
+						<span style="color:#ff4500" id="errorSchId"></span>
+					</div>
+				</div>				
+			</div>
+	</div>
+</div>
+<div id="updatePswDiv" style="display:none;margin:1rem 1rem 0 1rem;">
+	<div class="row" style="height:3rem;">
+		<div class="cell-3" style="line-height:2.215rem;">原始密码</div>
+		<div class="cell-9">
+			<input type="password" data-role="input" id="oldPsw" placeholder="密码输入框">
+		</div>
+	</div>
+	<div class="row" style="height:3rem;">
+		<div class="cell-3" style="line-height:2.215rem;">新密码</div>
+		<div class="cell-9">
+			<input type="password" data-role="input" id="newPsw" placeholder="密码输入框">
+		</div>
+	</div>
+	<div class="row" style="height:3rem;">
+		<div class="cell-3" style="line-height:2.215rem;">再次输入</div>
+		<div class="cell-9">
+			<input type="password" data-role="input" id="againNewPsw" placeholder="密码输入框">
+		</div>
+	</div>
+	<div class="row" style="color:#ff7f50" id="updatePswError">
+	</div>
+</div>
+<div id="userListDialog" style="margin:.6215rem 1rem">
+</div>
+<div id="downLoadFileList" style="display:none;">
+	<ul data-role="listview" data-view="content" data-select-node="true">
+		<li data-icon="<span class='mif-file-empty'>"
+	        data-caption="desktop.ini"
+	        data-content="<span class='text-muted'>Created: 12.21.2017</span>">
+	        <a href="js/test.js" download="test.js">
+	        	<span class="mif-download mif-3x fg-blue place-right" title="下载"></span>
+	        </a>
+	    </li>
+	    <li data-icon="<span class='mif-file-empty'>"
+	        data-caption="desktop.ini"
+	        data-content="<span class='text-muted'>Created: 12.21.2017</span>">
+	        <a href="js/test.js" download="test.js">
+	        	<span class="mif-download mif-3x fg-blue place-right" title="下载"></span>
+	        </a>
+	    </li>
+	    <li data-icon="<span class='mif-file-empty'>"
+	        data-caption="desktop.ini"
+	        data-content="<span class='text-muted'>Created: 12.21.2017</span>">
+	    	<a href="js/test.js" download="test.js">
+	        	<span class="mif-download mif-3x fg-blue place-right" title="下载"></span>
+	        </a>
+	    </li>
+	    <li data-icon="<span class='mif-file-empty'>"
+	        data-caption="desktop.ini"
+	        data-content="<span class='text-muted'>Created: 12.21.2017</span>">
+	        <a href="js/test.js" download="test.js">
+	        	<span class="mif-download mif-3x fg-blue place-right" title="下载"></span>
+	        </a>
+	    </li>
+	    <li data-icon="<span class='mif-file-empty'>"
+	        data-caption="file1.dat"
+	        data-content="<span class='text-muted'>Data file</span>">
+	        <a href="js/test.js" download="test.js">
+	        	<span class="mif-download mif-3x fg-blue place-right" title="下载"></span>
+	        </a>
+	    </li>
+	</ul>
+</div>		
+</body>
+<script type="text/javascript" src="common/artDialog-master/dist/dialog-plus.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/dateUtil.js"></script>
+<script type="text/javascript" src="js/student.js"></script>
+<script type="text/javascript" src="js/schedule.js"></script>
+<script type="text/javascript" src="js/less.js"></script>
+<script type="text/javascript" src="js/sysManage.js"></script>
+<script type="text/javascript" src="js/Array.js"></script>
+</html>

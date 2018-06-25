@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content=""/>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <!-- Graph CSS -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- jQuery -->
+    <!-- lined-icons -->
+    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css'/>
+    <!-- //lined-icons -->
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <!--clock init-->
+    <script type="text/javascript" src="js/bootstrapValidator.js"></script>
+    <link rel="stylesheet" href="css/bootstrapValidator.css"/>
+    <script src="js/bootbox.js"></script>
+    <style type="text/css">
+        body{
+                background-color: rgb(0, 26, 55);
+        }
+        input::-webkit-input-placeholder{
+            color:#ccc;
+        }
+        input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+            color:#ccc;
+        }
+        input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+            color:#ccc;
+        }
+        input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+            color:#ccc;
+        }
+        input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+            background-color: none !important;
+        }
+        .login input[type="text"], .login input[type="password"]{
+            color: #fff;
+        }
+        .login .left.glyphicon{
+            position: absolute;
+            top: 16px;
+            left: 15px;
+            color: #ccc;
+        }
+        .has-success .form-control-feedback{
+            color: #fff;
+        }
+        .has-error .form-control-feedback{
+            color: #fff;
+        }
+        .error_page{
+            background: url('img/aboutusbg.jpg') no-repeat;
+            background-size:110em 20em;
+        }
+        .error-top{
+            background-color: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+<!--/login-->
+
+<div class="error_page">
+    <!--/login-top-->
+
+    <div class="error-top">
+        <h2 class="inner-tittle page" style="left:5%;">北京人力培训系统</h2>
+
+        <div class="login">
+            <h3 class="inner-tittle t-inner">登录</h3>
+            <form>
+                <input type="hidden" name="service_version" value="1">
+                <input type="hidden" name="tid" value="tid_login">
+
+                <div class="form-group">
+                    <span class="left glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    <input type="text" class="text" placeholder="电话号码或邮箱" value="" name="loginId">
+                </div>
+                <div class="form-group">
+                    <span class="left glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                    <input type="password" value="" placeholder="密码" name="password">
+                </div>
+                <div class="submit"><input type="button" onclick="submitForm()" value="登录"></div>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+
+
+    </div>
+
+
+    <!--//login-top-->
+</div>
+
+    <div class="footer">
+       <p>Copyright &copy; 2018.Company name All rights reserved.中海油
+    </div>
+<script>
+    function submitForm() {
+        $("form").submit();
+    }
+
+    $(function () {
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+
+            fields: {
+                loginId: {
+                    validators: {
+                        notEmpty: {
+                            message: '电话号码或邮箱不能为空'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.bv', function (e) {
+            // Prevent form submission
+            e.preventDefault();
+
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+            // Use Ajax to submit form data
+            $.ajax({
+                url: "https://lpg.tianmengit.com/cnooc_training/login.do",
+                data: $("form").serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    console.log(result);
+                    if (result.result.retcode > 0) {
+                        window.location.href = "classTab.html";
+                    } else {
+                        bootbox.alert(result.result.retmsg, function () {});
+                    }
+                },
+                error: function () {
+                    bootbox.alert("系统错误，请联系管理员", function () {});
+                }
+            });
+        });
+    });
+
+
+</script>
+<!--js -->
+<!-- <script src="js/jquery.nicescroll.js"></script> -->
+<script src="js/scripts.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+</body>
+</html>

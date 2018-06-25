@@ -8,12 +8,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.model.InternalWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFPatriarch;
@@ -77,6 +81,64 @@ public class ExcelUtil {
 		// 6.返回CommImportGroup对象的list
 		return result;
 	}
+	
+	public static boolean createCommItemFile(File sourceFile, File destFile, List<CommImportItem> items) {
+		boolean result = false;
+		Workbook workBook = null;
+		FileOutputStream outputStream = null;
+		FileInputStream fis = null;
+		try {
+			if (sourceFile.isFile() && sourceFile.exists()) {
+				if (sourceFile.getName().endsWith(".xls")) {
+					fis = new FileInputStream(sourceFile);
+					workBook = new HSSFWorkbook(fis);
+				} else if (sourceFile.getName().endsWith(".xlsx")) {
+					workBook = new XSSFWorkbook(sourceFile);
+				}
+				if (workBook != null) {
+					// 2.模板sheet2（第一个sheet为列子忽略掉）
+					Sheet tempSheet = null;
+						tempSheet = workBook.getSheetAt(1);
+						String key = null;
+						int index = 0;
+					for (CommImportItem item: items) {
+						if (key == null || !key.equals(item.getRoleType() + item.getTargetType())) {
+							if (Const.excelSettings.get(item.getRoleType() + item.getTargetType()) != null) {
+								index = Const.excelSettings.get(item.getRoleType() + item.getTargetType());
+								key = item.getRoleType() + item.getTargetType();
+							} else {
+								continue;
+							}
+						} else {
+							index++;
+						}
+						tempSheet.getRow(index).getCell(5).setCellValue(item.getItemName());
+					}
+					// 输出
+					outputStream = new FileOutputStream(destFile);
+					workBook.write(outputStream);
+					}
+				} else {
+					result = false;
+				}
+			result = true;
+		} catch (FileNotFoundException e) {
+			result = false;
+		} catch (IOException e) {
+			result = false;
+		} catch (InvalidFormatException e) {
+			result = false;
+		} finally {
+			
+			try {
+				if (fis != null) fis.close();
+				if (outputStream != null)outputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 
 	private static void closeWorkBook(Workbook workBook) {
 		if (workBook != null)
@@ -128,7 +190,8 @@ public class ExcelUtil {
 									// 出生年月row.getCell(3).getStringCellValue()
 									imUser.setPhone(row.getCell(4).toString());
 									imUser.setEmail(row.getCell(5).getStringCellValue());
-									// 单位名称row.getCell(6).getStringCellValue()
+									//单位名称
+									imUser.setCompanyName(row.getCell(6).getStringCellValue());
 									imUser.setDept(row.getCell(7).getStringCellValue());
 									// 用户名不能为空
 									if (StringUtils.isEmpty(imUser.getUserName())) {
@@ -159,6 +222,11 @@ public class ExcelUtil {
 											&& !Tools.checkEmail(imUser.getEmail())) {
 										// 邮件格式
 										errs.add("No." + (rIndex - 1) + "邮件格式有误");
+										isCurValid = false;
+									}
+									if (StringUtils.isEmpty(imUser.getCompanyName())) {
+										// 工作部门
+										errs.add("No." + (rIndex - 1) + "工作单位不能为空");
 										isCurValid = false;
 									}
 									if (StringUtils.isEmpty(imUser.getDept())) {
@@ -212,8 +280,10 @@ public class ExcelUtil {
 		} else if (excelFile.getName().endsWith(".xlsx")) {
 			return new XSSFWorkbook(excelFile);
 		}
+		
 		return null;
 	}
+	
 
 	private static void getTempItems(Sheet tempSheet, CommImportGroup group) {
 		int lastRowIndex = tempSheet.getLastRowNum();
@@ -228,11 +298,8 @@ public class ExcelUtil {
 				break;
 			}
 			lastCellIndex = row.getLastCellNum();
-			if (lastCellIndex >= 7) {
+			if (lastCellIndex >= 7 && isValid(row)) {
 				// 读取模板sheet的第4行，要求1到7的cell里有数据，否则忽略当前sheet
-				if (rIndex == 3 && !isValid(row)) {
-					break;
-				}
 				item = new CommImportItem();
 				if (!StringUtils.isEmpty(row.getCell(2).getStringCellValue())) {
 					lastRoleType = row.getCell(2).getStringCellValue().trim();
@@ -250,13 +317,13 @@ public class ExcelUtil {
 	}
 
 	private static boolean isValid(Row row) {
-		int dataCount = 0;
-		for (int j = 1; j <= 7; j++) {
-			if (!StringUtils.isEmpty(row.getCell(j).toString())) {
-				dataCount++;
-			}
-		}
-		return dataCount == 7;
+//		int dataCount = 0;
+//		for (int j = 1; j <= 7; j++) {
+//			if (!StringUtils.isEmpty(row.getCell(j).toString())) {
+//				dataCount++;
+//			}
+//		}
+		return !StringUtils.isEmpty(row.getCell(5).toString());
 	}
 
 	public static boolean exportSignToExcel(List<SignInfo> signInfos, File toFile) {
@@ -424,44 +491,91 @@ public class ExcelUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
+		String a = null;
+//		System.out.println(StringUtils.isEmptyOrWhitespaceOnly(a));
+		//========================
+//		List<CommImportItem> items = new ArrayList<CommImportItem>();
+//		CommImportItem item1 = new CommImportItem();
+//		item1.setRoleType("STU");
+//		item1.setTargetType("LES");
+//		item1.setItemName("哈哈01");
+//		items.add(item1);
+//		item1 = new CommImportItem();
+//		item1.setRoleType("STU");
+//		item1.setTargetType("LES");
+//		item1.setItemName("哈哈02");
+//		items.add(item1);
+//		item1 = new CommImportItem();
+//		item1.setRoleType("STU");
+//		item1.setTargetType("LES");
+//		item1.setItemName("哈哈03");
+//		items.add(item1);
+//		item1 = new CommImportItem();
+//		item1.setRoleType("STU");
+//		item1.setTargetType("SCH");
+//		item1.setItemName("哈哈SCH01");
+//		items.add(item1);
+//		items.add(item1);
+//		item1 = new CommImportItem();
+//		item1.setRoleType("STU");
+//		item1.setTargetType("SCH");
+//		item1.setItemName("哈哈SCH02");
+//		items.add(item1);
+//		items.add(item1);
+//		item1 = new CommImportItem();
+//		item1.setRoleType("TEA");
+//		item1.setTargetType("STU");
+//		item1.setItemName("哈哈TEASTU01");
+//		items.add(item1);
+//		String tempName = "d:\\BJHR\\commTemp_commentTemplate02.xlsx";
+//		File newFile = new File(tempName);
+//		File file = new File("d:\\BJHR\\commentTemplate02.xlsx");
+//		try {
+//			FileUtils.copyFile(file, newFile);
+//			// 2.insert the items into new template file
+//			if (ExcelUtil.createCommItemFile(file, newFile,items)) {
+//				// 3.return new file name
+//			}
+//		} catch (IOException e) {
+//		}
 		// =======================
-		List<SignInfo> signInfos = new ArrayList<SignInfo>();
-		SignInfo s1 = new SignInfo();
-		s1.setSchId("8b111ab71de64ec2b56b554cc1dfb4b6");
-		s1.setLessName("党章专项讲座");
-		s1.setSchName("5月3号上午");
-		s1.setSchStime(new Date());
-		s1.setPlace("第一会议室");
-		s1.setUserName("李宏伟");
-		s1.setLessName("lessName");
-		s1.setSignTime(new Date());
-		s1.setSignPicUrl("20180505011146848014.png");
-		signInfos.add(s1);
-		s1 = new SignInfo();
-		s1.setUserName("name02");
-		s1.setLessName("lessName");
-		s1.setSchName("schName02");
-		s1.setSignTime(new Date());
-		s1.setSignPicUrl("D:\\BJHR\\source\\cnooc_training\\WebRoot\\image\\20180513145212687521.jpg");
-		signInfos.add(s1);
-		s1 = new SignInfo();
-		s1.setUserName("name03");
-		s1.setLessName("lessName");
-		s1.setSchName("schName02");
-		s1.setSignTime(new Date());
-		s1.setSignPicUrl("D:\\BJHR\\source\\cnooc_training\\WebRoot\\image\\20180513145212687521.jpg");
-		signInfos.add(s1);
-		exportSignToExcel(signInfos, new File("D:\\BJHR\\tets.xls"));
+//		List<SignInfo> signInfos = new ArrayList<SignInfo>();
+//		SignInfo s1 = new SignInfo();
+//		s1.setSchId("8b111ab71de64ec2b56b554cc1dfb4b6");
+//		s1.setLessName("党章专项讲座");
+//		s1.setSchName("5月3号上午");
+//		s1.setSchStime(new Date());
+//		s1.setPlace("第一会议室");
+//		s1.setUserName("李宏伟");
+//		s1.setLessName("lessName");
+//		s1.setSignTime(new Date());
+//		s1.setSignPicUrl("20180505011146848014.png");
+//		signInfos.add(s1);
+//		s1 = new SignInfo();
+//		s1.setUserName("name02");
+//		s1.setLessName("lessName");
+//		s1.setSchName("schName02");
+//		s1.setSignTime(new Date());
+//		s1.setSignPicUrl("D:\\BJHR\\source\\cnooc_training\\WebRoot\\image\\20180513145212687521.jpg");
+//		signInfos.add(s1);
+//		s1 = new SignInfo();
+//		s1.setUserName("name03");
+//		s1.setLessName("lessName");
+//		s1.setSchName("schName02");
+//		s1.setSignTime(new Date());
+//		s1.setSignPicUrl("D:\\BJHR\\source\\cnooc_training\\WebRoot\\image\\20180513145212687521.jpg");
+//		signInfos.add(s1);
+//		exportSignToExcel(signInfos, new File("D:\\BJHR\\tets.xls"));
 		// =======================
-		// List<CommImportGroup> groups = new ArrayList<CommImportGroup>();
-		// importCommItem(new File("d:\\BJHR\\commentTemplate.xlsx"), groups);
-		// for (CommImportGroup group : groups) {
-		// System.out.println(group.getGroupName());
-		// for(CommImportItem item : group.getItems()) {
-		// System.out.println(item.toString());
-		// }
-		// }
-
+//		List<CommImportGroup> groups = new ArrayList<CommImportGroup>();
+//		importCommItem(new File("d:\\BJHR\\commentTemplate02.xlsx"), groups);
+//		for (CommImportGroup group : groups) {
+//			System.out.println(group.getGroupName());
+//			for (CommImportItem item : group.getItems()) {
+//				System.out.println(item.getItemName() + "-f-" + item.getRoleType() + "-t-" + item.getTargetType());
+//			}
+//		}
+		//==========================
 		// List<SysUser> users = new ArrayList<SysUser>();
 		// List<String> errs = new ArrayList<String>();
 		// importUsers(new File("d:\\BJHR\\userTemplate.xlsx"), users, errs);

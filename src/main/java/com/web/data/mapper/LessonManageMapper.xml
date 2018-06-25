@@ -185,7 +185,6 @@
     <select id="getStartDateByLessonId" resultType="java.sql.Timestamp">
         select min(s.sch_s_time) from t_schedule s where s.less_id = #{lessonId}
     </select>
-    <!--  -->
     <select id="getLessonsCount" resultType="java.lang.Integer">
         select count(distinct t.less_Id)
         from (
@@ -220,6 +219,7 @@
         </if>
         order by l_name
     </select>
+    <!-- 每天早上9点执行的定时任务，获取第二天开始的课程列表 -->
     <select id="getLessonsStartTomorrow" resultMap="LessonResultMap">
         select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url
         from  t_lesson l,
@@ -228,7 +228,8 @@
         and n.l_status = 1
         group by n.less_id) c
         where l.less_id = c.less_id
-        and date_add(date_format(now(),'%Y-%m-%d'), interval 1 day) = date_format(c.m ,'%Y-%m-%d')
+        and TIMESTAMPDIFF(hour, now(), c.m) &lt;= 40
+        and TIMESTAMPDIFF(hour, now(), c.m) &gt;= 15
     </select>
     <select id="getLessonsStart2Hours" resultMap="LessonResultMap">
         select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url

@@ -1,6 +1,8 @@
 package com.web.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,12 +27,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.data.bean.CommImportItem;
 import com.web.data.pojo.Comment;
 import com.web.data.pojo.SysUser;
 import com.web.data.pojo.TCommTemplateGroup;
 import com.web.data.pojo.UserView;
 import com.web.service.ICommentService;
+import com.web.utils.Const;
 import com.web.utils.DataDesc;
+import com.web.utils.ExcelUtil;
 import com.web.utils.Page;
 import com.web.utils.ResourceDesc;
 import com.web.utils.Result;
@@ -231,7 +236,7 @@ public class TCommentController
       String filename = file.getOriginalFilename();
       Calendar date = Calendar.getInstance();
       SimpleDateFormat datef = new SimpleDateFormat("yyyyMMddHHmmss");
-      String tempName = datef.format("commTemp" + date.getTime()) + Tools.getRandomNum() + filename.substring(filename.lastIndexOf("."));
+      String tempName = "commTemp" + datef.format(date.getTime()) + Tools.getRandomNum() + filename.substring(filename.lastIndexOf("."));
       File filepath = new File(path, tempName);
 
       if (!(filepath.getParentFile().exists())) {
@@ -257,23 +262,52 @@ public class TCommentController
 	 * 下载评价模板
 	 */
 	@RequestMapping({"/getCommTemp"})
-  public ResponseEntity<byte[]> getCommTemp(HttpServletRequest request)
-          throws Exception {
-      String path = request.getServletContext().getRealPath("/templates/");
-      String filename = "commentTemplate.xlsx";
-      File file = new File(path + File.separator + filename);
-      if (file.exists()) {
-      	HttpHeaders headers = new HttpHeaders();
-      	
-      	String downloadFielName = new String(filename.getBytes("UTF-8"), "utf-8");
-      	
-      	headers.setContentDispositionFormData("attachment", downloadFielName);
-      	
-      	headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-      	return new ResponseEntity(FileUtils.readFileToByteArray(file),
-      			headers, HttpStatus.CREATED);
-      } else {
-      	return null;
-      }
-  }
+	public ResponseEntity<byte[]> getCommTemp(@RequestParam String tempGroupId, HttpServletRequest request)
+			throws Exception {
+		String path = request.getServletContext().getRealPath("/templates/");
+		String filename = "commentTemplate.xlsx";
+		File file = new File(path + File.separator + filename);
+		if (file.exists()) {
+
+			List<CommImportItem> items = commentService.selectCommGroupItem(tempGroupId);
+
+			File downloadFile = createDownFiles(request, items, file);
+			if (downloadFile == null) {
+				return null;
+			}
+
+			HttpHeaders headers = new HttpHeaders();
+
+			String downloadFielName = new String(filename.getBytes("UTF-8"), "utf-8");
+
+			headers.setContentDispositionFormData("attachment", downloadFielName);
+
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			return new ResponseEntity(FileUtils.readFileToByteArray(downloadFile), headers, HttpStatus.CREATED);
+		} else {
+			return null;
+		}
+	}
+
+	private File createDownFiles(HttpServletRequest request, List<CommImportItem> items, File file) {
+		// 1.make a new template file from file
+		String path = request.getServletContext().getRealPath("/templates/");
+		Calendar date = Calendar.getInstance();
+		SimpleDateFormat datef = new SimpleDateFormat("yyyyMMddHHmmss");
+		String tempName = "commTemp" + datef.format(date.getTime()) + Tools.getRandomNum()
+				+ file.getName().substring(file.getName().lastIndexOf("."));
+		File newFile = new File(path + File.separator + tempName);
+//		try {
+//			FileUtils.copyFile(file, newFile);
+			// 2.insert the items into new template file
+			// TODO I don't know why the source file modified,need more research here
+			if (ExcelUtil.createCommItemFile(file, newFile, items)) {
+				// 3.return new file name
+				return newFile;
+			}
+//		} catch (IOException e) {
+//			logger.error("copy file failed" + e.getMessage());
+//		}
+		return null;
+	}
 }

@@ -23,6 +23,7 @@ import com.web.data.mapper.ScheduleFileContentMapper;
 import com.web.data.mapper.ScheduleMapper;
 import com.web.data.mapper.SignMapper;
 import com.web.data.mapper.SysUserMapper;
+import com.web.data.mapper.UserViewMapper;
 import com.web.utils.Page;
 import com.web.utils.Result;
 import com.web.utils.Tools;
@@ -88,6 +89,21 @@ public class ScheduleServiceImpl implements IScheduleService {
 				temp.setHaveLeave("Y");
 			} else {
 				temp.setHaveLeave("N");
+			}
+			
+			// default set sign time delay 15 mins
+			if ("Y".equals(temp.getHaveSign())) {
+				String signEtime = temp.getSignETime();
+				Date eDate = Tools.str2Date(signEtime);
+				Calendar ca = Calendar.getInstance();
+				ca.setTime(eDate); 
+				ca.add(Calendar.MINUTE, 15);
+				eDate = ca.getTime();
+				temp.setSignETime(Tools.date2Str(eDate));
+			}
+			if (null != temp.getTutorId()) {
+				List<SysUser> teachers = sysUserMapper.getUserByUserIds(temp.getTutorId().split(","));
+				temp.setTeachers(teachers);
 			}
 		}
 

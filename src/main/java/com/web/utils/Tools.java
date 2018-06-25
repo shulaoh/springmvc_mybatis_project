@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -203,7 +204,8 @@ public class Tools
   }
 
   public static void main(String[] args) {
-	  System.out.println(Tools.date2Str(new Timestamp(new Date().getTime()), "yyyy-MM-dd HH:mm"));
-	  
+	  System.out.println("123,345".replaceAll(",", "','"));
+	  System.out.println("123".replaceAll(",", "','"));
+	  System.out.println("123,345,456".replaceAll(",", "','"));
   }
 }

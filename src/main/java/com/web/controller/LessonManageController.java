@@ -355,11 +355,17 @@ public class LessonManageController {
 	
 	@RequestMapping({ "/getIcons" })
 	@ResponseBody
-	public Map<String, Object> getIcons() {
+	public Map<String, Object> getIcons(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
+		List<KeyValue> iconList = new ArrayList<KeyValue>();
+		String path = request.getServletContext().getRealPath("/image/");
+		for (KeyValue icon : Const.iconList) {
+			icon.setValue(path + icon.getValue());
+			iconList.add(icon);
+		}
 		Result result = new Result();
 		map.put("result", result);
-		map.put("data", Const.iconList);
+		map.put("data", iconList);
 		result.setRetcode(1);
 		return map;
 	}

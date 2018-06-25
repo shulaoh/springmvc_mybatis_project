@@ -67,8 +67,24 @@ public class Const
   // 课程默认缩略图
   public static final List<KeyValue> iconList = new ArrayList<KeyValue>();
   static{
-	  iconList.add(new KeyValue("1", IMAGE_FILE_PATH + "PIC_DEFAULT_LESS_HUIYI.PNG"));
-	  iconList.add(new KeyValue("2", IMAGE_FILE_PATH + "PIC_DEFAULT_LESS_PEIXUN.PNG"));
-	  iconList.add(new KeyValue("3", IMAGE_FILE_PATH + "PIC_DEFAULT_LESS_GONGKAI.PNG"));
+	  iconList.add(new KeyValue("1", "PIC_DEFAULT_LESS_HUIYI.PNG"));
+	  iconList.add(new KeyValue("2", "PIC_DEFAULT_LESS_PEIXUN.PNG"));
+	  iconList.add(new KeyValue("3", "PIC_DEFAULT_LESS_GONGKAI.PNG"));
+  }
+  
+  // 导出评价模板设定
+  public static final Map<String, Integer> excelSettings = new HashMap<String, Integer>();
+  static{
+	  excelSettings.put("STULES", 3);// role-target:excel row index
+	  excelSettings.put("STUSCH", 13);
+	  excelSettings.put("STUTUT", 23);
+	  
+	  excelSettings.put("TUTLES", 33);// role-target:excel row index
+	  excelSettings.put("TUTSCH", 43);
+	  excelSettings.put("TUTSTU", 53);
+	  
+	  excelSettings.put("TEALES", 63);// role-target:excel row index
+	  excelSettings.put("TEASCH", 73);
+	  excelSettings.put("TEASTU", 83);
   }
 }

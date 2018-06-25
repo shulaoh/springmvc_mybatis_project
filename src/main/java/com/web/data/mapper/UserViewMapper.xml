@@ -110,16 +110,21 @@
 		and U_STATUS != 'DEL'
 	</select>
 
+    <!-- phone and email can't be null -->
 	<select id="userCheck" resultType="java.lang.Integer">
 		select count(*)
 		from v_user_personal
-		where U_STATUS != 'DEL'
-		<if test="email != null and email.length()>0">
-			and EMAIL = #{email,jdbcType=VARCHAR}
+		where U_STATUS != 'DEL' and (
+		<if test="email != null and email.length()>0 ">
+			EMAIL = #{email,jdbcType=VARCHAR}
+		</if>
+		<if test="email != null and email.length()>0 and phone != null and phone.length()>0">
+			or 
 		</if>
 		<if test="phone != null and phone.length()>0">
-			and PHONE = #{phone,jdbcType=VARCHAR}
+			PHONE = #{phone,jdbcType=VARCHAR}
 		</if>
+		)
 	</select>
 	<select id="getUsersByPhone" resultMap="BaseResultMap">
 		select

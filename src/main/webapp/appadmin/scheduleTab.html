@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Tables</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content=""/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <!-- Graph CSS -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- jQuery -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet'
+          type='text/css'>
+    <!-- lined-icons -->
+    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css'/>
+    <!-- /js -->
+	<script src="js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap-paginator.js"></script>
+	<script src="js/menuUtil.js"></script>
+	<script src="js/schedultab.js"></script>
+	<!--js -->
+	<script src="js/jquery.nicescroll.js"></script>
+	<script src="js/scripts.js"></script>
+	<!-- Bootstrap Core JavaScript -->
+	<script src="js/bootstrap.min.js"></script>
+    
+    
+    <script src="js/bootbox.js"></script>
+    <script src="js/util.js"></script>
+	
+    <!-- //js-->
+</head>
+<body>
+<div class="page-container">
+    <!--/content-inner-->
+    <div class="left-content">
+        <div class="inner-content">
+            <!-- header-starts -->
+            <div class="header-section">
+                <!--menu-right-->
+                <div class="top_menu">
+                    <div class="main-search">
+                        <div class="close"></div>
+                    </div>
+                    <div class="srch"><span
+                            style="position: absolute;top: 13px;left: 260px;font-size: 30px;color: white;">北京人力培训系统</span>
+                    </div>
+                    <script type="text/javascript">
+                        $('.main-search').hide();
+                        $('button').click(function () {
+                                    $('.main-search').show();
+                                    $('.main-search text').focus();
+                                }
+                        );
+                        $('.close').click(function () {
+                            $('.main-search').hide();
+                        });
+                    </script>
+                    <!--/profile_details-->
+                    <div class="profile_details_left">
+                        <ul class="nofitications-dropdown">
+
+                            <li class="dropdown note">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                                        class="fa fa-envelope-o"></i> <span id="userInfo"></span></a>
+
+                            </li>
+
+
+                            <div class="clearfix"></div>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!--//profile_details-->
+                </div>
+                <!--//menu-right-->
+                <div class="clearfix"></div>
+            </div>
+            <!-- //header-ends -->
+            <!--outter-wp-->
+            <div class="outter-wp">
+                <!--sub-heard-part-->
+                <!--<div class="sub-heard-part">
+                 <ol class="breadcrumb m-b-0">
+                      <li><a href="index.html">Home</a></li>
+                      <li class="active">Tables</li>
+                  </ol>
+                 </div>-->
+                <!--//sub-heard-part-->
+                <div class="graph-visual tables-main">
+
+
+                    <h3 class="inner-tittle two">日程列表</h3>
+
+                    <div style="height: 75px;">
+                        <div id="leftDiv" style="float: left;vertical-align: middle;padding-top: 5px;">
+                            <span style="font-size: 22px;" id="lessonInfo"><!--中国海油发展企业文化--></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span id="teacherInfo"><!--张伟(讲师) 13812340001--></span>
+                        </div>
+                        <div id="rightDiv" style="float: right;">
+                            <a href="" class="btn purple purp" id="addScheA">添加日程信息</a>
+                            <a href="./classTab.html" class="btn purple purp">返回课程列表</a>
+                        </div>
+                    </div>
+
+
+                    <div class="graph">
+                        <div class="tables">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>日程名称</th>
+                                    <th>开始时间</th>
+                                    <th>时长（分钟）</th>
+                                    <th>地点</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id = 'tbody'>
+                               <!-- <tr class="active">
+                                    <th scope="row">中国海油发展企业文化1</th>
+                                    <td>2018-05-03 04:51</td>
+                                    <td>30</td>
+                                    <td>海油发展大厦</td>
+                                    <td><span class="glyphicon glyphicon-edit" aria-hidden="true" onclick="toHtml('editSchedule');">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">中国海油发展企业文化2</th>
+                                    <td>2018-05-04 10:50</td>
+                                    <td>45</td>
+                                    <td>海油发展大厦</td>
+                                    <td></td>
+                                </tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+                        <ul id='bp-element'></ul>
+                    </div>
+
+                </div>
+                <!--//graph-visual-->
+            </div>
+            <!--//outer-wp-->
+            <!--footer section start-->
+            <!--footer>
+                <p>Copyright &copy; 2016.Company name All rights reserved.More Templates <a
+                        href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a
+                        href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+            </footer>
+            <!--footer section end-->
+        </div>
+    </div>
+    <!--//content-inner-->
+    <!--/sidebar-menu-->
+    <div class="sidebar-menu">
+        <header class="logo">
+            <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="index.html"> <span
+                id="logo"> <h1>菜单</h1></span>
+            <!--<img id="logo" src="" alt="Logo"/>-->
+        </a>
+        </header>
+        <div style="border-top:1px solid rgba(69, 74, 84, 0.7)"></div>
+        <!--/down-->
+
+        <!--//down-->
+        <div class="menu">
+            <ul id="menu">
+                <li><a href="#"><i class="fa fa-tachometer"></i> <span>主页</span></a></li>
+                <li><a href="./classTab.html"><i class="fa fa-table"></i></i> <span>课程/会议管理</span></a></li>
+                <!-- <li><a href="./addUser.html"><i class="fa fa-file-text-o"></i> <span>用户管理</span></a></li> -->
+
+            </ul>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+</body>
+</html>

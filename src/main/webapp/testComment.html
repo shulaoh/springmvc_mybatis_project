@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta http-equiv="imagetoolbar" content="no" />
+<title>接口测试</title>
+<link rel="stylesheet"  href="common/MetroUICSS4/css/metro-all.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-colors.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-icons.css" type="text/css">
+<link rel="stylesheet" href="common/MetroUICSS4/css/metro-rtl.css" type="text/css">
+<style type="text/css">
+html,body{
+	height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* background-color : black;
+	background-image: url(images/login/loginbg.jpg);
+	background-repeat: no-repeat;
+	background-size:100% 100%; */
+	font-family: "Arial","Microsoft YaHei","黑体","宋体","sans-serif";
+}
+::-webkit-scrollbar{
+	width:0px;
+}
+.fontStyleB {
+    margin-left: 32rem;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    width: 100%;
+    height: 78px;
+    line-height: 78px;
+    text-align: center;
+    font-size: 28px;
+    font-family: "微软雅黑";
+    font-weight: normal;
+}
+.tabs.vertical > ul > li.active {
+    border: 1px solid #2ac4f4;
+    border-right: 1px solid #2ac4f4; 
+}
+.tabs.vertical > ul > li {
+    border-right: 1px solid #2ac4f4;
+}
+</style>
+</head>
+<script type="text/javascript" src="common/MetroUICSS4/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="common/MetroUICSS4/js/metro.js"></script>
+<script type="text/javascript" src="js/test2.js"></script>
+<body oncontextmenu="return true;" onselectstart="return true;" ondragstart="return true;">
+<div class="row">
+	<div class="cell-12">
+		<span class="fontStyleB">接口测试页面</span><span style="font-size:16px;">(必须调用用户登录接口登录用户,不然无法获取session)</span>
+	</div>
+</div>
+<div class="row" style="height: 85%;">
+	<div class="cell-2">
+		<ul class="vertical tabs-expand-fs" data-role="tabs" style="width: 100%">
+			<li><a href="#_target_1" id="portName" portId="login">1、用户登录验证</a></li>
+			<li><a href="#_target_2" id="portName" portId="getCommTypes">2、获取评价类型信息</a></li>
+			<li><a href="#_target_3" id="portName" portId="getCommTemps">3、获取评价模板列表</a></li>
+			<li><a href="#_target_4" id="portName" portId="getComments">4、获取指定目标的历史评价信息</a></li>
+			<li><a href="#_target_5" id="portName" portId="comment">5、生成评价</a></li>
+		</ul>
+	</div>
+	<div class="cell-5">
+		<div style="width:100%;height:100%" id="targetDiv">
+		<div id="_target_1">
+		        <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="login"
+					data-role="validator" action="javascript:">
+						<div class="row mb-2">
+							<label class="cell-sm-2">方法名</label>
+							<div class="cell-sm-10">
+								login
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">接口版本</label>
+							<div class="cell-sm-10">
+								<input type="text" class="warning" data-role="input" name="service_version" placeholder="版本号，目前为1">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">字符集</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" name="input_charset" placeholder="默认为：UTF-8">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">访问标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_login">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">登录标识</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="loginId" placeholder="登录标识，可为电话号码或邮箱地址  ">
+							</div>
+						</div>
+						<div class="row mb-2">
+							<label class="cell-sm-2">登录密码</label>
+							<div class="cell-sm-10">
+								<input type="text" data-role="input" class="warning" name="password" placeholder="Md5加密密文  ">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		    <div id="_target_2">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getCommTypes"
+						data-role="validator">
+						<div class="row mb-2">
+					        <label class="cell-sm-2">方法名</label>
+					        <div class="cell-sm-10">
+					            getCommTypes
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">接口版本</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="service_version" placeholder="版本号，目前为1">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">字符集</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" name="input_charset"  placeholder="默认为：UTF-8">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">访问标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_commtypes">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">角色类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="roleType" placeholder="STU:学员 TEA:讲师 AL2:二级管理员 AL1:一级管理员">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">目标类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="targetType" placeholder="LES:课程 SCH:程 STU:学员">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">模板ID</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="commTempIds" placeholder="">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_3">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getCommTemps"
+						data-role="validator">
+						<div class="row mb-2">
+					        <label class="cell-sm-2">方法名</label>
+					        <div class="cell-sm-10">
+					            getCommTemps
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">接口版本</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="service_version" placeholder="版本号，目前为1">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">字符集</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" name="input_charset"  placeholder="默认为：UTF-8">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">访问标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_commtypes">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">角色类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="roleType" placeholder="STU:学员 TEA:讲师 AL2:二级管理员 AL1:一级管理员">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">目标类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="targetType" placeholder="LES:课程 SCH:程 STU:学员">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">模板ID</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="commTempId" placeholder="">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_4">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="getComments"
+						data-role="validator">
+						<div class="row mb-2">
+					        <label class="cell-sm-2">方法名</label>
+					        <div class="cell-sm-10">
+					            getComments
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">接口版本</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="service_version" placeholder="版本号，目前为1">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">字符集</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" name="input_charset"  placeholder="默认为：UTF-8">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">访问标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_get_comments">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">课程标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonId" placeholder="">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">日程Id</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="schId" placeholder="">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">目标标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="targetId" placeholder="课程ID\日程ID\讲授者的UserId">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">目标类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="targetType" placeholder="LES:课程  SCH:日程 TUT：讲授者 ">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div id="_target_5">
+			    <div class="row">
+					<form style="margin: 2rem;width: 100%;" name="comment"
+						data-role="validator">
+						<div class="row mb-2">
+					        <label class="cell-sm-2">方法名</label>
+					        <div class="cell-sm-10">
+					            comment
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">接口版本</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="service_version" placeholder="版本号，目前为1">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">字符集</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" name="input_charset"  placeholder="默认为：UTF-8">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">访问标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="tid" placeholder="此CGI为:tid_comment">
+					        </div>
+					    </div>
+						<div class="row mb-2">
+					        <label class="cell-sm-2">评价信息</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="comments" placeholder="如：tempItemId=1#score=5#comment=abc">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">课程标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="lessonId" placeholder="">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">目标类型</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="targetType" placeholder="LES:课程  SCH:日程  STU:学员">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">目标标识</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="targetId" placeholder="根据目标类型确定实际评价目标的标识">
+					        </div>
+					    </div>
+					    <div class="row mb-2">
+					        <label class="cell-sm-2">日程Id</label>
+					        <div class="cell-sm-10">
+					            <input type="text" data-role="input" class="warning" name="schId" placeholder="如果是教授者（TUT）、日程（SCH）评价此字段必填">
+					        </div>
+					    </div>
+					</form>
+				</div>
+			</div>
+			<div class="row">
+		        <div class="cell">
+		            <button class="button primary place-right" style="width:8rem;margin-right:1.5rem;" onclick="testConmit()">生成请求参数</button>
+		        </div>
+		    </div>	
+		</div>
+	</div>	
+	
+	<div class="cell-5" id="requestId">
+		<div class="row" style="height:65%;">
+			<p>请求参数集</p>
+			<div style="width:80%;border: 1px solid #ff9447;margin-bottom: 2rem;margin-left: 1rem;">
+				<textarea data-role="textarea" style="height:22rem;" id="requestParam"></textarea>
+				<div style="position: absolute;right: 1rem;bottom: .5rem;">
+					<button class="button primary" style="width:8rem" onclick="sendRequest()">发送请求</button>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="height:65%;">
+			<p>返回结果集</p>
+			<div style="width:80%;border: 1px solid #ff9447;margin-left: 1rem;" id="resultJson"></div>
+		</div>
+	</div>
+</div>
+</body>
+
+</html>

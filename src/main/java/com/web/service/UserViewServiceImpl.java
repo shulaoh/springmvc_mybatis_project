@@ -42,7 +42,7 @@ public class UserViewServiceImpl implements IUserViewService {
 	@Override
 	public UserView getUserByUserId(String paramString) {
 		UserView uv = userViewMapper.getUserByUserId(paramString);
-		if (uv != null) {
+		if (uv != null && uv.getCompanyId() != null && uv.getCompanyId().equals("000")) {
 			uv.setCompanyName(uv.getRemark());
 		}
 		return uv;

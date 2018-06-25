@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Tables</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content=""/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel='stylesheet' type='text/css'/>
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <!-- Graph CSS -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- jQuery -->
+    <!-- lined-icons -->
+    <link rel="stylesheet" href="css/icon-font.min.css" type='text/css'/>
+    <!-- /js -->
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <!-- //js-->
+	<script type="text/javascript" src="js/bootstrap-paginator.js"></script>
+    <script src="js/bootbox.js"></script>
+	<script src="js/util.js"></script>
+    <style type="text/css">
+        .Z_title{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1em;
+        }
+        .Z_title .inner-tittle{margin: 0px 2em 0px 0px;}
+        .act.btn{
+            padding: 5px;
+            margin-bottom: 3px;
+            margin-left: 3px;
+        }
+        .publish.btn{
+            padding: 3px 8px;
+            font-size: 14px;
+        }
+        .table td, .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+                padding: 8px 5px !important;
+        }
+        .table>thead>tr>th{
+            text-align: center;
+        }
+        .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+            color: #777;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+        .graph{padding-top: 1em;}
+    </style>
+	
+</head>
+<body>
+<div class="page-container">
+    <!--/content-inner-->
+    <div class="left-content">
+        <div class="inner-content">
+            <!-- header-starts -->
+            <div class="header-section">
+                <!--menu-right-->
+                <div class="top_menu">
+                    <div class="main-search">
+                        <div class="close"></div>
+                    </div>
+                    <div class="srch"><span
+                            style="position: absolute;top: 13px;left: 260px;font-size: 30px;color: white;">北京人力培训系统</span>
+                    </div>
+                    <script type="text/javascript">
+                        $('.main-search').hide();
+                        $('button').click(function () {
+                                    $('.main-search').show();
+                                    $('.main-search text').focus();
+                                }
+                        );
+                        $('.close').click(function () {
+                            $('.main-search').hide();
+                        });
+                    </script>
+                    <!--/profile_details-->
+                    <div class="profile_details_left">
+                        <ul class="nofitications-dropdown">
+
+                            <li class="dropdown note">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                                        class="fa fa-envelope-o"></i> <span id="userInfo"><!-- 赵总经(二级管理) --></span></a>
+
+                            </li>
+
+
+                            <div class="clearfix"></div>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!--//profile_details-->
+                </div>
+                <!--//menu-right-->
+                <div class="clearfix"></div>
+            </div>
+            <!-- //header-ends -->
+            <!--outter-wp-->
+            <div class="outter-wp">
+
+                <div class="graph-visual tables-main">
+
+                <div class="Z_title">
+                    <h3 class="inner-tittle two">课程列表 </h3>
+                    <a href="./saveOrEditLesson.html?id=" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 添加课程</a>
+                </div>
+                    <div>
+                    <div class="graph">
+                        <div class="tables">
+                            <table class="table" >
+                                <thead>
+                                <tr>
+                                    <th>课程名称</th>
+                                    <th>类型</th>
+                                    <th>开始时间</th>
+                                    <th>结束时间</th>
+                                    <th>地点</th>
+                                    <th>讲师</th>
+                                    <th>发布</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                               <!--  <tr class="active">
+                                    <th scope="row">中国海油发展企业文化</th>
+                                    <td>课程</td>
+                                    <td>2018-05-03 04:51</td>
+                                    <td>2018-05-07 12:00</td>
+                                    <td>海油发展大厦</td>
+                                    <td>张伟(讲师)</td>
+                                    <td>
+                                        <div class="onoffswitch">
+                                            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                                            <label class="onoffswitch-label" for="myonoffswitch">
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td><span class="glyphicon glyphicon-edit" aria-hidden="true" onclick="toHtml('editClass');">修改</span> &nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-th-list" aria-hidden="true" onclick="toHtml('scheduleTab');">日程信息</span>  </td>
+                                </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+						<ul id='bp-element'></ul>
+					
+                    </div>
+                    <!--<h3 class="inner-tittle two">Responsive Table </h3>
+                          <div class="graph">
+                            <div class="tables">
+
+                                <table class="table table-bordered"> <thead> <tr> <th>#</th> <th>Table heading</th> <th>Table heading</th> <th>Table heading</th> <th>Table heading</th> </tr> </thead> <tbody> <tr> <th scope="row">1</th> <td>Table cell</td> <td>Table cell</td> <td>Table cell</td> <td>Table cell</td> </tr> <tr> <th scope="row">2</th> <td>Table cell</td> <td>Table cell</td> <td>Table cell</td> <td>Table cell</td> </tr> <tr> <th scope="row">3</th> <td>Table cell</td> <td>Table cell</td> <td>Table cell</td> <td>Table cell</td> </tr> </tbody> </table>
+                            </div>
+                    </div>-->
+                </div>
+                <!--//graph-visual-->
+            </div>
+            <!--//outer-wp-->
+        </div>
+    </div>
+    <!--//content-inner-->
+    <!--/sidebar-menu-->
+    <div class="sidebar-menu">
+        <header class="logo">
+            <a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="index.html"> <span
+                id="logo"> <h1>菜单</h1></span>
+            <!--<img id="logo" src="" alt="Logo"/>-->
+        </a>
+        </header>
+        <div style="border-top:1px solid rgba(69, 74, 84, 0.7)"></div>
+
+        <div class="menu">
+            <ul id="menu">
+                <li><a href="#"><i class="fa fa-tachometer"></i> <span>主页</span></a></li>
+                <li><a href="#"><i class="fa fa-table"></i></i> <span>课程/会议管理</span></a></li>
+                <!-- <li><a href="./addUser.html"><i class="fa fa-file-text-o"></i> <span>用户管理</span></a></li> -->
+
+            </ul>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script src="js/menuUtil.js"></script>
+<script>
+	$(function(){
+
+		getCurrentUserInfo();
+
+		var currPage;
+		var totalPage;
+		
+		//获得全部课程(分页)
+		function getLessons(pageNum){
+		
+			$.ajax({
+				url: "https://lpg.tianmengit.com/cnooc_training/getAllLessons.do",
+				data:{
+					service_version:1,
+					tid:'tid_get_all_lessons',
+					showCount:10,
+					pageNum:pageNum
+				},
+                async:false,
+				type: 'post',
+				dataType: 'json',
+				success: function (result) {
+					if (result.result.retcode > 0) {
+					  $("tbody").html("");
+					
+					   var trBeginHtml ="<tr>";
+					   var trEndHtml ="</tr>";
+					   var thBeginHtml ="<th scope='row'>";
+					   var thEndHtml ="</th>";
+					   var tdBeginHtml = "<td>";
+					   var tdEndHtml = "</td>";
+					   
+					   currPage = result.datadesc.page.currentPage;
+					   totalPage = result.datadesc.page.totalPage;
+					   
+					   $.each(result.data.lessons,function(i,item){
+						   if(i%2 == 0){
+								trBeginHtml = "<tr class='active'>";
+						   }else{
+								trBeginHtml = "<tr>";
+						   }
+						   
+						   var lessonName = item.lessonName ;
+						   var lessonType = item.lessonType == "L" ? "课程" :"会议" ;
+                           if(item.stime){
+                                var beginTime = item.stime;
+                           }else{
+                                var beginTime = '';
+                           }
+						    if(item.stime){
+                                var endTime = item.etime;
+                           }else{
+                                var endTime = '';
+                           }
+						   var place = item.place;
+                           if(item.teacher){
+                             var teacher = item.teacher.name;
+                           }else{
+                            var teacher = '';
+                           }
+						   
+						   var lessonStatus = item.lessonStatus;
+						   var lessonId = item.lessonId;
+                           var operate = '<button type="button" class="act btn btn-default" onclick="toHtml(\'saveOrEditLesson\',\''+lessonId+'\');"><span class="glyphicon glyphicon-edit"></span> 编辑课程</button>'+
+                                         '<button type="button" class="act btn btn-default" onclick="toHtml(\'scheduleTab\',\''+lessonId+'\');"><span class="glyphicon glyphicon-edit"></span> 日程信息</button>'
+                           if(lessonStatus == '1'){
+                                statusHtml = '<button class="publish btn btn-info" data-status='+lessonStatus+' data-lessonId='+lessonId+' onclick="publish(this)">已发布</button>';
+                           }else{
+                                statusHtml = '<button class="publish btn btn-unPub" data-status='+lessonStatus+' data-lessonId='+lessonId+' onclick="publish(this)">未发布</button>'
+                           }
+						  
+							var trHtml = trBeginHtml +thBeginHtml+ lessonName + thEndHtml + tdBeginHtml + lessonType +tdEndHtml + tdBeginHtml + beginTime +tdEndHtml + tdBeginHtml + endTime +tdEndHtml+ tdBeginHtml + place +tdEndHtml+ tdBeginHtml + teacher +tdEndHtml+ tdBeginHtml + statusHtml +tdEndHtml+ tdBeginHtml + operate +tdEndHtml + trEndHtml;
+							
+							$("tbody").append(trHtml);
+					  });
+					} else {
+                        bootbox.alert(result.result.retmsg, function () {})
+					}
+				},
+				error: function () {
+                    bootbox.alert("系统错误，请联系管理员", function () {})
+				}
+			});
+		}
+
+		getLessons(1);
+        console.log(currPage,totalPage);
+        pageUtil(getLessons,currPage,totalPage);	
+	});
+    
+    function publish(obj){
+        var lessonId = $(obj).data('lessonid');
+        console.log(lessonId);
+        var status = '';
+        if($(obj).data('status') == 1){
+            //当前状态已发布，需要取消发布
+            status = '0'
+        }else{
+            status = '1'
+        }
+        $.ajax({
+                url: "https://lpg.tianmengit.com/cnooc_training/updateLessStatus.do",
+                data:{
+                    service_version:1,
+                    tid:'tid_add_shc',
+                    lessonId:lessonId,
+                    lessonStatus:status
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                    if(result.result.retcode >0){
+                        window.location.href = "classTab.html";
+
+                    }else{
+                        console.log('error')
+                        bootbox.alert(result.result.retmsg, function () {})
+                    }
+                    
+                    
+                },
+                error: function () {
+                    bootbox.alert("系统错误，请联系管理员", function () {})
+                }
+            });
+    }
+
+</script>
+<!--js -->
+<script src="js/jquery.nicescroll.js"></script>
+<script src="js/scripts.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+</body>
+</html>

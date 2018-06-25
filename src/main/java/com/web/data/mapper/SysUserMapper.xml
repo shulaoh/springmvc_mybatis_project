@@ -183,7 +183,16 @@
         from t_sch_tea a left join t_users b on a.USER_ID = b.USER_ID
         where a.SCH_ID = #{schId}
     </select>
-
+	<select id="getUserByUserIds" resultMap="BaseResultMap">
+		select
+		USER_ID, USER_NAME, PHONE
+		from t_users
+		where
+		USER_ID in 
+		<foreach item="item" collection="array" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
     <!-- 分页列子 -->
     <!--select id="selectUserListPage" resultType="com.web.data.pojo.SysUser">
         select

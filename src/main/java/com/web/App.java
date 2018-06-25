@@ -1,17 +1,12 @@
 package com.web;
 
-import com.web.data.mapper.*;
-import com.web.data.pojo.*;
-import com.web.service.ILessonManageService;
-import com.web.service.LessonManageServiceImpl;
-import com.web.task.SmsScheduleTask;
-import com.web.utils.Tools;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.web.data.mapper.LessonManageMapper;
 
 /**
  * Hello world!
@@ -32,7 +27,7 @@ public class App
         SimpleDateFormat datef = new SimpleDateFormat("yyMMddHHmmss");
         String tempName = datef.format(date.getTime());
         System.out.println(tempName);*/
-        /**ApplicationContext ac = new ClassPathXmlApplicationContext("spring-mybatis.xml");
+        ApplicationContext ac = new ClassPathXmlApplicationContext("spring-mybatis.xml");
         LessonManageMapper nm = (LessonManageMapper)ac.getBean("lessonManageMapper");
         Map<String, Object> map = new HashMap<>();
         map.put("lessonId", "f29cc12b38354b029cdffc0a887fcbfa");
@@ -40,22 +35,7 @@ public class App
         map.put("offset", 1);
         map.put("size", 2);
         int c = nm.getFilesCountByLessonId(map);
-        System.out.println(c);**/
-        String a = "培生幼儿英语（共三套）.xlsx,培生幼儿英语（共三套）_180624223154.xlsx;commentTemplate.xlsx,commentTemplate_180624223213.xlsx";
-        String[] file = a.split(";");
-        for (int i = 0; i < file.length; ++i) {
-            String[] filenames = file[i].split(",");
-            FileContent fc = new FileContent();
-            String filename = filenames[0];
-            String attach = filenames[1];
-
-            fc.setFileId("-1");
-            fc.setFileName(filename);
-            fc.setFileType(filename.substring(filename.lastIndexOf(".") + 1));
-            fc.setFileURL(attach);
-
-        }
-
+        System.out.println(c);
 
 
 
