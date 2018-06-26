@@ -136,17 +136,21 @@
     </update>
 
     <select id="getLessonListByUserId" resultMap="LessonResultMap">
-        select t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.teacher_id, t.less_pic_url,t.ALL_COMM_FLAG, t.comm_tempids
-        from (
-        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url, u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
-        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_users u
+        select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.teacher_id, t.less_pic_url,
+        t.ALL_COMM_FLAG, t.comm_tempids from (
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url,
+        u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
+        group by less_Id ) c on (l.less_id = c.less_id), t_users u
         where  l.creator_id = u.user_id
-        and u.admin_flag = 20 and l_status != '-1' 
+        and l_status != '-1'
         union all
-        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url, u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
-        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_users u
-        where  l.creator_id = u.user_id
-        and u.admin_flag = 30 and l_status != '-1'  ) t
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id,
+        l.less_pic_url, u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule group by less_Id )
+        c on (l.less_id = c.less_id), t_less_admin u
+        where  l.less_id = u.less_id
+        and l_status != '-1'  ) t
         where user_id = #{userId, jdbcType=VARCHAR}
         order by sch_s_time desc, l_type desc
         limit #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
@@ -188,13 +192,19 @@
     <select id="getLessonsCount" resultType="java.lang.Integer">
         select count(distinct t.less_Id)
         from (
-        select l.less_id, u.user_id from t_lesson l, t_users u where
-        l.creator_id = u.user_id
-        and u.admin_flag = 20 and l_status != '-1' 
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.less_pic_url,
+        u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
+        group by less_Id ) c on (l.less_id = c.less_id), t_users u
+        where  l.creator_id = u.user_id
+        and l_status != '-1'
         union all
-        select l.less_id, u.user_id from t_lesson l, t_users u where
-        l.creator_id = u.user_id and l_status != '-1' 
-        and u.admin_flag = 30) t
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id,
+        l.less_pic_url, u.user_id, c.sch_s_time,l.ALL_COMM_FLAG, l.comm_tempids
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule group by less_Id )
+        c on (l.less_id = c.less_id), t_less_admin u
+        where  l.less_id = u.less_id
+        and l_status != '-1'  ) t
         where user_id = #{userId, jdbcType=VARCHAR}
 
 

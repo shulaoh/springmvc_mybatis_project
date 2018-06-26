@@ -14,6 +14,8 @@ public abstract interface LessonMapper
 
   public abstract List<Lession> selectLessionsByTEATypeListPage(HashMap<String, Object> paramHashMap);
 
+  List<Lession> selectLessonByAdminId(HashMap<String,Object> hashMap);
+
   public abstract List<Lession> selectLessionsByUserIdListPage(HashMap<String, Object> paramHashMap);
 
   public abstract int getcommentFlag(HashMap<String, Object> paramHashMap);
