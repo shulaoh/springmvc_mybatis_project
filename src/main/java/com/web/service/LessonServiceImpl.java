@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.web.data.mapper.LessonManageMapper;
+import com.web.data.pojo.SysUser;
+import com.web.utils.Tools;
 import org.springframework.stereotype.Service;
 
 import com.web.data.mapper.LessonMapper;
@@ -18,6 +21,9 @@ public class LessonServiceImpl implements ILessonService {
 
 	@Resource
 	private LessonMapper lessonMapper;
+
+	@Resource
+	private LessonManageMapper lessonManageMapper;
 
 	public List<Lession> getLessons(Page page, String userId, String oprType, String lessonType,
 			String lessonNameKeyword) {
@@ -36,7 +42,8 @@ public class LessonServiceImpl implements ILessonService {
 		} else if (oprType.equalsIgnoreCase("MY")) {
 			list = this.lessonMapper.selectMyStuLessionsListPage(map);
 		} else if (oprType.equalsIgnoreCase("TEA")) {
-			list = this.lessonMapper.selectLessionsByTEATypeListPage(map);
+			//list = this.lessonMapper.selectLessionsByTEATypeListPage(map);
+			list = lessonMapper.selectLessonByAdminId(map);
 		} else {
 			map.put("oprType", oprType);
 			list = this.lessonMapper.selectLessionsByStuTypeListPage(map);
@@ -44,6 +51,12 @@ public class LessonServiceImpl implements ILessonService {
 		for (Iterator localIterator = list.iterator(); localIterator.hasNext();) {
 			Lession temp = (Lession) localIterator.next();
 
+			Timestamp startTs = lessonManageMapper.getStartDateByLessonId(temp.getLessonId());
+			Timestamp endTs = lessonManageMapper.getEndDatetimeByLessonId(temp.getLessonId());
+			temp.setStime(Tools.date2Str(startTs, "yyyy-MM-dd HH:mm"));
+			temp.setEtime(Tools.date2Str(endTs, "yyyy-MM-dd HH:mm"));
+			List<SysUser> adminList = lessonManageMapper.getAdminListByLessonId(temp.getLessonId());
+			temp.setAdminList(adminList);
 			map.put("lessonId", temp.getLessonId());
 			map.put("targetType", "LES");
 			map.put("targetId", temp.getLessonId());
