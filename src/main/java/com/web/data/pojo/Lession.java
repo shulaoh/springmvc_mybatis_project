@@ -1,6 +1,7 @@
 package com.web.data.pojo;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Lession {
 	private String lessonId;
@@ -26,6 +27,16 @@ public class Lession {
 
 	private Timestamp createTime;
 	private Timestamp updateTime;
+
+	public List<SysUser> getAdminList() {
+		return adminList;
+	}
+
+	public void setAdminList(List<SysUser> adminList) {
+		this.adminList = adminList;
+	}
+
+	private List<SysUser> adminList;
 
 	public SysUser getInstructor() {
 		return instructor;
