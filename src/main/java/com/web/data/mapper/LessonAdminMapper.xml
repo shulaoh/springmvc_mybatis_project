@@ -21,4 +21,7 @@
             #{item}
         </foreach>
     </delete>
+    <delete id="deleteAllLessonAdmin">
+        delete from t_less_admin where less_id = #{lessonId}
+    </delete>
 </mapper>

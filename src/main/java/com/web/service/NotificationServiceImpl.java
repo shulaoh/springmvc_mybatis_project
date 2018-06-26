@@ -220,24 +220,27 @@ public class NotificationServiceImpl implements INotificationService{
             String name = lesson.getLessonName();
             String place = lesson.getPlace();
             java.sql.Timestamp t = lessonManageMapper.getStartDateByLessonId(lesson.getLessonId());
-            List<SysUser> users = lesson.getStudentList();
-            if (users != null && users.size() > 0) {
-                for (SysUser user: users) {
-                    Notification n = new Notification();
-                    n.setNotificationId(Tools.generateID());
-                    n.setNotificationDatetime(new Timestamp(new Date().getTime()));
-                    n.setNotificationType(type);
-                    n.setLessonId(lesson.getLessonId());
-                    n.setUserId(user.getUserId());
-                    notificationMapper.insert(n);
-                    String phone = user.getPhone();
-                    if (phone != null && phone.trim().length() > 0) {
-                        params = params + phone + "," + Tools.formatTimestampNoSec(t) + "," + place + "," + name + ";";
+            //当lesson的开始时间晚于当前时间，才会更新短信。
+            if (t == null || t.getTime() > new Date().getTime()) {
+                List<SysUser> users = lesson.getStudentList();
+                if (users != null && users.size() > 0) {
+                    for (SysUser user : users) {
+                        Notification n = new Notification();
+                        n.setNotificationId(Tools.generateID());
+                        n.setNotificationDatetime(new Timestamp(new Date().getTime()));
+                        n.setNotificationType(type);
+                        n.setLessonId(lesson.getLessonId());
+                        n.setUserId(user.getUserId());
+                        notificationMapper.insert(n);
+                        String phone = user.getPhone();
+                        if (phone != null && phone.trim().length() > 0) {
+                            params = params + phone + "," + Tools.formatTimestampNoSec(t) + "," + place + "," + name + ";";
+                        }
                     }
                 }
-            }
 
-            map.putAll(smsNotification(message, params));
+                map.putAll(smsNotification(message, params));
+            }
         }
         return map;
     }

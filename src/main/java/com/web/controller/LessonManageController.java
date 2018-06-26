@@ -132,7 +132,7 @@ public class LessonManageController {
 	@RequestMapping({ "/putLesson" })
 	@ResponseBody
 	public Map<String, Object> putLesson(@RequestParam String lessonId, @RequestParam String lessonName,
-			@RequestParam String lessonType, @RequestParam String place, String lessonInfo, String purl,
+			@RequestParam String lessonType, @RequestParam String lessonStatus, @RequestParam String place, String lessonInfo, String purl,
 			@RequestParam String teacherId, @RequestParam String creatorId, @RequestParam String allCommFlag,
 			@RequestParam String lessPicUrl, @RequestParam String lessCycPicUrl, String inviUserIds, String commTempIds,
 			String adminIds,String inviUserFile) {
@@ -157,7 +157,13 @@ public class LessonManageController {
 		less.setLessonId(lessonId);
 		less.setLessonName(lessonName);
 		less.setLessonType(lessonType);
-
+		int status = 0;
+		try {
+			status = Integer.valueOf(lessonStatus);
+		} catch (NumberFormatException ex) {
+			status = 0;
+		}
+		less.setLessonStatus(status);
 		less.setPlace(place);
 		less.setLessonInfo(lessonInfo);
 		less.setPurl(purl);

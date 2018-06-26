@@ -11,4 +11,5 @@ public interface LessonStudentMapper {
     void insertLessonStudent(LessonStudent student);
     void deleteLessonStudent(@Param("lessonId") String lessonId, @Param("userId") String userId);
     void deleteLessonStudentNotInList(@Param("lessonId") String lessonId, @Param("list") List<String> list);
+    void deleteAllLessonStudent(@Param("lessonId") String lessonId);
 }

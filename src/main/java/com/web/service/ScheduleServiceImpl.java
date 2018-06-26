@@ -217,9 +217,10 @@ public class ScheduleServiceImpl implements IScheduleService {
 			}
 
 			List<FileContent> fileList = schedule.getFileContentList();
+			scheduleFileContentMapper.deleteAllFileContentsByScheduleId(scheduleId);
 			if (fileList != null && fileList.size() > 0) {
 				// 删除该日程下关联的全部附件
-				scheduleFileContentMapper.deleteAllFileContentsByScheduleId(scheduleId);
+
 				for (FileContent fc : fileList) {
 					// 1. 插入附件表
 					if (fc.getFileId().equals("-1")) {
@@ -237,6 +238,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 
 				}
 			}
+
 			List<SchTeaLink> stLinkList = new ArrayList<SchTeaLink>();
 			SchTeaLink schTeaLink = null;
 			for (SysUser user: schedule.getTeachers()) {

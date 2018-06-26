@@ -144,6 +144,8 @@ public class LessonManageServiceImpl implements ILessonManageService {
                 l2.add(user.getUserId());
             }
             lessonAdminMapper.deleteLessonAdminNotInList(lessonId, l2);
+        } else {
+            lessonAdminMapper.deleteAllLessonAdmin(lessonId);
         }
 
         List<SysUser> studentList = lesson.getStudentList();
@@ -159,6 +161,8 @@ public class LessonManageServiceImpl implements ILessonManageService {
                 l2.add(user.getUserId());
             }
             lessonStudentMapper.deleteLessonStudentNotInList(lessonId, l2);
+        } else {
+            lessonStudentMapper.deleteAllLessonStudent(lessonId);
         }
         return 1;
     }
