@@ -118,12 +118,12 @@ public class SignController {
 	public ResponseEntity<byte[]> exportLessSignInfo(HttpServletRequest request, @RequestParam String lessId) {
 			List<SignInfo> data = this.signService.getSignListByLessId(lessId);
 			String imagePath = request.getServletContext().getRealPath("/image/");
-			for (int i = 0; i < data.size(); ++i) {
+			/*for (int i = 0; i < data.size(); ++i) {
 				if (StringUtils.isNotEmpty(data.get(i).getSignPicUrl())) {
 					data.get(i).setSignPicUrl(
 							imagePath + data.get(i).getSignPicUrl().replaceAll("\"", ""));
 				}
-			}
+			}*/
 	        String path = request.getServletContext().getRealPath("/tmp/");
 	        String fileName = "signInfo_" + lessId + ".xls";
 	        File file = new File(path + File.separator + fileName);
