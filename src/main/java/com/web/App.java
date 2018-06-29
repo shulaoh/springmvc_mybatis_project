@@ -1,5 +1,6 @@
 package com.web;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,11 @@ public class App
     {
         System.out.println( "Hello World!" );
 
+        String a = "\\dfdfdf";
+        System.out.println(a);
+        a = a.replaceAll("\\\\", File.separator);
+        System.out.println(a);
+
         //ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         //SmsScheduleTask task = (SmsScheduleTask)ac.getBean("smsScheduleTask");
@@ -26,7 +32,7 @@ public class App
         /*Calendar date = Calendar.getInstance();
         SimpleDateFormat datef = new SimpleDateFormat("yyMMddHHmmss");
         String tempName = datef.format(date.getTime());
-        System.out.println(tempName);*/
+        System.out.println(tempName);
         ApplicationContext ac = new ClassPathXmlApplicationContext("spring-mybatis.xml");
         LessonManageMapper nm = (LessonManageMapper)ac.getBean("lessonManageMapper");
         Map<String, Object> map = new HashMap<>();
