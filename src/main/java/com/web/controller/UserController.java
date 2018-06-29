@@ -165,6 +165,27 @@ public class UserController {
 		}
 		return map;
 	}
+	@RequestMapping({ "/updatePassword" })
+	@ResponseBody
+	public Map<String, Object> updatePassword(String userId, String oldPassword, String newPassword) {
+		String tid = "tid_update_my_password";
+		ResourceDesc rdesc = new ResourceDesc();
+		HashMap map = new HashMap();
+		Result result = new Result();
+		map.put("result", result);
+		SysUser oldUser = this.userService.getUserById(userId);
+		if (oldPassword.endsWith(oldUser.getPassword())) {
+			oldUser.setPassword(newPassword);
+			if (this.userService.updatePassword(oldUser) > 0) {
+				result.setRetcode(1);
+				result.setRetmsg("修改密码成功");
+			} else {
+				result.setRetcode(-1);
+				result.setRetmsg("修改密码失败");
+			}
+		}
+		return map;
+	}
 	@RequestMapping({ "/getMyUserInfo" })
 	@ResponseBody
 	public Map<String, Object> getMyUserInfo(HttpSession session) {

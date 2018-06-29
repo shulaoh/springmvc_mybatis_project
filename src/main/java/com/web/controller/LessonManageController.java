@@ -13,6 +13,7 @@ import com.web.utils.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,6 +48,9 @@ public class LessonManageController {
 	@Resource
 	private INotificationService notificationService;
 
+	@Value("${file.folder}")
+    private String fileRelativeAddress;
+
 	private static Logger logger = Logger.getLogger(LessonManageController.class);
 
 
@@ -68,8 +72,8 @@ public class LessonManageController {
 			}
 			params.put("offset", offset);
 			params.put("size", showCount);
-			data.put("lessonFiles", this.lessonManageService.getFilesByLessonId(map));
-			data.put("count", lessonManageService.getFilesCountByLessonId(map));
+			data.put("lessonFiles", this.lessonManageService.getFilesByLessonId(params));
+			data.put("count", lessonManageService.getFilesCountByLessonId(params));
 			map.put("data", data);
 			result.setRetcode(1);
 		}
@@ -132,9 +136,9 @@ public class LessonManageController {
 	@RequestMapping({ "/putLesson" })
 	@ResponseBody
 	public Map<String, Object> putLesson(@RequestParam String lessonId, @RequestParam String lessonName,
-			@RequestParam String lessonType, @RequestParam String lessonStatus, @RequestParam String place, String lessonInfo, String purl,
+			@RequestParam String lessonType, @RequestParam String place, String lessonInfo, String purl,
 			@RequestParam String teacherId, @RequestParam String creatorId, @RequestParam String allCommFlag,
-			@RequestParam String lessPicUrl, @RequestParam String lessCycPicUrl, String inviUserIds, String commTempIds,
+			@RequestParam String lessPicUrl, @RequestParam String lessCycPicUrl, String lessonStatus, String inviUserIds, String commTempIds,
 			String adminIds,String inviUserFile) {
 		Map<String, Object> map = new HashMap<>();
 		Result result = new Result();
@@ -171,8 +175,8 @@ public class LessonManageController {
 		less.setTeacherName(teacherName);
 		less.setCreatorId(creatorId);
 		less.setAllCommFlag(allCommFlag);
-		less.setLessPicUrl("https://lpg.tianmengit.com/cnooc_training/image/" + lessPicUrl);
-		less.setLessCycPicUrl("https://lpg.tianmengit.com/cnooc_training/image/" + lessCycPicUrl);
+		less.setLessPicUrl(generateFileAddress(lessPicUrl));
+		less.setLessCycPicUrl(generateFileAddress(lessCycPicUrl));
 		less.setCommTempIds(commTempIds);
 		less.setInstructor(teacher);
 
@@ -188,13 +192,16 @@ public class LessonManageController {
 		}
 		// import stu file
 		if (!StringUtils.isEmptyOrWhitespaceOnly(inviUserFile)){
+			logger.info("import student file:" + inviUserFile);
 			File userFile = new File(inviUserFile);
 			if (userFile.exists()) {
 				List<String> errs = null;
 				List<SysUser> suts = userService.importUesers(userFile, errs);
 				if (errs.isEmpty()) {
 					studentList.addAll(suts);
+					logger.info("import student success, students:" + suts.size());
 				} else {
+					logger.info("import student file error:");
 					result.setRetcode(-1);
 					StringBuffer buf = new StringBuffer();
 					for(String errInfo : errs) {
@@ -203,6 +210,7 @@ public class LessonManageController {
 					result.setRetmsg("添加课程错误" + buf.toString());
 				}
 			}
+			logger.info("import student file end");
 		}
 		if ((adminIds != null) && (adminIds.trim().length() > 0)) {
 
@@ -233,6 +241,19 @@ public class LessonManageController {
 		}
 		return map;
 	}
+
+	private String generateFileAddress(String fileName) {
+	    String filename = fileName.replaceAll("/", File.separator);
+	    filename = filename.replaceAll("\\\\", File.separator);
+	    if(fileName.startsWith(fileRelativeAddress)) {
+	        return fileName;
+        }
+	    if (filename.startsWith(File.separator)) {
+	        return fileRelativeAddress + fileName;
+        } else {
+	        return fileRelativeAddress + File.separator + fileName;
+        }
+    }
 
 	@RequestMapping({ "/joinLesson" })
 	@ResponseBody
@@ -364,10 +385,12 @@ public class LessonManageController {
 	public Map<String, Object> getIcons(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
 		List<KeyValue> iconList = new ArrayList<KeyValue>();
-		String path = request.getServletContext().getRealPath("/image/");
+		String path = request.getServletContext().getContextPath()+ "/image/";
+		KeyValue newIcon = null;
 		for (KeyValue icon : Const.iconList) {
-			icon.setValue(path + icon.getValue());
-			iconList.add(icon);
+			newIcon = new KeyValue(icon.getKey(), icon.getValue());
+			newIcon.setValue(path + icon.getValue());
+			iconList.add(newIcon);
 		}
 		Result result = new Result();
 		map.put("result", result);

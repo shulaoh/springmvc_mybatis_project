@@ -1,8 +1,6 @@
 package com.web.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +32,7 @@ import com.web.data.pojo.SysUser;
 import com.web.data.pojo.TCommTemplateGroup;
 import com.web.data.pojo.UserView;
 import com.web.service.ICommentService;
-import com.web.utils.Const;
+import com.web.service.ILessonService;
 import com.web.utils.DataDesc;
 import com.web.utils.ExcelUtil;
 import com.web.utils.Page;
@@ -47,6 +46,9 @@ public class TCommentController
 
   @Resource
   private ICommentService commentService;
+  
+  @Resource
+  private ILessonService lessonService;
   private static Logger logger = Logger.getLogger(TCommentController.class);
 
   // 获取评价类型信息
@@ -148,7 +150,8 @@ public class TCommentController
     {
       DataDesc datadesc = new DataDesc();
       HashMap data = new HashMap();
-      data.put("Comments", this.commentService.selectCommentsListPage(page, lessonId, schId, targetId, targetType));
+      UserView loginUser = (UserView) session.getAttribute("userSession");
+      data.put("Comments", this.commentService.selectCommentsListPage(page, loginUser.getuStatus(),lessonId, schId, targetId, targetType));
       boolean paging = page.caculatePageing();
       datadesc.setPaging(paging);
       datadesc.setPage(page);
@@ -193,7 +196,7 @@ public class TCommentController
   
   @RequestMapping({"/getCommTemps"})
   @ResponseBody
-  public Map<String, Object> getCommTemps(String roleType, String targetType, @RequestParam String commTempId, HttpSession session)
+  public Map<String, Object> getCommTemps(String roleType, String targetType, @RequestParam String commTempId, @RequestParam String lessId, String schId,HttpSession session)
   {
     String tid = "tid_get_comm_temps";
     ResourceDesc rdesc = new ResourceDesc();
@@ -207,6 +210,11 @@ public class TCommentController
     try
     {
       HashMap data = new HashMap();
+      if (StringUtils.isEmpty(roleType)) {
+    	  // STU/TEA/TUT
+    	  UserView loginUser = (UserView) session.getAttribute("userSession");
+    	  roleType = this.lessonService.getCurUserRole(loginUser.getUserId(), lessId, schId);
+      }
       data.put("temps", this.commentService.selectTemplates(roleType, targetType, commTempId));
       map.put("data", data);
       result.setRetcode(1);
@@ -222,7 +230,7 @@ public class TCommentController
 
   @RequestMapping(value={"/importCommTemplates"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
   @ResponseBody
-  public Map<String, Object> importCommTemplates(HttpServletRequest request, String fileDesc, @RequestParam("commFile") MultipartFile file)
+  public Map<String, Object> importCommTemplates(HttpServletRequest request, HttpSession session,String fileDesc, @RequestParam("commFile") MultipartFile file)
     throws Exception
   {
     logger.info("upload beginning [" + file.getName() + "]");
@@ -244,8 +252,8 @@ public class TCommentController
       }
       File newFile = new File(path + File.separator + tempName);
       file.transferTo(newFile);
-      
-      TCommTemplateGroup group = commentService.importCommItems(newFile);
+      UserView loginUser = (UserView) session.getAttribute("userSession");
+      TCommTemplateGroup group = commentService.importCommItems(loginUser, newFile);
       
       HashMap data = new HashMap();
       data.put("group", group);
