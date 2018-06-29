@@ -94,7 +94,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 			// default set sign time delay 15 mins
 			if ("Y".equals(temp.getHaveSign())) {
 				String signEtime = temp.getSignETime();
-				Date eDate = Tools.str2Date(signEtime);
+				Date eDate = Tools.str2Date(signEtime + ":00");
 				Calendar ca = Calendar.getInstance();
 				ca.setTime(eDate); 
 				ca.add(Calendar.MINUTE, 15);

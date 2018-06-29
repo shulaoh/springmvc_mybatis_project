@@ -226,6 +226,9 @@ public class UserServiceImpl implements IUserService {
 		BeanUtils.copyProperties(newUser,pInfo);
 		SysUser user = new SysUser();
 		BeanUtils.copyProperties(newUser,user);
+		if("000".equals(user.getCompanyId())) {
+			newUser.setRemark(user.getCompanyName());
+		}
 		if (invitedUser != null && !invitedUser.getuStatus().equals(Const.USER_STATUS_DEL)) {
 			// 受邀用户
 			user.setUserId(invitedUser.getUserId());

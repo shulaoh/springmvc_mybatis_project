@@ -4,6 +4,8 @@ import com.web.data.pojo.Lession;
 import com.web.utils.Page;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 public abstract interface ILessonService
 {
   public abstract List<Lession> getLessons(Page paramPage, String paramString1, String paramString2, String paramString3, String paramString4);
@@ -21,4 +23,6 @@ public abstract interface ILessonService
   public abstract int insertLessStu(String paramString1, String paramString2);
 
   public abstract int updateByPrimaryKeySelective(Lession paramLession);
+  
+  String getCurUserRole(String userId, String lessonId,String schId);
 }

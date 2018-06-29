@@ -51,9 +51,12 @@ public class UserViewServiceImpl implements IUserViewService {
 	@Override
 	public List<UserView> getUserListByRole(String searchKey, String role, Page page) {
 		if (role != null && Const.USER_ROLE_ADMIN.equalsIgnoreCase(role)) {
-			return userViewMapper.getUserByRoleListPage(searchKey, Const.USER_ROLE_20, Const.USER_ROLE_30,page);
+			return userViewMapper.getUserByRoleListPage(searchKey, new String[]{Const.USER_ROLE_20, Const.USER_ROLE_30, Const.USER_ROLE_0,
+			Const.USER_ROLE_10, Const.USER_ROLE_100},page);
+		} if (role != null && Const.USER_ROLE_TUT.equalsIgnoreCase(role)) {
+			return userViewMapper.getUserByRoleListPage(searchKey, new String[]{Const.USER_ROLE_20, Const.USER_ROLE_10,Const.USER_ROLE_0},page);
 		} else {
-			return userViewMapper.getUserByRoleListPage(searchKey, role, null, page);
+			return userViewMapper.getUserByRoleListPage(searchKey, new String[]{role}, page);
 		}
 	}
 

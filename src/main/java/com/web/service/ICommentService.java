@@ -9,6 +9,7 @@ import com.web.data.bean.CommImportItem;
 import com.web.data.bean.CommType;
 import com.web.data.bean.CommentList;
 import com.web.data.pojo.Comment;
+import com.web.data.pojo.SysUser;
 import com.web.data.pojo.TCommTemplateGroup;
 import com.web.data.pojo.TCommTemplateItem;
 import com.web.utils.Page;
@@ -24,18 +25,6 @@ public abstract interface ICommentService {
 	 */
 	List<TCommTemplateItem> selectTemplates(String roleType, String targetType, String commTempId);
 
-	/**
-	 * 获取指定目标的历史评价信息（支持课程与日程）
-	 * @param paramPage
-	 * @param paramString1
-	 * @param paramString2
-	 * @param paramString3
-	 * @param paramString4
-	 * @return
-	 */
-	List<CommentList> selectCommentsListPage(Page paramPage, String paramString1, String paramString2, String paramString3,
-			String paramString4);
-
 	int insert(Comment paramComment);
 	
 	int insert(List<Comment> paramComment);
@@ -49,7 +38,7 @@ public abstract interface ICommentService {
 	 */
 	List<CommType> selectTargets(String roleType, String targetType, String commTempId);
 
-	TCommTemplateGroup importCommItems(File excelFile);
+	TCommTemplateGroup importCommItems(SysUser user, File excelFile);
 	
 	/**
 	 * 查询所有的评价模板，供创建课程使用
@@ -64,4 +53,18 @@ public abstract interface ICommentService {
 	 * @return
 	 */
 	List<CommImportItem> selectCommGroupItem(String tempGroupId);
+
+	/**
+	 * 获取指定目标的历史评价信息（支持课程与日程）
+	 * @param page
+	 * @param userId
+	 * @param lessonId
+	 * @param schId
+	 * @param targetId
+	 * @param targetType
+	 * @return
+	 */
+	List<CommentList> selectCommentsListPage(Page page, String userId, String lessonId, String schId, String targetId,
+			String targetType);
+
 }

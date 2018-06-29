@@ -18,6 +18,7 @@ import com.web.data.mapper.TCommTemplateGroupMapper;
 import com.web.data.mapper.TCommTemplateItemMapper;
 import com.web.data.mapper.TCommTemplateRelateMapper;
 import com.web.data.pojo.Comment;
+import com.web.data.pojo.SysUser;
 import com.web.data.pojo.TCommTemplateGroup;
 import com.web.data.pojo.TCommTemplateItem;
 import com.web.data.pojo.TCommTemplateRelate;
@@ -55,13 +56,14 @@ public class TCommentServiceImpl implements ICommentService {
 	}
 
 	@Override
-	public List<CommentList> selectCommentsListPage(Page page, String lessonId, String schId, String targetId,
+	public List<CommentList> selectCommentsListPage(Page page, String userId, String lessonId, String schId, String targetId,
 			String targetType) {
 		HashMap map = new HashMap();
 		map.put("page", page);
 		if ((schId != null) && (schId.length() > 0)) {
 			map.put("schId", schId);
 		}
+		map.put("userId", userId);
 		map.put("lessonId", lessonId);
 		map.put("targetId", targetId);
 		map.put("targetType", targetType);
@@ -84,7 +86,7 @@ public class TCommentServiceImpl implements ICommentService {
 	}
 
 	@Override
-	public TCommTemplateGroup importCommItems(File excelFile) {
+	public TCommTemplateGroup importCommItems(SysUser user, File excelFile) {
 		List<CommImportGroup> groups = new ArrayList<CommImportGroup>();
 		boolean result = ExcelUtil.importCommItem(excelFile, groups);
 		if (result) {
@@ -101,6 +103,8 @@ public class TCommentServiceImpl implements ICommentService {
 				tGroup = new TCommTemplateGroup();
 				tGroup.setTempGroupId(Tools.generateID());
 				tGroup.setTempGroupName(group.getGroupName());
+				tGroup.setTempGroupOwerId(user.getUserId());
+				tGroup.setTempGroupEnable(1);
 				
 				for(CommImportItem item : group.getItems()) {
 					
@@ -108,6 +112,7 @@ public class TCommentServiceImpl implements ICommentService {
 					tItem.setTempItemId(Tools.generateID());
 					tItem.setTempItemName(item.getItemName());
 					tItem.setTempItemType(item.getItemType());
+					tItem.setTempItemEnable(1);
 					
 					tRelate = new TCommTemplateRelate();
 					tRelate.setTempRelateId(Tools.generateID());
@@ -115,6 +120,7 @@ public class TCommentServiceImpl implements ICommentService {
 					tRelate.setTargetType(item.getTargetType());
 					tRelate.setTempGroupId(tGroup.getTempGroupId());
 					tRelate.setTempItemId(tItem.getTempItemId());
+					tRelate.setTempRelateEnable(1);
 					
 					itemList.add(tItem);
 					relateList.add(tRelate);
