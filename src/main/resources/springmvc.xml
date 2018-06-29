@@ -24,6 +24,9 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
     </context:component-scan>
 
+    <context:property-placeholder location="classpath:global.properties"
+                                  ignore-unresolvable="true" file-encoding="UTF-8"/>
+
     <!-- 注意prefix前后的/不要漏了，WebRoot类似是根目录 -->
     <bean id="viewResolver"
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
