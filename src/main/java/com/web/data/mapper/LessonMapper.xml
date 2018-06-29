@@ -78,7 +78,7 @@
         joinStatus,temp_less_student.REJ_REASON
         from t_lesson ,(select DISTINCT LESS_ID tempLESS_id,S_STATUS,REJ_REASON from t_less_student where
         S_USER_ID=#{userId,jdbcType=VARCHAR}) temp_less_student
-        WHERE t_lesson.LESS_ID=temp_less_student.tempLESS_id and L_STATUS!=0
+        WHERE t_lesson.LESS_ID=temp_less_student.tempLESS_id and L_STATUS not in ('-1', '0')
         and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
         <if test="lessonType != null and lessonType.length()>0">
             and L_TYPE=#{lessonType,jdbcType=VARCHAR}
@@ -91,7 +91,7 @@
         (select
         <include refid="Base_Column_List"/>,'TEA' joinStatus,'' REJ_REASON
         from t_lesson
-        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS!=0
+        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS not in ('-1', '0')
         <if test="lessonType != null and lessonType.length()>0">
             and L_TYPE=#{lessonType,jdbcType=VARCHAR}
         </if>
@@ -106,9 +106,12 @@
         from t_lesson left join (select LESS_ID tempLESS_id,S_STATUS,REJ_REASON from t_less_student where
         S_USER_ID=#{userId,jdbcType=VARCHAR}) temp_less_student
         on t_lesson.LESS_ID=temp_less_student.tempLESS_id
-        where L_STATUS!=0 and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
-        <if test="lessonType != null and lessonType.length()>0">
+        where L_STATUS not in ('-1', '0') and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
+        <if test="lessonType != null and lessonType.length()>0 and lessonType != 'LP'.toString()">
             and L_TYPE=#{lessonType,jdbcType=VARCHAR}
+        </if>
+        <if test="lessonType != null and lessonType.length()>0 and lessonType == 'LP'.toString()">
+            and L_TYPE in ('L', 'P')
         </if>
         <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
             and L_NAME like #{lessonNameKeyword,jdbcType=VARCHAR}
@@ -118,7 +121,7 @@
         (select
         <include refid="Base_Column_List"/>,'TEA' joinStatus,'' REJ_REASON
         from t_lesson
-        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS!=0
+        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS  not in ('-1', '0')
         <if test="lessonType != null and lessonType.length()>0">
             and L_TYPE=#{lessonType,jdbcType=VARCHAR}
         </if>
@@ -136,7 +139,7 @@
         where S_USER_ID=#{userId,jdbcType=VARCHAR})
         temp_less_student
         on t_lesson.LESS_ID=temp_less_student.tempLESS_id
-        where L_STATUS!=0 and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
+        where L_STATUS  not in ('-1', '0') and t_lesson.TEACHER_ID!=#{userId,jdbcType=VARCHAR}
         <if test="lessonType != null and lessonType.length()>0">
             and L_TYPE=#{lessonType,jdbcType=VARCHAR}
         </if>
@@ -149,7 +152,7 @@
         select
         <include refid="Base_Column_List"/>,'TEA' joinStatus
         from t_lesson
-        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS!=0
+        where TEACHER_ID=#{userId,jdbcType=VARCHAR} and L_STATUS not in ('-1', '0')
         <if test="lessonType != null and lessonType.length()>0">
             and L_TYPE=#{lessonType,jdbcType=VARCHAR}
         </if>
@@ -163,8 +166,9 @@
         select
         <include refid="Base_Column_List"/>
         from t_lesson
+        where l_status  not in ('-1', '0')
         <if test="userId != null and userId.length()>0">
-            where CREATOR_ID=#{userId,jdbcType=VARCHAR}
+            and CREATOR_ID=#{userId,jdbcType=VARCHAR}
         </if>
         order by stime desc
     </select>
@@ -175,7 +179,7 @@
         from t_lesson
         where LESS_ID=#{lessonId,jdbcType=VARCHAR}
         <if test='lessonStatus!=null and lessonStatus != "Y"'>
-            and L_STATUS!=0
+            and L_STATUS not in ('-1', '0')
         </if>
     </select>
 
@@ -302,7 +306,7 @@
         from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
         group by less_Id ) c on (l.less_id = c.less_id), t_users u
         where  l.creator_id = u.user_id
-        and l_status != '-1'
+        and l_status not in ('-1', '0')
 
         union
 
@@ -310,10 +314,39 @@
         from t_lesson l left join
         (select less_Id, min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_less_admin a
         where  l.less_id = a.less_id
-        and l_status != '-1'
+        and l_status not in ('-1', '0')
         ) t
 
         where t.user_id = #{userId, jdbcType=VARCHAR}
     </select>
-
+	<!-- 学生：STU 管理员：TEA 讲师：TUT -->
+	<select id="getCurUserRole" resultType="java.lang.String">
+		(select 'STU'
+		from t_less_student a, t_users b
+		where a.s_user_id = #{userId,jdbcType=VARCHAR}
+		and a.less_id =#{lessonId,jdbcType=VARCHAR}
+		and a.s_user_id = b.user_id)
+		union all
+		(select 'TEA'
+		from t_less_admin a,t_users b
+		where a.user_id = #{userId,jdbcType=VARCHAR}
+		and a.less_id =#{lessonId,jdbcType=VARCHAR}
+		and a.user_id = b.user_id)
+		union all
+		<if test="schId != null and schId.length()>0">
+		(select 'TUT'
+		from t_sch_tea a,t_users b
+		where a.user_id = #{userId,jdbcType=VARCHAR}
+		and a.sch_id =#{schId,jdbcType=VARCHAR}
+		and a.user_id = b.user_id)
+		 </if>
+		 <if test="schId == null or schId.length()==0">
+		(select 'TUT'
+		from t_lesson a , t_schedule b, t_sch_tea c
+		where a.less_id = b.less_id
+		and b.sch_id = c.sch_id
+		and a.less_id =#{lessonId,jdbcType=VARCHAR}
+		and c.user_id = #{userId,jdbcType=VARCHAR})
+		</if>
+	</select>
 </mapper>

@@ -271,6 +271,9 @@
     <if test="schId != null and schId.length()>0">
    	and a.SCH_ID = #{schId,jdbcType=VARCHAR} 
    	</if>
+   	<if test="userId != null and userId.length()>0">
+   	and a.USER_ID = #{userId,jdbcType=VARCHAR} 
+   	</if>
   </select>  
   <insert id="insertBatch">
   <!--   <selectKey keyProperty="commentId" order="BEFORE" resultType="java.lang.String">

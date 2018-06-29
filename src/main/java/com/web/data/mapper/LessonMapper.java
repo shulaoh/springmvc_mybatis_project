@@ -4,6 +4,8 @@ import com.web.data.pojo.Lession;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 public abstract interface LessonMapper
 {
   public abstract List<Lession> selectMyStuLessionsListPage(HashMap<String, Object> paramHashMap);
@@ -37,4 +39,6 @@ public abstract interface LessonMapper
   public abstract int insertLessStu(HashMap<String, Object> paramHashMap);
 
   public abstract int countHaveLeave(HashMap<String, Object> paramHashMap);
+  
+  String getCurUserRole(@Param("userId") String userId, @Param("lessonId") String lessonId,@Param("schId") String schId);
 }

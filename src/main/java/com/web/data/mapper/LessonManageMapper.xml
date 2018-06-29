@@ -260,22 +260,21 @@
     </select>
     <select id="getFilesByLessonId" parameterType="java.util.HashMap"
             resultMap="com.web.data.mapper.FileContentMapper.FileContentResultMap">
-        select * from (select f.* from t_filecontent f where exists
-        (select 1 from t_schedule s, t_sch_file l
+        select * from
+        (select f.*, s.sch_id from t_filecontent f, t_schedule s, t_sch_file l
         where s.less_id = #{lessonId, jdbcType=VARCHAR} and s.sch_id = l.sch_id
-        and l.fileid = f.fileid)
+        and l.fileid = f.fileid
         <if test="scheduleId == null">
 
         </if>
         union
-        select f.* from t_filecontent f where exists
-        (select 1 from t_schedule s, t_sch_file l
+        select f.*, s.sch_id from t_filecontent f, t_schedule s, t_sch_file l
         where s.less_id = #{lessonId, jdbcType=VARCHAR} and s.sch_id = l.sch_id
         and l.fileid = f.fileid
         <if test="scheduleId != null">
              and s.sch_id = #{scheduleId, jdbcType=VARCHAR}
         </if>
-        )) e order by e.filename
+        ) e order by e.sch_id, e.filename
         limit #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
     </select>
     <select id="getFilesCountByLessonId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
