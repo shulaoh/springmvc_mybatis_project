@@ -133,4 +133,9 @@ public class LessonServiceImpl implements ILessonService {
 		less.setUpdateTime(new Timestamp(System.currentTimeMillis()));
 		return this.lessonMapper.updateByPrimaryKeySelective(less);
 	}
+
+	@Override
+	public String getCurUserRole(String userId, String lessonId, String schId) {
+		return this.lessonMapper.getCurUserRole(userId, lessonId, schId);
+	}
 }
