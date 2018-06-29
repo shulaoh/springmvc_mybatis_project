@@ -63,20 +63,16 @@
 		order by
 		U_STATUS DESC
 	</select>
-	<select id="getUserByRoleListPage" resultMap="BaseResultMap">
+	<select id="getUserByRoleListPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from v_user_personal
 		where
 		U_STATUS != 'DEL'
-		<if test="adminFlag != null and adminFlag.length()>0 and (adminFlag2 != null and adminFlag2.length()>0)">
-			and (ADMIN_FLAG = #{adminFlag,jdbcType=VARCHAR}
-			or
-			ADMIN_FLAG = #{adminFlag2,jdbcType=VARCHAR})
-		</if>
-		<if test="adminFlag != null and adminFlag.length()>0 and (adminFlag2 == null or adminFlag2.length()==0)">
-			and ADMIN_FLAG = #{adminFlag,jdbcType=VARCHAR}
-		</if>
+		and ADMIN_FLAG in
+		<foreach item="item" collection="adminFlags" index="index" open="(" separator="," close=")">
+            ${item}
+        </foreach>
 		<if test="searchKey != null and searchKey.length()>0">
 			and USER_NAME like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
 		</if>

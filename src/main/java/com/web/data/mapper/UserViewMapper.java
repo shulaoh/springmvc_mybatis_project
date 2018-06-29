@@ -23,7 +23,7 @@ public interface UserViewMapper {
 
 	UserView getUserByUserId(String paramString);
 
-	List<UserView> getUserByRoleListPage(@Param("searchKey")String searchKey, @Param("adminFlag")String adminFlag,@Param("adminFlag2")String adminFlag2, @Param("page") Page page);
+	List<UserView> getUserByRoleListPage(@Param("searchKey")String searchKey, @Param("adminFlags")String[] adminFlags, @Param("page") Page page);
 
 	UserView userCheckIn(String paramString);
 
