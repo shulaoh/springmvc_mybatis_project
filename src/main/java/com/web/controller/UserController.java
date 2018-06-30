@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.web.data.pojo.LessonStudent;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -365,7 +366,7 @@ public class UserController {
 	@RequestMapping(value = { "/importUsers" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	@ResponseBody
 	public HashMap<String, Object> upload(HttpServletRequest request, String fileDesc,
-			@RequestParam("userFile") MultipartFile file) throws Exception {
+			@RequestParam("userFile") MultipartFile file, String lessonId) throws Exception {
 		logger.info("upload beginning [" + file.getName() + "]");
 		List<String> errs = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -387,10 +388,12 @@ public class UserController {
 			File newFile = new File(path + File.separator + tempName);
 			file.transferTo(newFile);
 			// test
-//			errs = new ArrayList<String>();
-//			List<SysUser> users = this.userService.importUesers(newFile, errs);
+			errs = new ArrayList<String>();
+			List<SysUser> users = this.userService.importUesers(newFile, errs);
+
 			result.setRetcode(1);
 			result.setRetmsg(filepath.getAbsolutePath());
+			map.put("users", users);
 
 		} else {
 			result.setRetcode(-1);
