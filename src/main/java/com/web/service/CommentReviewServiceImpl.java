@@ -3,6 +3,7 @@ package com.web.service;
 import com.web.data.mapper.CommentReviewMapper;
 import com.web.data.pojo.CommentReview;
 import com.web.data.pojo.SysUser;
+import com.web.utils.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -13,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service("commentReviewService")
-@PropertySource(value = "classpath:task.properties")
+@PropertySource(value = "classpath:comment-review-category.properties")
 public class CommentReviewServiceImpl implements ICommentReviewService {
 
     private List<String> list;
@@ -24,19 +25,15 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
     @Resource
     private CommentReviewMapper commentReviewMapper;
 
-    @Autowired
-    private Environment environment;
-
-
     public Map<String, Object> getCommentReview(String lessonId, String scheduleId) {
 
         Map<String, Object> reviewMap = new HashMap<>();
 
         for (String str : commmentCats) {
 
-            String cat = environment.getProperty(str);
+            String label = PropertyUtil.getProperty(str);
 
-            String[] result = str.split(":");
+            String[] result = str.split("-");
             String source = result[0];
             String target = result[1];
             Map<String, Object> map = new HashMap<>();
@@ -111,7 +108,7 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
 
             List<List<String>> trans = transformReview(root);
 
-            reviewMap.put(str, trans);
+            reviewMap.put(label, trans);
 
 
         }
