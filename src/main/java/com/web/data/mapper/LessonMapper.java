@@ -18,6 +18,8 @@ public abstract interface LessonMapper
 
   List<Lession> selectLessonByAdminId(HashMap<String,Object> hashMap);
 
+  List<Lession> selectAllLessonByUserId(HashMap<String, Object> hashmap);
+
   public abstract List<Lession> selectLessionsByUserIdListPage(HashMap<String, Object> paramHashMap);
 
   public abstract int getcommentFlag(HashMap<String, Object> paramHashMap);

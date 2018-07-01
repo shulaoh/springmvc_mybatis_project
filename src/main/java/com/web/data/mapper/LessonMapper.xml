@@ -319,6 +319,40 @@
 
         where t.user_id = #{userId, jdbcType=VARCHAR}
     </select>
+
+    <select id="selectAllLessonByUserId" resultMap="BaseResultMap">
+        select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.p_url, t.teacher_id, t.less_pic_url, t.less_cyc_pic_url, t.all_comm_flag, t.comm_tempids from
+
+        (
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.p_url, l.less_pic_url, l.less_cyc_pic_url, 'ALL' as user_id,
+        c.sch_s_time, l.all_comm_flag, l.comm_tempids
+
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
+        group by less_Id ) c on (l.less_id = c.less_id)
+        where l.l_type = 'P'
+        and l_status not in ('-1', '0')
+
+        union
+
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.p_url, l.less_pic_url, l.less_cyc_pic_url, a.s_user_id, c.sch_s_time, l.all_comm_flag, l.comm_tempids
+        from t_lesson l left join
+        (select less_Id, min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_less_student a
+        where  l.less_id = a.less_id
+        and l.l_type != 'P'
+        and l_status not in ('-1', '0')
+        ) t
+
+        where 1 = 1
+        <if test="lessonType != null and lessonType != 'P'.toString()">
+            and t.user_id = #{userId, jdbcType=VARCHAR}
+        </if>
+
+        <if test="lessonType != null and lessonType.length()>0">
+            and t.l_type = #{lessonType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
 	<!-- 学生：STU 管理员：TEA 讲师：TUT -->
 	<select id="getCurUserRole" resultType="java.lang.String">
 		(select 'STU'
