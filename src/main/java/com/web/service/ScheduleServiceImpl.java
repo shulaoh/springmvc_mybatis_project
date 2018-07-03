@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.web.data.bean.SignInfo;
 import com.web.data.pojo.*;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +81,8 @@ public class ScheduleServiceImpl implements IScheduleService {
 			} else {
 				temp.setHaveSign("N");
 			}
-
+			//List<SignInfo> signList = signMapper.selectSchSignListPage(temp.getSchId(), new Page());
+			//temp.setSignInfo(signList);
 			HashMap mapLeave = new HashMap();
 			mapLeave.put("userId", userId);
 			mapLeave.put("schId", temp.getSchId());

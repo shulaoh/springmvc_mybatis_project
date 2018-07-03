@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service("notificationService")
-public class NotificationServiceImpl implements INotificationService{
+public class NotificationServiceImpl implements INotificationService {
 
 
     @Value("${sms.charset}")
@@ -93,7 +93,7 @@ public class NotificationServiceImpl implements INotificationService{
         String lessonName = lesson.getLessonName();
         String result;
         switch (type) {
-            case  "sms.message.1day" :
+            case "sms.message.1day":
                 message = message1DayAhead;
                 String[] m1 = {datetime, place, lessonName};
                 result = getMessage(message, m1);
@@ -124,7 +124,7 @@ public class NotificationServiceImpl implements INotificationService{
         String[] str = message.split("\\{\\$var\\}");
         StringBuffer sb = new StringBuffer();
         int i;
-        for(i = 0; i < vars.length; i++) {
+        for (i = 0; i < vars.length; i++) {
             sb.append(str[i]);
             sb.append(vars[i]);
         }
@@ -145,7 +145,7 @@ public class NotificationServiceImpl implements INotificationService{
                 java.sql.Timestamp t = lessonManageMapper.getStartDateByLessonId(lesson.getLessonId());
                 List<SysUser> users = lesson.getStudentList();
                 if (users != null && users.size() > 0) {
-                    for (SysUser user: users) {
+                    for (SysUser user : users) {
                         String phone = user.getPhone();
                         Notification n = new Notification();
                         n.setNotificationId(Tools.generateID());
@@ -180,7 +180,7 @@ public class NotificationServiceImpl implements INotificationService{
                 java.sql.Timestamp t = lessonManageMapper.getStartDateByLessonId(lesson.getLessonId());
                 List<SysUser> users = lesson.getStudentList();
                 if (users != null && users.size() > 0) {
-                    for (SysUser user: users) {
+                    for (SysUser user : users) {
                         String phone = user.getPhone();
                         Notification n = new Notification();
                         n.setNotificationId(Tools.generateID());
@@ -190,7 +190,7 @@ public class NotificationServiceImpl implements INotificationService{
                         n.setUserId(user.getUserId());
                         notificationMapper.insert(n);
                         if (phone != null && phone.trim().length() > 0) {
-                            params = params + phone +  "," + place + "," + name + "," + Tools.formatTimestampNoSec(t) + ";";
+                            params = params + phone + "," + place + "," + name + "," + Tools.formatTimestampNoSec(t) + ";";
                         }
                     }
                 }
@@ -220,27 +220,25 @@ public class NotificationServiceImpl implements INotificationService{
             String name = lesson.getLessonName();
             String place = lesson.getPlace();
             java.sql.Timestamp t = lessonManageMapper.getStartDateByLessonId(lesson.getLessonId());
-            //当lesson的开始时间晚于当前时间，才会更新短信。
-            if (t == null || t.getTime() > new Date().getTime()) {
-                List<SysUser> users = lesson.getStudentList();
-                if (users != null && users.size() > 0) {
-                    for (SysUser user : users) {
-                        Notification n = new Notification();
-                        n.setNotificationId(Tools.generateID());
-                        n.setNotificationDatetime(new Timestamp(new Date().getTime()));
-                        n.setNotificationType(type);
-                        n.setLessonId(lesson.getLessonId());
-                        n.setUserId(user.getUserId());
-                        notificationMapper.insert(n);
-                        String phone = user.getPhone();
-                        if (phone != null && phone.trim().length() > 0) {
-                            params = params + phone + "," + Tools.formatTimestampNoSec(t) + "," + place + "," + name + ";";
-                        }
+
+            List<SysUser> users = lesson.getStudentList();
+            if (users != null && users.size() > 0) {
+                for (SysUser user : users) {
+                    Notification n = new Notification();
+                    n.setNotificationId(Tools.generateID());
+                    n.setNotificationDatetime(new Timestamp(new Date().getTime()));
+                    n.setNotificationType(type);
+                    n.setLessonId(lesson.getLessonId());
+                    n.setUserId(user.getUserId());
+                    notificationMapper.insert(n);
+                    String phone = user.getPhone();
+                    if (phone != null && phone.trim().length() > 0) {
+                        params = params + phone + "," + Tools.formatTimestampNoSec(t) + "," + place + "," + name + ";";
                     }
                 }
-
-                map.putAll(smsNotification(message, params));
             }
+
+            map.putAll(smsNotification(message, params));
         }
         return map;
     }
@@ -249,7 +247,7 @@ public class NotificationServiceImpl implements INotificationService{
     private Map<String, Object> smsNotification(String message, String params) {
         Map<String, Object> map = new HashMap<>();
         String prefix = "【253云通讯】";
-        SmsVariableRequest smsVariableRequest=new SmsVariableRequest(account, password, prefix + message, params, "true");
+        SmsVariableRequest smsVariableRequest = new SmsVariableRequest(account, password, prefix + message, params, "true");
         String requestJson = JSON.toJSONString(smsVariableRequest);
         System.out.println("before request string is: " + requestJson);
 

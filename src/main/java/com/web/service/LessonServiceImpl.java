@@ -40,7 +40,7 @@ public class LessonServiceImpl implements ILessonService {
 		if (oprType.equalsIgnoreCase("ALL")) {
 			list = this.lessonMapper.selectAllLessonByUserId(map);
 		} else if (oprType.equalsIgnoreCase("MY")) {
-			list = this.lessonMapper.selectMyStuLessionsListPage(map);
+			list = this.lessonMapper.selectMyLessonAsStudent(map);
 		} else if (oprType.equalsIgnoreCase("TEA")) {
 			//list = this.lessonMapper.selectLessionsByTEATypeListPage(map);
 			list = lessonMapper.selectLessonByAdminId(map);

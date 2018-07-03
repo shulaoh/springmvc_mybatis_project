@@ -22,7 +22,8 @@ public class SignServiceImpl implements ISignService {
 	}
 
 	public List<SignInfo> getSignListBySchId(String schId, Page page) {
-		return this.signMapper.selectSchSignListPage(schId, page);
+		// return this.signMapper.selectSchSignListPage(schId, page);
+		return null;
 	}
 
 	@Override
