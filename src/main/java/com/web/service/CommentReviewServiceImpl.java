@@ -1,7 +1,11 @@
 package com.web.service;
 
 import com.web.data.mapper.CommentReviewMapper;
+import com.web.data.mapper.LessonManageMapper;
+import com.web.data.mapper.ScheduleMapper;
 import com.web.data.pojo.CommentReview;
+import com.web.data.pojo.LessonCommon;
+import com.web.data.pojo.Schedule;
 import com.web.data.pojo.SysUser;
 import com.web.utils.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +29,15 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
     @Resource
     private CommentReviewMapper commentReviewMapper;
 
-    public Map<String, Object> getCommentReview(String lessonId, String scheduleId) {
+    @Resource
+    private LessonManageMapper lessonManageMapper;
+
+    @Resource
+    private ScheduleMapper scheduleMapper;
+
+    /*public Map<String, Object> getCommentReview(String lessonId, String scheduleId, String reviewType) {
+
+        List<Schedule> schedules = lessonManageMapper.getScheduleByLessonId(lessonId);
 
         Map<String, Object> reviewMap = new HashMap<>();
 
@@ -38,12 +50,19 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
             String target = result[1];
             Map<String, Object> map = new HashMap<>();
             map.put("lessonId", lessonId);
-            if (scheduleId != null && scheduleId.trim().length() > 0) {
-                map.put("schedule", scheduleId);
-            }
-
             map.put("source", source);
             map.put("target", target);
+
+            if (target.equals("SCH")) {
+                for (Schedule schedule : schedules) {
+                    String scheduleId = schedule.getSchId();
+                    String scheduleName = schedule.getSchName();
+                    if (scheduleId != null && scheduleId.trim().length() > 0) {
+                        map.put("schedule", scheduleId);
+                    }
+                }
+            }
+
 
             //获取某种类型下，针对某课程或者日程的评价
             List<CommentReview> crList = commentReviewMapper.getCommentReview(map);
@@ -83,11 +102,6 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
                         row.add(cr.getComment());
                     }
                 }
-                /*comments.add("平均分");
-                comments.add("总评价分");
-                //comments.add("评语");
-                row.add(averageScore(scores));
-                row.add(sumScore(scores));*/
             }
 
             if (!isListEmpty(root) && calcIndex > 0) {
@@ -112,6 +126,116 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
 
 
         }
+        return reviewMap;
+    }*/
+
+    private List<List<String>> prcoessCommentReview(Map<String, Object> map) {
+        List<CommentReview> crList = commentReviewMapper.getCommentReview(map);
+        List<List<String>> root = null;
+        int calcIndex = 0;
+        if (crList != null && crList.size() > 0) {
+            root = new ArrayList<>();
+            List<String> comments = new ArrayList<>();
+            comments.add(" ");
+            root.add(comments);
+            Set<String> ids = new HashSet<>();
+            List<String> row = null;
+            for (CommentReview cr: crList) {
+                String userId = cr.getUserId();
+                SysUser user = cr.getUser();
+                if (!ids.contains(userId)) {
+
+                    ids.add(userId);
+                    row = new ArrayList<>();
+                    root.add(row);
+                    String head = user.getUserName() + "(" + user.getPhone() +")";
+                    row.add(head);
+                }
+
+                if (ids.size() == 1) {
+                    if (cr.getCommentType() == 1) {
+                        calcIndex++;
+                    }
+                    comments.add(cr.getCommentCategory());
+
+                }
+                if (cr.getCommentType() == 1) {
+                    row.add(String.valueOf(cr.getScore()));
+                }
+
+                if (cr.getCommentType() == 2) {
+                    row.add(cr.getComment());
+                }
+            }
+        }
+
+        if (!isListEmpty(root) && calcIndex > 0) {
+            List<String> comments = root.get(0);
+            comments.add(calcIndex + 1, "平均分");
+            comments.add(calcIndex + 2, "评价总分");
+            for (int i = 1; i < root.size(); i++) {
+                List<String> row = root.get(i);
+                float score = 0;
+                for (int j = 1; j <= calcIndex; j++) {
+                    score += Integer.valueOf(row.get(j));
+                }
+                row.add(calcIndex + 1, String.format("%.1f", score/calcIndex));
+                row.add(calcIndex + 2, String.format("%.0f", score));
+            }
+        }
+
+
+        List<List<String>> trans = transformReview(root);
+        return trans;
+    }
+
+    public Map<String, Object> getCommentReview(String lessonId, String scheduleId, String reviewType) {
+        Map<String, Object> reviewMap = new HashMap<>();
+        Map<String, Object> content = new HashMap<>();
+        String[] result = reviewType.split("-");
+        String source = result[0];
+        String target = result[1];
+        String label = PropertyUtil.getProperty(reviewType);
+        reviewMap.put("reviewType", reviewType);
+        reviewMap.put("reviewTypeLabel", label);
+        reviewMap.put("content", content);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("lessonId", lessonId);
+        map.put("source", source);
+        map.put("target", target);
+        switch (target) {
+            case "SCH":
+                List<Schedule> schedules = null;
+                if (scheduleId != null && scheduleId.trim().length() > 0) {
+                    Schedule schedule = scheduleMapper.getSingleScheduleByScheduleId(scheduleId);
+                    schedules = new ArrayList<>();
+                    schedules.add(schedule);
+                } else {
+                    schedules = lessonManageMapper.getScheduleByLessonId(lessonId);
+                }
+
+                for (Schedule schedule : schedules) {
+                    String scheduleName = schedule.getSchName();
+                    map.remove("scheduleId");
+                    if (scheduleId != null && scheduleId.trim().length() > 0) {
+                        map.put("scheduleId", scheduleId);
+                    }
+                    List<List<String>> list = prcoessCommentReview(map);
+                    content.put(scheduleName, list);
+                }
+
+                break;
+            case "LES":
+                LessonCommon lesson = lessonManageMapper.getLessonByLessonId(lessonId);
+                List<List<String>> list = prcoessCommentReview(map);
+                content.put(lesson.getLessonName(), list);;
+                break;
+            default:
+                break;
+
+        }
+
         return reviewMap;
     }
 
@@ -174,8 +298,7 @@ public class CommentReviewServiceImpl implements ICommentReviewService {
             }
 
             return newList;
-        }
-        else {
+        } else {
             return null;
         }
     }

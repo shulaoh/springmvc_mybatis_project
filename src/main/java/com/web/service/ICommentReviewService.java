@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface ICommentReviewService {
 
-    Map<String, Object> getCommentReview(String lessonId, String scheduleId);
+    Map<String, Object> getCommentReview(String lessonId, String scheduleId, String reviewType);
 }
