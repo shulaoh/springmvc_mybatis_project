@@ -14,7 +14,7 @@ public abstract interface SignMapper
 
   public abstract int getSignFlag(HashMap<String, Object> paramHashMap);
 
-  List<SignInfo> selectSchSignListPage(@Param("schId") String schId, @Param("page") Page page);
+  List<SignInfo> selectSignListPage(@Param("lessId") String lessId, @Param("schId") String schId, @Param("page") Page page);
   
   List<SignInfo> selectLessSignList(@Param("lessId") String lessId);
 }
