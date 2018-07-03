@@ -297,59 +297,88 @@
         where USER_ID=#{userId,jdbcType=VARCHAR} and SCH_ID=#{schId,jdbcType=VARCHAR}
     </select>
     <select id="selectLessonByAdminId" resultMap="BaseResultMap">
-        select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.p_url,  t.teacher_id, t.less_pic_url, t.less_cyc_pic_url, t.all_comm_flag, t.comm_tempids from
+        select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.p_url, t.teacher_id
+        , t.less_pic_url, t.less_cyc_pic_url, t.all_comm_flag, t.comm_tempids, t.joinstatus from
 
         (
-        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.p_url, l.less_pic_url, l.less_cyc_pic_url, u.user_id,
-        c.sch_s_time, l.all_comm_flag, l.comm_tempids
-
-        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
-        group by less_Id ) c on (l.less_id = c.less_id), t_users u
-        where  l.creator_id = u.user_id
-        and l_status not in ('-1', '0')
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id
+        , l.p_url, l.less_pic_url, l.less_cyc_pic_url, a.user_id, l.all_comm_flag
+        , l.comm_tempids, 'TUT' as joinstatus
+        from t_lesson l, t_sch_tea a, t_schedule b
+        where  l.less_id = b.less_id
+        and b.sch_id = a.sch_id
 
         union
 
-        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.p_url, l.less_pic_url, l.less_cyc_pic_url, a.user_id, c.sch_s_time, l.all_comm_flag, l.comm_tempids
-        from t_lesson l left join
-        (select less_Id, min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_less_admin a
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id
+        , l.p_url, l.less_pic_url, l.less_cyc_pic_url, a.user_id, l.all_comm_flag
+        , l.comm_tempids, 'TEA' as joinstatus
+        from t_lesson l, t_less_admin a
         where  l.less_id = a.less_id
-        and l_status not in ('-1', '0')
-        ) t
 
-        where t.user_id = #{userId, jdbcType=VARCHAR}
+        union
+
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id
+        , l.p_url, l.less_pic_url, l.less_cyc_pic_url, u.user_id, l.all_comm_flag
+        , l.comm_tempids, 'TEA' as joinstatus
+        from t_lesson l, t_users u
+        where  l.creator_id = u.user_id
+
+        ) t left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
+        group by less_Id ) c on (t.less_id = c.less_id)
+
+        where 1 = 1
+
+        and t.l_status in ('1', '0')
+
+        and t.user_id = #{userId,jdbcType=VARCHAR}
+
+        <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
+            and t.l_name like #{lessonNameKeyword,jdbcType=VARCHAR}
+        </if>
+
+        <if test="lessonType != null and lessonType.trim().length()>0">
+            and t.l_type = #{lessonType,jdbcType=VARCHAR}
+        </if>
+        order by c.sch_s_time desc
     </select>
 
     <select id="selectAllLessonByUserId" resultMap="BaseResultMap">
-        select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.p_url, t.teacher_id, t.less_pic_url, t.less_cyc_pic_url, t.all_comm_flag, t.comm_tempids from
+        select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.p_url, t.teacher_id
+        , t.less_pic_url, t.less_cyc_pic_url, t.all_comm_flag, t.comm_tempids, t.joinstatus from
 
         (
-        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.p_url, l.less_pic_url, l.less_cyc_pic_url, 'ALL' as user_id,
-        c.sch_s_time, l.all_comm_flag, l.comm_tempids
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id
+        , l.p_url, l.less_pic_url, l.less_cyc_pic_url, l.user_id, l.all_comm_flag
+        , l.comm_tempids, l.joinstatus
+        from v_lesson_enroll l
+        where l.user_id = #{userId, jdbcType=VARCHAR}
 
-        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
-        group by less_Id ) c on (l.less_id = c.less_id)
-        where l.l_type = 'P'
-        and l_status not in ('-1', '0')
+        union all
 
-        union
+        select p.less_id, p.l_name, p.l_type, p.l_status, p.place, p.l_intro, p.teacher_id
+        , p.p_url, p.less_pic_url, p.less_cyc_pic_url, 'ALL' as user_id, p.all_comm_flag
+        , p.comm_tempids, 'PUB'
+        from t_lesson p
+        where p.l_type = 'P'
+        and not exists (select 1 from v_lesson_enroll r
+        where r.less_id = p.less_id and r.user_id = #{userId, jdbcType=VARCHAR})
 
-        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id, l.p_url, l.less_pic_url, l.less_cyc_pic_url, a.s_user_id, c.sch_s_time, l.all_comm_flag, l.comm_tempids
-        from t_lesson l left join
-        (select less_Id, min(sch_s_time) as sch_s_time from t_schedule group by less_Id ) c on (l.less_id = c.less_id), t_less_student a
-        where  l.less_id = a.less_id
-        and l.l_type != 'P'
-        and l_status not in ('-1', '0')
-        ) t
+        ) t left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
+        group by less_Id ) c on (t.less_id = c.less_id)
 
         where 1 = 1
-        <if test="lessonType != null and lessonType != 'P'.toString()">
-            and t.user_id = #{userId, jdbcType=VARCHAR}
+
+        and t.l_status = '1'
+
+        <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
+            and t.l_name like #{lessonNameKeyword,jdbcType=VARCHAR}
         </if>
 
-        <if test="lessonType != null and lessonType.length()>0">
+        <if test="lessonType != null and lessonType.trim().length()>0">
             and t.l_type = #{lessonType,jdbcType=VARCHAR}
         </if>
+        order by c.sch_s_time desc
     </select>
 
 
@@ -383,4 +412,21 @@
 		and c.user_id = #{userId,jdbcType=VARCHAR})
 		</if>
 	</select>
+    <select id="selectMyLessonAsStudent" resultMap="BaseResultMap">
+        select l.less_id, l.l_name, l.l_type, l.l_status, l.place, l.l_intro, l.teacher_id
+        , l.p_url, l.less_pic_url, l.less_cyc_pic_url, a.s_user_id as user_id, l.all_comm_flag
+        , l.comm_tempids, a.s_status as joinstatus
+        from t_lesson l left join (select less_Id,  min(sch_s_time) as sch_s_time from t_schedule
+        group by less_Id ) c on (l.less_id = c.less_id), t_less_student a
+        where  l.less_id = a.less_id
+        and l.l_status = '1'
+        and a.s_user_id = #{userId,jdbcType=VARCHAR}
+        <if test="lessonNameKeyword != null and lessonNameKeyword.length()>0">
+            and l.l_name like #{lessonNameKeyword,jdbcType=VARCHAR}
+        </if>
+        <if test="lessonType != null and lessonType.trim().length()>0">
+            and t.l_type = #{lessonType,jdbcType=VARCHAR}
+        </if>
+        order by c.sch_s_time desc
+    </select>
 </mapper>

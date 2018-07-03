@@ -54,4 +54,5 @@ public interface LessonManageMapper {
     List<FileContent> getFilesByLessonId(Map<String, Object> paramHashMap);
 
     int getFilesCountByLessonId(Map<String, Object> paramHashMap);
+
 }

@@ -250,7 +250,7 @@
         group by n.less_id) c
         where l.less_id = c.less_id
         and TIMESTAMPDIFF(hour, now(), c.m) &lt;= 2
-        and TIMESTAMPDIFF(hour, now(), c.m) &gt;= 0
+        and TIMESTAMPDIFF(minute, now(), c.m) &gt;= 0
         and not exists (select 1 from t_user_notification f where f.less_id = l.less_id
         and f.notify_type = 'sms.message.2hours'
         and TIMESTAMPDIFF(hour, f.notify_dttm, now()) &lt;= 2)
