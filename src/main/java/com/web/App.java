@@ -2,8 +2,15 @@ package com.web;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.web.data.mapper.CommentReviewMapper;
+import com.web.data.mapper.LessonMapper;
+import com.web.data.pojo.CommentReview;
+import com.web.data.pojo.Lession;
+import com.web.service.CommentReviewServiceImpl;
+import com.web.service.LessonManageServiceImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -32,21 +39,24 @@ public class App
         /*Calendar date = Calendar.getInstance();
         SimpleDateFormat datef = new SimpleDateFormat("yyMMddHHmmss");
         String tempName = datef.format(date.getTime());
-        System.out.println(tempName);
+        System.out.println(tempName);*/
         ApplicationContext ac = new ClassPathXmlApplicationContext("spring-mybatis.xml");
-        LessonManageMapper nm = (LessonManageMapper)ac.getBean("lessonManageMapper");
-        Map<String, Object> map = new HashMap<>();
-        map.put("lessonId", "f29cc12b38354b029cdffc0a887fcbfa");
-        map.put("scheduleId", "0d442057b75e4506bb05b37b62e2fea4");
-        map.put("offset", 1);
-        map.put("size", 2);
-        int c = nm.getFilesCountByLessonId(map);
-        System.out.println(c);
+        LessonMapper nm = (LessonMapper) ac.getBean("lessonMapper");
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userId", " 01bfba19959f4a1ab75c3ccebb0ffe77");
+        map.put("lessonType", "P");
+
+        List<Lession> l = nm.selectAllLessonByUserId(map);
+        System.out.println(l.size());
+        //CommentReviewServiceImpl impl = (CommentReviewServiceImpl)ac.getBean("commentReviewService");
+        //System.out.println(impl);
 
 
 
         //LessonManageMapper sd = (LessonManageMapper)ac.getBean("lessonManageMapper");
-        //LessonManageServiceImpl ims = (LessonManageServiceImpl)ac.getBean("iLessonManageServiceImpl");
+       // LessonManageServiceImpl ims = (LessonManageServiceImpl)ac.getBean("iLessonManageServiceImpl");
+       // System.out.println(ims);
 
         /**List<SysUser> list = sd.getStudentListByLessonId("8a1cd77d0d2b45b284a78d549c8bd4fd");
         System.out.println(list.size());

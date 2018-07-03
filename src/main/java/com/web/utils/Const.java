@@ -48,6 +48,7 @@ public class Const
   public static final String USER_ROLE_10 = "10";
   public static final String USER_ROLE_0 = "0";
   public static final String USER_ROLE_ADMIN = "admin";
+  public static final String USER_ROLE_TUT = "tut";
   
   
   public static final String APP_ID="wxc0a422ba9287706a";

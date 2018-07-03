@@ -33,6 +33,13 @@
 
 	<context:property-placeholder location="classpath:sms.properties"
 								  ignore-unresolvable="true" file-encoding="UTF-8"/>
-
+	<!--context:property-placeholder location="classpath:comment-review-category.properties"
+								  ignore-unresolvable="true" file-encoding="UTF-8"/-->
+	<!--bean id="propertyConfigurer" class="com.web.data.bean.PropertyPlaceholder">
+		<property name="fileEncoding" value="UTF-8"/>
+		<property name="location">
+			<value>classpath:comment-review-category.properties</value>
+		</property>
+	</bean-->
 
 </beans>
