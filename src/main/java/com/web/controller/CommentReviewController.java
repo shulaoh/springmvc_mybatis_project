@@ -22,8 +22,8 @@ public class CommentReviewController {
 
     @RequestMapping({"/getCommentReview"})
     @ResponseBody
-    public Map<String, Object> getCommentReview(@RequestParam String lessonId, String scheduleId) {
-        Map<String, Object> map = commentReviewService.getCommentReview(lessonId, scheduleId);
+    public Map<String, Object> getCommentReview(@RequestParam String lessonId, String scheduleId, String reviewType) {
+        Map<String, Object> map = commentReviewService.getCommentReview(lessonId, scheduleId, reviewType);
         return map;
     }
 }
