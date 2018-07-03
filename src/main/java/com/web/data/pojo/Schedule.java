@@ -1,208 +1,220 @@
 package com.web.data.pojo;
 
+import com.web.data.bean.SignInfo;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 public class Schedule {
-	String lessonId;
-	String schId;
-	String schName;
-	String schPlace;
-	String schIntro;
-	String ssTime;
-	String schLastMNum;
-	String signFlag;
-	String signSTime;
-	String signETime;
-	String commentFlag;
-	String allCommFlag;
-	String haveCommFlag;
-	String haveSign;
-	String haveLeave;
-	String tutorId;
-	String commTempIds;
-	  private Timestamp createTime;
-	  private Timestamp updateTime;
-	
-	private Teacher tutor;
+    String lessonId;
+    String schId;
+    String schName;
+    String schPlace;
+    String schIntro;
+    String ssTime;
+    String schLastMNum;
+    String signFlag;
+    String signSTime;
+    String signETime;
+    String commentFlag;
+    String allCommFlag;
+    String haveCommFlag;
+    String haveSign;
+    String haveLeave;
+    String tutorId;
+    String commTempIds;
+    private Timestamp createTime;
+    private Timestamp updateTime;
 
-	private List<FileContent> fileContentList;
+    private Teacher tutor;
 
-	private List<SysUser> teachers;
+    private List<FileContent> fileContentList;
 
-	public Timestamp getCreateTime() {
-		return createTime;
-	}
+    private List<SysUser> teachers;
 
-	public void setCreateTime(Timestamp createTime) {
-		this.createTime = createTime;
-	}
+    private List<SignInfo> signInfo;
 
-	public Timestamp getUpdateTime() {
-		return updateTime;
-	}
+    public List<SignInfo> getSignInfo() {
+        return signInfo;
+    }
 
-	public void setUpdateTime(Timestamp updateTime) {
-		this.updateTime = updateTime;
-	}
+    public void setSignInfo(List<SignInfo> signInfo) {
+        this.signInfo = signInfo;
+    }
 
-	public List<SysUser> getTeachers() {
-		return teachers;
-	}
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
 
-	public void setTeachers(List<SysUser> teachers) {
-		this.teachers = teachers;
-	}
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
 
-	public List<FileContent> getFileContentList() {
-		return fileContentList;
-	}
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
 
-	public void setFileContentList(List<FileContent> fileContentList) {
-		this.fileContentList = fileContentList;
-	}
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	public String getCommTempIds() {
-		return this.commTempIds;
-	}
+    public List<SysUser> getTeachers() {
+        return teachers;
+    }
 
-	public void setCommTempIds(String commTempIds) {
-		this.commTempIds = commTempIds;
-	}
+    public void setTeachers(List<SysUser> teachers) {
+        this.teachers = teachers;
+    }
 
-	public String getHaveLeave() {
-		return this.haveLeave;
-	}
+    public List<FileContent> getFileContentList() {
+        return fileContentList;
+    }
 
-	public void setHaveLeave(String haveLeave) {
-		this.haveLeave = haveLeave;
-	}
+    public void setFileContentList(List<FileContent> fileContentList) {
+        this.fileContentList = fileContentList;
+    }
 
-	public String getTutorId() {
-		return this.tutorId;
-	}
+    public String getCommTempIds() {
+        return this.commTempIds;
+    }
 
-	public void setTutorId(String tutorId) {
-		this.tutorId = tutorId;
-	}
+    public void setCommTempIds(String commTempIds) {
+        this.commTempIds = commTempIds;
+    }
 
-	public Teacher getTutor() {
-		return this.tutor;
-	}
+    public String getHaveLeave() {
+        return this.haveLeave;
+    }
 
-	public void setTutor(Teacher tutor) {
-		this.tutor = tutor;
-	}
+    public void setHaveLeave(String haveLeave) {
+        this.haveLeave = haveLeave;
+    }
 
-	public String getHaveSign() {
-		return this.haveSign;
-	}
+    public String getTutorId() {
+        return this.tutorId;
+    }
 
-	public void setHaveSign(String haveSign) {
-		this.haveSign = haveSign;
-	}
+    public void setTutorId(String tutorId) {
+        this.tutorId = tutorId;
+    }
 
-	public String getLessonId() {
-		return this.lessonId;
-	}
+    public Teacher getTutor() {
+        return this.tutor;
+    }
 
-	public void setLessonId(String lessonId) {
-		this.lessonId = lessonId;
-	}
+    public void setTutor(Teacher tutor) {
+        this.tutor = tutor;
+    }
 
-	public String getSchId() {
-		return this.schId;
-	}
+    public String getHaveSign() {
+        return this.haveSign;
+    }
 
-	public void setSchId(String schId) {
-		this.schId = schId;
-	}
+    public void setHaveSign(String haveSign) {
+        this.haveSign = haveSign;
+    }
 
-	public String getSchName() {
-		return this.schName;
-	}
+    public String getLessonId() {
+        return this.lessonId;
+    }
 
-	public void setSchName(String schName) {
-		this.schName = schName;
-	}
+    public void setLessonId(String lessonId) {
+        this.lessonId = lessonId;
+    }
 
-	public String getSchIntro() {
-		return this.schIntro;
-	}
+    public String getSchId() {
+        return this.schId;
+    }
 
-	public void setSchIntro(String schIntro) {
-		this.schIntro = schIntro;
-	}
+    public void setSchId(String schId) {
+        this.schId = schId;
+    }
 
-	public String getSchLastMNum() {
-		return this.schLastMNum;
-	}
+    public String getSchName() {
+        return this.schName;
+    }
 
-	public void setSchLastMNum(String schLastMNum) {
-		this.schLastMNum = schLastMNum;
-	}
+    public void setSchName(String schName) {
+        this.schName = schName;
+    }
 
-	public String getSignFlag() {
-		return this.signFlag;
-	}
+    public String getSchIntro() {
+        return this.schIntro;
+    }
 
-	public void setSignFlag(String signFlag) {
-		this.signFlag = signFlag;
-	}
+    public void setSchIntro(String schIntro) {
+        this.schIntro = schIntro;
+    }
 
-	public String getSsTime() {
-		return this.ssTime;
-	}
+    public String getSchLastMNum() {
+        return this.schLastMNum;
+    }
 
-	public void setSsTime(String ssTime) {
-		this.ssTime = ssTime;
-	}
+    public void setSchLastMNum(String schLastMNum) {
+        this.schLastMNum = schLastMNum;
+    }
 
-	public String getSignSTime() {
-		return this.signSTime;
-	}
+    public String getSignFlag() {
+        return this.signFlag;
+    }
 
-	public void setSignSTime(String signSTime) {
-		this.signSTime = signSTime;
-	}
+    public void setSignFlag(String signFlag) {
+        this.signFlag = signFlag;
+    }
 
-	public String getSignETime() {
-		return this.signETime;
-	}
+    public String getSsTime() {
+        return this.ssTime;
+    }
 
-	public void setSignETime(String signETime) {
-		this.signETime = signETime;
-	}
+    public void setSsTime(String ssTime) {
+        this.ssTime = ssTime;
+    }
 
-	public String getCommentFlag() {
-		return this.commentFlag;
-	}
+    public String getSignSTime() {
+        return this.signSTime;
+    }
 
-	public void setCommentFlag(String commentFlag) {
-		this.commentFlag = commentFlag;
-	}
+    public void setSignSTime(String signSTime) {
+        this.signSTime = signSTime;
+    }
 
-	public String getAllCommFlag() {
-		return this.allCommFlag;
-	}
+    public String getSignETime() {
+        return this.signETime;
+    }
 
-	public void setAllCommFlag(String allCommFlag) {
-		this.allCommFlag = allCommFlag;
-	}
+    public void setSignETime(String signETime) {
+        this.signETime = signETime;
+    }
 
-	public String getHaveCommFlag() {
-		return this.haveCommFlag;
-	}
+    public String getCommentFlag() {
+        return this.commentFlag;
+    }
 
-	public void setHaveCommFlag(String haveCommFlag) {
-		this.haveCommFlag = haveCommFlag;
-	}
+    public void setCommentFlag(String commentFlag) {
+        this.commentFlag = commentFlag;
+    }
 
-	public String getSchPlace() {
-		return this.schPlace;
-	}
+    public String getAllCommFlag() {
+        return this.allCommFlag;
+    }
 
-	public void setSchPlace(String schPlace) {
-		this.schPlace = schPlace;
-	}
+    public void setAllCommFlag(String allCommFlag) {
+        this.allCommFlag = allCommFlag;
+    }
+
+    public String getHaveCommFlag() {
+        return this.haveCommFlag;
+    }
+
+    public void setHaveCommFlag(String haveCommFlag) {
+        this.haveCommFlag = haveCommFlag;
+    }
+
+    public String getSchPlace() {
+        return this.schPlace;
+    }
+
+    public void setSchPlace(String schPlace) {
+        this.schPlace = schPlace;
+    }
 }
