@@ -1,11 +1,15 @@
 package com.web.service;
 
-import com.web.data.mapper.LeaveMapper;
-import com.web.data.pojo.Leave;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
+import com.web.data.mapper.LeaveMapper;
+import com.web.data.pojo.Leave;
+import com.web.utils.Page;
 
 @Service("leaveService")
 public class LeaveServiceImpl
@@ -22,6 +26,9 @@ public class LeaveServiceImpl
 
   public int updateLeave(Leave leave)
   {
+	  if (null != leave.getApproveUserId() && leave.getApproveUserId().length() > 0) {
+		  leave.setApproveDate(new java.sql.Timestamp(System.currentTimeMillis()));
+	  }
     return this.leaveMapper.updateLeave(leave);
   }
 
@@ -29,4 +36,9 @@ public class LeaveServiceImpl
   {
     return this.leaveMapper.selectLeaveList(schId);
   }
+
+@Override
+public List getMyLeave(String schId, String userId) {
+	return this.leaveMapper.getMyLeave(schId, userId);
+}
 }

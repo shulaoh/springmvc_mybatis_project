@@ -255,17 +255,17 @@
     <result column="SIGN" jdbcType="VARCHAR" property="sign" /> 
     <result column="TARGET_TYPE" jdbcType="VARCHAR" property="targetType" />
   </resultMap>
-
+<!-- 暂时先少取几个属性select a.comment_id, c.temp_item_name, a.score, a.comment,a.comm_time, b.USER_NAME, b.SIGN,a.TARGET_TYPE -->
   <select id="selectCommentsListPage" parameterType="java.util.HashMap" resultMap="CommResultMap">
-  	select a.comment_id, c.temp_item_name, a.score, a.comment,a.comm_time, b.USER_NAME, b.SIGN,a.TARGET_TYPE
+  	select a.comment_id, c.temp_item_name, a.score, a.comment
 	from t_comment a left join t_users b on a.USER_ID = b.USER_ID 
 	left join t_comm_template_item c on a.temp_item_id = c.temp_item_id 
     WHERE 
    	a.LESS_ID = #{lessonId,jdbcType=VARCHAR} 
-   	<if test="TARGET_TYPE != null and TARGET_TYPE.length()>0">
+   	<if test="targetType != null and targetType.length()>0">
     and a.TARGET_TYPE = #{targetType,jdbcType=VARCHAR}
     </if>
-    <if test="TARGET_ID != null and TARGET_ID.length()>0">
+    <if test="targetId != null and targetId.length()>0">
     and a.TARGET_ID = #{targetId,jdbcType=VARCHAR}
     </if>
     <if test="schId != null and schId.length()>0">

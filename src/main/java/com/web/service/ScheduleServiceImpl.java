@@ -81,7 +81,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 			} else {
 				temp.setHaveSign("N");
 			}
-			//List<SignInfo> signList = signMapper.selectSchSignListPage(temp.getSchId(), new Page());
+			//List<SignInfo> signList = signMapper.selectSignListPage(lessonId, temp.getSchId(), new Page());
 			//temp.setSignInfo(signList);
 			HashMap mapLeave = new HashMap();
 			mapLeave.put("userId", userId);

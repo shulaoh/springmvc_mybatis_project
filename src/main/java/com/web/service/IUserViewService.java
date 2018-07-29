@@ -1,5 +1,6 @@
 package com.web.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,15 @@ public abstract interface IUserViewService
 	 * @return 非受邀用户return null
 	 */
 	UserView getInvitedUser(Map<String, Object> paramHashMap);
-	
-	List<UserView> getUserList(Page paramPage, String searchKey);
+	/**
+	 * 用户管理一览页面查询用户
+	 * @param searchKey 关键字
+	 * @param companyId 公司
+	 * @param adminFlag 角色
+	 * @param paramPage 
+	 * @return
+	 */
+	List<UserView> getUserList(Page paramPage, String searchKey, String companyId, String adminFlag);
 	
 	UserView getUserByUserId(String paramString);
 	
@@ -25,6 +33,17 @@ public abstract interface IUserViewService
 	UserView userCheckIn(String loginId);
 	
 	UserView userCheckInByWeixinID(String webchatId);
+
+	/**
+	 * 查询可以作为讲师的用户，指定课程的管理员，创建者，学员除外。
+	 * @param lessId
+	 * @param searchKey
+	 * @param page
+	 * @return
+	 */
+	List<UserView> getTeaList(String lessId, String searchKey, Page page);
+
+	int isTeacher(String userId, Date date);
 	
 
   

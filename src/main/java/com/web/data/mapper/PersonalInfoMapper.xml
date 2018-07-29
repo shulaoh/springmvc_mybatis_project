@@ -14,10 +14,11 @@
     <result column="PPosition" jdbcType="VARCHAR" property="pposition" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="COMPANY_ID" jdbcType="CHAR" property="companyId" />
+    <result column="EDUCATION" jdbcType="VARCHAR" property="education" />
   </resultMap>
   <sql id="Base_Column_List">
     PERSON_ID, USER_ID, PHONE, EMAIL, USER_NAME, PSEX, PBirthday, DEPT, SUBDEPT, PPosition, 
-    REMARK,COMPANY_ID
+    REMARK,COMPANY_ID,EDUCATION
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -33,11 +34,13 @@
     insert into t_personal_info (PERSON_ID, USER_ID, PHONE, 
       EMAIL, USER_NAME, PSEX, 
       PBirthday, DEPT, SUBDEPT, 
-      PPosition, REMARK,COMPANY_ID)
+      PPosition, REMARK,COMPANY_ID,
+      EDUCATION)
     values (#{personId,jdbcType=CHAR}, #{userId,jdbcType=CHAR}, #{phone,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{psex,jdbcType=BIT}, 
       #{pbirthday,jdbcType=TIMESTAMP}, #{dept,jdbcType=VARCHAR}, #{subdept,jdbcType=VARCHAR}, 
-      #{pposition,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{companyId,jdbcType=CHAR})
+      #{pposition,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{companyId,jdbcType=CHAR},
+      #{education,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.web.data.pojo.PersonalInfo">
     insert into t_personal_info
@@ -78,6 +81,9 @@
       <if test="companyId != null">
         COMPANY_ID,
       </if>
+      <if test="education != null">
+        EDUCATION,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="personId != null">
@@ -115,6 +121,9 @@
       </if>
       <if test="companyId != null">
         #{companyId,jdbcType=CHAR},
+      </if>
+      <if test="education != null">
+        #{education,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -154,6 +163,9 @@
       <if test="companyId != null">
         COMPANY_ID = #{companyId,jdbcType=CHAR},
       </if>
+      <if test="education != null">
+        EDUCATION = #{education,jdbcType=VARCHAR},
+      </if>
     </set>
     where PERSON_ID = #{personId,jdbcType=CHAR}
   </update>
@@ -190,6 +202,9 @@
       <if test="companyId != null">
         COMPANY_ID = #{companyId,jdbcType=CHAR},
       </if>
+      <if test="education != null">
+        EDUCATION = #{education,jdbcType=VARCHAR},
+      </if>
     </set>
     where USER_ID = #{userId,jdbcType=CHAR}
   </update>
@@ -205,16 +220,18 @@
       SUBDEPT = #{subdept,jdbcType=VARCHAR},
       PPosition = #{pposition,jdbcType=VARCHAR},
       REMARK = #{remark,jdbcType=VARCHAR},
-      COMPANY_ID = #{companyId,jdbcType=CHAR}
+      COMPANY_ID = #{companyId,jdbcType=CHAR},
+      EDUCATION = #{education,jdbcType=VARCHAR}
     where PERSON_ID = #{personId,jdbcType=CHAR}
   </update>
     <insert id="insertBatch">
-    insert into t_personal_info (PERSON_ID,USER_ID,PHONE,EMAIL,USER_NAME,PSEX,PBirthday,DEPT,SUBDEPT,PPosition,REMARK,COMPANY_ID) values 
+    insert into t_personal_info (PERSON_ID,USER_ID,PHONE,EMAIL,USER_NAME,PSEX,PBirthday,DEPT,SUBDEPT,PPosition,REMARK,COMPANY_ID,EDUCATION) values 
     <foreach collection ="list" item="item" separator =",">
     ( #{item.personId,jdbcType=CHAR}, #{item.userId,jdbcType=CHAR}, #{item.phone,jdbcType=VARCHAR}, 
       #{item.email,jdbcType=VARCHAR}, #{item.userName,jdbcType=VARCHAR}, #{item.psex,jdbcType=BIT}, 
       #{item.pbirthday,jdbcType=TIMESTAMP}, #{item.dept,jdbcType=VARCHAR}, #{item.subdept,jdbcType=VARCHAR},
-      #{item.pposition,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},#{item.companyId,jdbcType=CHAR}
+      #{item.pposition,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},#{item.companyId,jdbcType=CHAR},
+      #{education,jdbcType=VARCHAR}
     )
     </foreach>
   </insert> 

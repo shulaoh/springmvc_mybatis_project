@@ -16,7 +16,42 @@ public class SignInfo implements Serializable {
 	private String email;
 	private String dept;
 	private String companyName;
+	private String remark;
+	private String cancelFlag;
+	private String reason;
+	private String isApproved;
+	private String approveUserName;
 	
+	public String getIsApprove() {
+		return isApproved;
+	}
+	public void setIsApprove(String isApprove) {
+		this.isApproved = isApprove;
+	}
+	public String getApproveUserName() {
+		return approveUserName;
+	}
+	public void setApproveUserName(String approveUserName) {
+		this.approveUserName = approveUserName;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getCancelFlag() {
+		return cancelFlag;
+	}
+	public void setCancelFlag(String cancelFlag) {
+		this.cancelFlag = cancelFlag;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 	public String getSchId() {
 		return schId;
 	}

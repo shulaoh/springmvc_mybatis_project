@@ -19,11 +19,15 @@
 		<result column="person_id" jdbcType="CHAR" property="personId" />
 		<result column="company_id" jdbcType="CHAR" property="companyId" />
 		<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+		<result column="PBirthday" jdbcType="TIMESTAMP" property="pbirthday" />
+		<result column="PPosition" jdbcType="VARCHAR" property="pposition" />
+		<result column="EDUCATION" jdbcType="VARCHAR" property="education" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		USER_ID, USER_NAME, U_STATUS, EMAIL,
 		PHONE,SIGN,ADMIN_FLAG,DEPT,WECHATID,PASSWORD,TIME_STAMP,
-		USER_PIC_URL,person_id,REMARK,REMARK1,company_id,company_name
+		USER_PIC_URL,person_id,REMARK,REMARK1,company_id,company_name,
+		PBirthday,PPosition,EDUCATION
 	</sql>
 	<!-- check是否受邀用户 -->
 	<select id="getInvitedUser" parameterType="java.lang.String"
@@ -60,8 +64,14 @@
 		U_STATUS != 'DEL'
 		and ADMIN_FLAG != '100'
 		and ADMIN_FLAG != '30'
+		<if test="companyId != null and companyId.length()>0">
+			and company_id = #{companyId,jdbcType=VARCHAR}
+		</if>
+		<if test="adminFlag != null and adminFlag.length()>0">
+			and ADMIN_FLAG = #{adminFlag,jdbcType=VARCHAR}
+		</if>
 		order by
-		U_STATUS DESC
+		U_STATUS DESC,company_id,USER_NAME DESC
 	</select>
 	<select id="getUserByRoleListPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
 		select
@@ -76,6 +86,36 @@
 		<if test="searchKey != null and searchKey.length()>0">
 			and USER_NAME like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
 		</if>
+		order by USER_NAME
+	</select>
+	<select id="getTeaListPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from v_user_personal
+		where
+		U_STATUS != 'DEL'
+		and ADMIN_FLAG in
+		<foreach item="item" collection="adminFlags" index="index" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+		<if test="searchKey != null and searchKey.length()>0">
+			and USER_NAME like concat('%', #{searchKey,jdbcType=VARCHAR}, '%')
+		</if>
+		and USER_ID not in (
+		select creator_id
+        from t_lesson
+		where less_id = #{lessId, jdbcType=VARCHAR}
+		union all
+		select user_id
+        from t_lesson a left join t_less_admin b on a.less_id = b.less_id
+		where 
+		a.less_id = #{lessId, jdbcType=VARCHAR}
+		union all
+		select b.s_user_id
+        from t_lesson a left join t_less_student b on a.less_id = b.less_id
+		where 
+		a.less_id = #{lessId, jdbcType=VARCHAR}
+		)
 		order by USER_NAME
 	</select>
 	<select id="getUserByUserId" resultMap="BaseResultMap">
@@ -96,6 +136,19 @@
 		EMAIL=#{loginId,jdbcType=VARCHAR})
 		and U_STATUS != 'DEL'
 	</select>
+	
+	<!-- 判断是否管理员 -->
+	<select id="isTeacher" resultType="java.lang.Integer">
+        select count(*) 
+        from (
+	        select max(date_add(sch_s_time, interval sch_last_m_num minute)) as endTime
+	        from t_lesson a left join t_less_admin b on a.less_id = b.less_id
+	        left join t_schedule c on a.less_id = c.less_id
+			where b.user_id = #{userId, jdbcType=VARCHAR}
+		) x 
+		where 
+		<![CDATA[x.endTime <= #{endTime, jdbcType=TIMESTAMP}]]>
+    </select>
 
 	<select id="userCheckInByWeixinID" parameterType="java.lang.String"
 		resultMap="BaseResultMap">

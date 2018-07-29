@@ -9,14 +9,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.model.InternalWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -326,6 +324,50 @@ public class ExcelUtil {
 		return !StringUtils.isEmpty(row.getCell(5).toString());
 	}
 
+	public static boolean exportReviewToExcel(Map<String, Object> map, File toFile) {
+        Map<String, Object> reviews = (Map<String, Object>)map.get("content");
+		HSSFWorkbook wb = new HSSFWorkbook();
+
+        for (String key : reviews.keySet()) {
+            HSSFSheet sheet = null;
+            List<List<String>> review = (List<List<String>>) reviews.get(key);
+            if (review != null && review.size() > 0) {
+                List<String> header = review.get(0);
+                sheet = wb.createSheet(key);
+                createSheetHeader(sheet, header);
+                for (int i = 1; i < review.size(); i++) {
+                    createSheetRow(sheet, (Object[]) review.get(i).toArray(), i);
+                }
+            }
+        }
+
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(toFile);
+            wb.write(outputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+
+            try {
+                wb.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+		return true;
+	}
+
 	public static boolean exportSignToExcel(List<SignInfo> signInfos, File toFile) {
 		// 创建一个表格
 		HSSFWorkbook wb = new HSSFWorkbook();
@@ -350,7 +392,21 @@ public class ExcelUtil {
 				// No 姓名 手机号 邮箱 公司 部门 签到时间 签到图片
 				createRowData(sheet, signInfo, rowCount);
 				try {
-					addSinPicToRow(wb, rowCount + 2, patriarch, signInfo.getSignPicUrl());
+					HSSFRow dataRow;
+					HSSFCell dataCell0;
+					dataRow = sheet.getRow(rowCount + 2);
+					// 判断是否请假并批准
+					if (null != signInfo.getSignPicUrl()) {
+						// 没有请假
+						addSinPicToRow(wb, rowCount + 2, patriarch, signInfo.getSignPicUrl());
+					} else if (null != signInfo.getReason() && "N".equals(signInfo.getCancelFlag()) && "1".equals(signInfo.getIsApprove())) {
+						dataCell0 = dataRow.createCell(7);
+						dataCell0.setCellValue("请假并获得批准");
+					} else {
+						// 没有请假且没有签到
+						dataCell0 = dataRow.createCell(7);
+						dataCell0.setCellValue("未签到");
+					}
 				} catch (IOException e) {
 					addSinMisPicToRow(sheet, rowCount + 2);
 				}
@@ -391,17 +447,18 @@ public class ExcelUtil {
 		HSSFCell dataCell0;
 		dataRow = sheet.getRow(i);
 		dataCell0 = dataRow.createCell(7);
-		dataCell0.setCellValue("文件读取失败");
+		dataCell0.setCellValue("签名文件读取失败");
 
 	}
 
 	private static void addSinPicToRow(HSSFWorkbook wb, int row, HSSFPatriarch patriarch, String signPicUrl)
 			throws IOException {
 		if (!StringUtils.isEmpty(signPicUrl)) {
-			BufferedImage bufferImg = null;
-			ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
-			bufferImg = ImageIO.read(new File(signPicUrl));
-			ImageIO.write(bufferImg, "jpg", byteArrayOut);
+//			BufferedImage bufferImg = null;
+//			ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+//			bufferImg = ImageIO.read(new File(signPicUrl));
+//			ImageIO.write(bufferImg, "png", byteArrayOut);
+			
 			// 关于HSSFClientAnchor(dx1,dy1,dx2,dy2,col1,row1,col2,row2)的参数，有必要在这里说明一下：
 			// dx1：起始单元格的x偏移量，
 			// dy1：起始单元格的y偏移量，
@@ -412,7 +469,9 @@ public class ExcelUtil {
 			// col2：终止单元格列序号，从0开始计算；
 			// row2：终止单元格行序号，从0开始计算，
 			HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 1023, 250, (short) 7, row, (short) 7, row);
-			patriarch.createPicture(anchor, wb.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+			patriarch.createPicture(anchor, wb.addPicture(IOUtils.toByteArray(new FileInputStream(signPicUrl)), HSSFWorkbook.PICTURE_TYPE_JPEG));
+			
+			//patriarch.createPicture(anchor, wb.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
 		}
 	}
 
@@ -436,6 +495,42 @@ public class ExcelUtil {
 		dataCell0 = dataRow.createCell(6);
 		dataCell0.setCellValue(Tools.date2Str(signInfo.getSignTime()));
 	}
+
+	private static void createSheetRow(HSSFSheet sheet, Object[] data, int rowNo) {
+        HSSFRow dataRow;
+        HSSFCell dataCell0;
+        dataRow = sheet.createRow(rowNo + 2);
+        dataRow.setHeightInPoints(40);
+        for(int i = 0; i < data.length; i++) {
+            dataCell0 = dataRow.createCell(i);
+            Object o = data[i];
+            if (o instanceof String) {
+                dataCell0.setCellValue((String)data[i]);
+            }
+
+            if (o instanceof Integer) {
+                dataCell0.setCellValue((Integer)data[i]);
+            }
+
+            if (o instanceof Double) {
+                dataCell0.setCellValue((Double)data[i]);
+            }
+        }
+    }
+
+	private static void createSheetHeader(HSSFSheet sheet, List<String> headers) {
+	    HSSFRow row = sheet.createRow(0);
+	    HSSFCell dataCell0;
+        CellRangeAddress rangeAddress = new CellRangeAddress(0, 0, 0, headers.size() - 1);
+        sheet.addMergedRegion(rangeAddress);
+        dataCell0 = row.createCell(0);
+        //dataCell0.setCellValue("testing");
+        row = sheet.createRow(1);
+        for (int i = 0; i < headers.size(); i++) {
+            dataCell0 = row.createCell(i);
+            dataCell0.setCellValue(headers.get(i));
+        }
+    }
 
 	private static void createHeader(HSSFSheet sheet, SignInfo signInfo) {
 		HSSFRow dataRow;
@@ -491,7 +586,10 @@ public class ExcelUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String a = null;
+		String signPicUrl = "D:\\BJHR\\source\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\cnooc_training\\image\\tmp_2c6f2351b84c75ca6361ea87bbb07c663e51bf23f42c161f_180627234843.png";
+		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+		BufferedImage bufferImg = null;
+		bufferImg = ImageIO.read(new File(signPicUrl));
 //		System.out.println(StringUtils.isEmptyOrWhitespaceOnly(a));
 		//========================
 //		List<CommImportItem> items = new ArrayList<CommImportItem>();

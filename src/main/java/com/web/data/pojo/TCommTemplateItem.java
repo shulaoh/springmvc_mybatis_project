@@ -1,5 +1,7 @@
 package com.web.data.pojo;
 
+import com.web.utils.Const;
+
 public class TCommTemplateItem {
     private String tempItemId;
 
@@ -13,7 +15,7 @@ public class TCommTemplateItem {
 
     private Integer tempItemEnable;
 
-    public String getTempItemId() {
+	public String getTempItemId() {
         return tempItemId;
     }
 

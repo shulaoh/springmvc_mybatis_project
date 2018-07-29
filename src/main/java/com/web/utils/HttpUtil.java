@@ -1,14 +1,19 @@
 package com.web.utils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 public class HttpUtil
 {
@@ -72,16 +77,38 @@ public class HttpUtil
     return result;
   }
 
+  public static String getStringFromStream(HttpServletRequest req) {
+		ServletInputStream is;
+		try {
+			is = req.getInputStream();
+			int nRead = 1;
+			int nTotalRead = 0;
+			byte[] bytes = new byte[10240];
+			while (nRead > 0) {
+				nRead = is.read(bytes, nTotalRead, bytes.length - nTotalRead);
+				if (nRead > 0)
+					nTotalRead = nTotalRead + nRead;
+			}
+			String str = new String(bytes, 0, nTotalRead, "utf-8");
+			return str;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+  
   public static void main(String[] args)
   {
-    String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
-
-    HashMap map = new HashMap();
-    map.put("appid", "wxc0a422ba9287706a");
-    map.put("secret", "a6c93320cad4374cbf58eeaf5505bed8");
-    map.put("js_code", "1111");
-    map.put("grant_type", "authorization_code");
-    String data = get(requestUrl, map);
-    System.out.println(data);
+	  JSONObject jobj = JSON.parseObject("{\"name\":\"李明\",\"age\":19}");
+	  System.out.println(jobj.getString("name"));
+//    String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
+//
+//    HashMap map = new HashMap();
+//    map.put("appid", "wxc0a422ba9287706a");
+//    map.put("secret", "a6c93320cad4374cbf58eeaf5505bed8");
+//    map.put("js_code", "1111");
+//    map.put("grant_type", "authorization_code");
+//    String data = get(requestUrl, map);
+//    System.out.println(data);
   }
 }

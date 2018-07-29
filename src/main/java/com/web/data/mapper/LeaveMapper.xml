@@ -8,7 +8,12 @@
 	    <result column="SCH_ID" jdbcType="VARCHAR" property="schId" />
 	    <result column="CANCEL_FLAG" jdbcType="VARCHAR" property="cancelFlag" />
 	    <result column="REASON" jdbcType="VARCHAR" property="reason" />    
+	    <result column="APPROVE" jdbcType="CHAR" property="isApproved" />
+	    <result column="APPROVE_TIME" jdbcType="TIMESTAMP" property="approveDate" />
+	    <result column="APPROVE_ID" jdbcType="VARCHAR" property="approveUserId" />  
+	    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
 	    <association column="USER_ID" property="user" javaType="com.web.data.pojo.Teacher" select="getLeaveTeacher" />
+	    <association column="APPROVE_ID" property="approveUser" javaType="com.web.data.pojo.Teacher" select="getLeaveTeacher" />
 	</resultMap>
 	
 	<insert id="addLeave" parameterType="java.util.HashMap">
@@ -33,6 +38,18 @@
 	       <if test="reason != null and reason.length()>0">
 	        REASON = #{reason,jdbcType=VARCHAR},
 	      </if>
+	      <if test="isApproved != null">
+	        APPROVE = #{isApproved,jdbcType=CHAR},
+	      </if>
+	      <if test="approveDate != null">
+	        APPROVE_TIME = #{approveDate,jdbcType=DATE},
+	      </if>
+	      <if test="approveUserId != null and approveUserId.length()>0">
+	        APPROVE_ID = #{approveUserId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="remark != null and remark.length()>0">
+	        REMARK = #{remark,jdbcType=VARCHAR},
+	      </if>
 	    </set>
 	    where USER_ID=#{userId,jdbcType=VARCHAR}
 	          and SCH_ID=#{schId,jdbcType=VARCHAR}
@@ -45,9 +62,16 @@
    </select>
    
    <select id="selectLeaveList" resultMap="leaveListResultMap">
-	  	SELECT USER_ID,DATE_FORMAT(TIME,'%Y-%m-%d %H:%i') TIME,SCH_ID,CANCEL_FLAG,REASON 
+	  	SELECT USER_ID,DATE_FORMAT(TIME,'%Y-%m-%d %H:%i') TIME,SCH_ID,CANCEL_FLAG,REASON,APPROVE,APPROVE_TIME,APPROVE_ID,REMARK 
 	  	FROM t_leave
 	    where SCH_ID=#{schId,jdbcType=VARCHAR}
+   </select> 
+   
+   <select id="getMyLeave" resultMap="leaveListResultMap">
+	  	SELECT USER_ID,DATE_FORMAT(TIME,'%Y-%m-%d %H:%i') TIME,SCH_ID,CANCEL_FLAG,REASON,APPROVE,APPROVE_TIME,APPROVE_ID 
+	  	FROM t_leave
+	    where SCH_ID=#{schId,jdbcType=VARCHAR}
+	    and USER_ID=#{userId,jdbcType=VARCHAR}
    </select> 
    
 	

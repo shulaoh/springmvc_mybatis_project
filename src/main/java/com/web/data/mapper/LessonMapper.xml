@@ -295,6 +295,7 @@
         select count(*)
         from t_leave
         where USER_ID=#{userId,jdbcType=VARCHAR} and SCH_ID=#{schId,jdbcType=VARCHAR}
+        and (APPROVE = '0' or APPROVE = '1')
     </select>
     <select id="selectLessonByAdminId" resultMap="BaseResultMap">
         select distinct t.less_id, t.l_name, t.l_type, t.l_status, t.place, t.l_intro, t.p_url, t.teacher_id

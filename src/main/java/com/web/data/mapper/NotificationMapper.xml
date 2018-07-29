@@ -25,12 +25,12 @@
         where notify_id = #{notificationId, jdbcType=VARCHAR}
     </delete>
     <select id="getNotificationByUserId" resultMap="notifyMap">
-        select notify_id, user_id, less_id, notify_type, notify_dttm from t_user_notification
+        select notify_id, user_id, a.less_id, notify_type, notify_dttm from t_user_notification a join t_lesson b on a.less_id = b.less_id
         where user_Id = #{userId, jdbcType=VARCHAR}
         order by notify_dttm desc
         limit #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
     </select>
     <select id="getNotificationCountByUserId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(*) from t_user_notification where user_id = #{userId, jdbcType=VARCHAR}
+        select count(*) from t_user_notification a join t_lesson b on a.less_id = b.less_id where user_id = #{userId, jdbcType=VARCHAR}
     </select>
 </mapper>

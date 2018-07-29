@@ -25,8 +25,8 @@ public class WeChatUtil {
 		String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
 
 		HashMap map = new HashMap();
-		map.put("appid", "wxc0a422ba9287706a");
-		map.put("secret", "a6c93320cad4374cbf58eeaf5505bed8");
+		map.put("appid", Const.APP_ID);
+		map.put("secret", Const.APP_SECRET);
 		map.put("js_code", jscode);
 		map.put("grant_type", "authorization_code");
 		String data = HttpUtil.get(requestUrl, map);

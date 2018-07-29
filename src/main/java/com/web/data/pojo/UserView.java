@@ -1,5 +1,7 @@
 package com.web.data.pojo;
 
+import java.util.Date;
+
 public class UserView extends SysUser{
     private String userId;
 
@@ -33,8 +35,26 @@ public class UserView extends SysUser{
     private String remark1;
 
     private String personId;
+    
+    private String education;
+    private String pposition;
+    private Date pbirthday;
+    
+    /**值来源于adminFlag 只有当是班主任时为TEA*/
+    private String role;
 
-    public String getCompanyId() {
+    public String getRole() {
+		if (role == null) {
+			return adminFlag;
+		}
+    	return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getCompanyId() {
 		return companyId;
 	}
 
@@ -170,4 +190,28 @@ public class UserView extends SysUser{
     public void setPersonId(String personId) {
         this.personId = personId == null ? null : personId.trim();
     }
+
+	public String getEducation() {
+		return education;
+	}
+
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+	public String getPposition() {
+		return pposition;
+	}
+
+	public void setPposition(String pposition) {
+		this.pposition = pposition;
+	}
+
+	public Date getPbirthday() {
+		return pbirthday;
+	}
+
+	public void setPbirthday(Date pbirthday) {
+		this.pbirthday = pbirthday;
+	}
 }

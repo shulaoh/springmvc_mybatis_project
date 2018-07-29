@@ -77,4 +77,39 @@ public class LessonStuController
     }
     return map;
   }
+  /**
+   * {"schId":"09764e7c65164b56a764179f71054361","showCount":"10","pageNum":"1"}
+   * @param schId
+   * @param showCount
+   * @param pageNum
+   * @return
+   */
+  @RequestMapping({"/getSchStuStatus"})
+  @ResponseBody
+  public Map<String, Object> getSchStuStatus(@RequestParam String schId,@RequestParam Integer showCount,
+			@RequestParam Integer pageNum) {
+	  ResourceDesc rdesc = new ResourceDesc();
+		HashMap map = new HashMap();
+		Result result = new Result();
+		map.put("result", result);
+		Page page = new Page();
+		page.setCurrentPage(pageNum.intValue());
+		page.setShowCount(showCount.intValue());
+		try {
+			DataDesc datadesc = new DataDesc();
+			HashMap data = new HashMap();
+			data.put("students", lessonStuService.getStuListBySch(schId, page));
+			boolean paging = page.caculatePageing();
+			datadesc.setPaging(paging);
+			datadesc.setPage(page);
+			map.put("datadesc", datadesc);
+			map.put("data", data);
+			result.setRetcode(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setRetcode(-1);
+			result.setRetmsg("获取学员列表失败" + e);
+		}
+		return map;
+  }
 }

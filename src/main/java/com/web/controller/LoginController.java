@@ -1,5 +1,7 @@
 package com.web.controller;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import com.web.data.pojo.SysUser;
 import com.web.data.pojo.UserView;
 import com.web.service.IUserService;
 import com.web.service.IUserViewService;
+import com.web.utils.Const;
 import com.web.utils.DataDesc;
 import com.web.utils.ResourceDesc;
 import com.web.utils.Result;
@@ -46,6 +49,20 @@ public class LoginController
     {
       if (user.getPassword().equals(password))
       {
+    	  // is teacher?
+    	  if (!Const.USER_ROLE_100.equals(user.getAdminFlag())
+    			  && !Const.USER_ROLE_30.equals(user.getAdminFlag())
+    			  && !Const.USER_ROLE_20.equals(user.getAdminFlag())) {
+    		  
+    		  Calendar cal = Calendar.getInstance();
+    		  cal.add(Calendar.MONTH, 1);
+    		  if (userViewService.isTeacher(user.getUserId(), cal.getTime()) > 0) {
+    			  user.setRole("TEA");
+    		  } else {
+    			  result.setRetcode(-1);
+    			  result.setRetmsg("请用管理员或班主任账户登录");
+    		  }
+    	  }
         session.setAttribute("userSession", user);
         result.setRetcode(1);
         result.setRetmsg(session.getId());
@@ -63,7 +80,7 @@ public class LoginController
     return map;
   }
 
-  @RequestMapping({"/loginByWeChatId"})
+@RequestMapping({"/loginByWeChatId"})
   @ResponseBody
   public Map<String, Object> loginByWeChatId(@RequestParam String jscode, HttpSession session)
   {

@@ -64,10 +64,11 @@
 		c.dept,j.name as companyName,c.remark,h.cancel_flag,h.reason,
 		h.APPROVE,i.user_name as APPROVE_USER_NAME
 		from 
-		t_less_student a left join t_sign b on a.less_id = b.less_id and a.s_user_id = b.user_id
+		t_less_student a
 		join t_users c on a.s_user_id = c.user_id
 		join t_lesson d on a.less_id = d.less_id
 		join t_schedule e on a.less_id = e.less_id
+		left join t_sign b on e.less_id = b.less_id and e.sch_id = b.sch_id and a.s_user_id = b.user_id
 		join t_personal_info f on a.s_user_id = f.user_id
 		left join t_company j on f.company_id = j.id
 		left join t_leave h on e.sch_id = h.sch_id and a.s_user_id = h.user_id
@@ -84,10 +85,11 @@
 		c.dept,j.name as companyName,c.remark,h.cancel_flag,h.reason,
 		h.APPROVE,i.user_name as APPROVE_USER_NAME
 		from 
-		t_less_student a left join t_sign b on a.less_id = b.less_id and a.s_user_id = b.user_id
+		t_less_student a
 		join t_users c on a.s_user_id = c.user_id
 		join t_lesson d on a.less_id = d.less_id
 		join t_schedule e on a.less_id = e.less_id
+		left join t_sign b on e.less_id = b.less_id and e.sch_id = b.sch_id and a.s_user_id = b.user_id
 		join t_personal_info f on a.s_user_id = f.user_id
 		left join t_company j on f.company_id = j.id
 		left join t_leave h on e.sch_id = h.sch_id and a.s_user_id = h.user_id
@@ -98,5 +100,26 @@
 		and e.sch_id=#{schId,jdbcType=CHAR}
 		</if>
 		order by SCH_ID,companyName,c.dept,c.user_name
+	</select>
+    <select id="getSignByScheduleIdForCurrentUser" resultMap="signListResultMapForExport">
+		select
+		e.SCH_ID,d.l_name,e.sch_name,e.sch_s_time,e.sch_place,
+		c.user_name,b.sign_pic_url,b.s_time,c.phone,c.email,
+		c.dept,j.name as companyName,c.remark,h.cancel_flag,h.reason,
+		h.APPROVE,i.user_name as APPROVE_USER_NAME
+		from
+		t_less_student a
+		join t_users c on a.s_user_id = c.user_id
+		join t_lesson d on a.less_id = d.less_id
+		join t_schedule e on a.less_id = e.less_id
+		left join t_sign b on e.less_id = b.less_id and e.sch_id = b.sch_id and a.s_user_id = b.user_id
+		join t_personal_info f on a.s_user_id = f.user_id
+		left join t_company j on f.company_id = j.id
+		left join t_leave h on e.sch_id = h.sch_id and a.s_user_id = h.user_id
+		left join t_users i on h.approve_id = i.user_id
+		where
+		a.less_id=#{lessonId,jdbcType=VARCHAR}
+		and e.sch_id=#{scheduleId,jdbcType=VARCHAR}
+		and c.user_id = #{userId,jdbcType=VARCHAR}
 	</select>
 </mapper>

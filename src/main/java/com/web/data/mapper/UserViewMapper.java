@@ -1,5 +1,6 @@
 package com.web.data.mapper;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,5 +35,9 @@ public interface UserViewMapper {
 	List<UserView> getUsersByPhone(List<String> phones);
 
 	List<UserView> getUsersByEmail(List<String> emails);
+
+	List<UserView> getTeaListPage(@Param("lessId")String lessId, @Param("searchKey")String searchKey, @Param("adminFlags")String[] adminFlags, @Param("page") Page page);
+
+	int isTeacher(@Param("userId")String userId, @Param("endTime")Date endTime);
 
 }

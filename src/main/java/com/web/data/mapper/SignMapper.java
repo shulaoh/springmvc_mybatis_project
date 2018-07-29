@@ -17,4 +17,6 @@ public abstract interface SignMapper
   List<SignInfo> selectSignListPage(@Param("lessId") String lessId, @Param("schId") String schId, @Param("page") Page page);
   
   List<SignInfo> selectLessSignList(@Param("lessId") String lessId);
+
+  SignInfo getSignByScheduleIdForCurrentUser(@Param("lessonId") String lessonId, @Param("scheduleId") String scheduleId, @Param("userId") String userId);
 }

@@ -1,6 +1,7 @@
 package com.web.service;
 
 import com.web.data.pojo.FileContent;
+import com.web.data.pojo.LessonAdmin;
 import com.web.data.pojo.LessonCommon;
 import com.web.data.pojo.Schedule;
 import com.web.data.pojo.SysUser;
@@ -35,4 +36,6 @@ public interface ILessonManageService {
     List<FileContent> getFilesByLessonId(Map<String, Object> map);
 
     int getFilesCountByLessonId(Map<String, Object> map);
+
+	List<LessonAdmin> getAdminByLessId(String userId);
 }

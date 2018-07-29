@@ -151,8 +151,10 @@
         c on (l.less_id = c.less_id), t_less_admin u
         where  l.less_id = u.less_id
         and l_status != '-1'  ) t
-        where user_id = #{userId, jdbcType=VARCHAR}
-        order by sch_s_time desc, l_type desc
+        <if test="userId != null and userId.length()>0">
+         where user_id = #{userId, jdbcType=VARCHAR}
+		</if>
+        order by l_status asc, sch_s_time desc, l_type desc
         limit #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER}
     </select>
 
@@ -205,9 +207,9 @@
         c on (l.less_id = c.less_id), t_less_admin u
         where  l.less_id = u.less_id
         and l_status != '-1'  ) t
-        where user_id = #{userId, jdbcType=VARCHAR}
-
-
+        <if test="userId != null and userId.length()>0">
+         where user_id = #{userId, jdbcType=VARCHAR}
+		</if>
     </select>
     <select id="getEndDatetimeByLessonId" resultType="java.sql.Timestamp">
         select max(date_add(sch_s_time, interval sch_last_m_num minute)) from t_schedule where less_Id = #{lessonId}

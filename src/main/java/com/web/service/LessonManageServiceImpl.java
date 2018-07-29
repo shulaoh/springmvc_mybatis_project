@@ -211,4 +211,9 @@ public class LessonManageServiceImpl implements ILessonManageService {
     public int getFilesCountByLessonId(Map<String, Object> map) {
         return lessonManageMapper.getFilesCountByLessonId(map);
     }
+
+	@Override
+	public List<LessonAdmin> getAdminByLessId(String lessId) {
+		return this.lessonAdminMapper.selectAdminByLessId(lessId);
+	}
 }

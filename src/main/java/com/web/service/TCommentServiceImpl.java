@@ -22,6 +22,7 @@ import com.web.data.pojo.SysUser;
 import com.web.data.pojo.TCommTemplateGroup;
 import com.web.data.pojo.TCommTemplateItem;
 import com.web.data.pojo.TCommTemplateRelate;
+import com.web.utils.Const;
 import com.web.utils.ExcelUtil;
 import com.web.utils.Page;
 import com.web.utils.Tools;
@@ -103,7 +104,11 @@ public class TCommentServiceImpl implements ICommentService {
 				tGroup = new TCommTemplateGroup();
 				tGroup.setTempGroupId(Tools.generateID());
 				tGroup.setTempGroupName(group.getGroupName());
-				tGroup.setTempGroupOwerId(user.getUserId());
+				if (Const.USER_ROLE_100.equals(user.getAdminFlag()) || Const.USER_ROLE_30.equals(user.getAdminFlag())) {
+					tGroup.setTempGroupOwerId("-1");
+				} else {
+					tGroup.setTempGroupOwerId(user.getUserId());
+				}
 				tGroup.setTempGroupEnable(1);
 				
 				for(CommImportItem item : group.getItems()) {

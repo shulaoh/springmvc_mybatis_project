@@ -1,5 +1,7 @@
 package com.web.data.bean;
 
+import com.web.utils.Const;
+
 public class CommImportItem {
 
 	private String roleType;
@@ -9,7 +11,18 @@ public class CommImportItem {
 	private String itemName;
 	
 	private String itemType;
+    
+    /**用来显示分类，不对应数据库*/
+    private String category;
 
+    public String getCategory() {
+    	this.category = Const.commCatagory.get(this.roleType+this.targetType);;
+    	return this.category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public String getRoleType() {
 		return roleType;
 	}

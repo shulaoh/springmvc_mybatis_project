@@ -13,8 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.web.data.pojo.LessonStudent;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -199,18 +206,29 @@ public class UserController {
 		map.put("datadesc", new DataDesc());
 		HashMap data = new HashMap();
 		UserView user = (UserView) session.getAttribute("userSession");
-		if (user == null) {
-			result.setRetcode(-100);// 表示用户未登录
-		} else if (needToRegiste(user)) {
+		UserView newUser = this.userViewService.getUserByUserId(user.getUserId());
+		newUser.setRole(user.getRole());
+		session.setAttribute("userSession", newUser);
+		if (needToRegiste(newUser)) {
 			result.setRetcode(2000);// 受邀用户注册
 		}
-		data.put("userInfo", user);
+		data.put("userInfo", newUser);
 		map.put("data", data);
 		return map;
 	}
+	/**
+	 * 用户管理一览页面查询用户
+	 * @param searchKey 关键字
+	 * @param companyId 公司
+	 * @param adminFlag 角色
+	 * @param showCount 每页显示数量
+	 * @param pageNum	页码
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping({ "/getUserList" })
 	@ResponseBody
-	public Map<String, Object> getUserList(@RequestParam String searchKey, Integer showCount, Integer pageNum,
+	public Map<String, Object> getUserList(@RequestParam String searchKey, String companyId, String adminFlag,Integer showCount, Integer pageNum,
 			HttpSession session) {
 		String tid = "tid_get_userList";
 		ResourceDesc rdesc = new ResourceDesc();
@@ -223,7 +241,7 @@ public class UserController {
 		try {
 			DataDesc datadesc = new DataDesc();
 			HashMap data = new HashMap();
-			data.put("users", this.userViewService.getUserList(page, searchKey));
+			data.put("users", this.userViewService.getUserList(page, searchKey,companyId,adminFlag));
 			boolean paging = page.caculatePageing();
 			datadesc.setPaging(paging);
 			datadesc.setPage(page);
@@ -402,6 +420,49 @@ public class UserController {
 		return map;
 	}
 
+	@RequestMapping({ "/getTeaList" })
+	@ResponseBody
+	public Map<String, Object> getTeaList(String searchKey, @RequestParam String lessId, @RequestParam Integer showCount,
+			@RequestParam Integer pageNum, HttpSession session) {
+		ResourceDesc rdesc = new ResourceDesc();
+		HashMap map = new HashMap();
+		Result result = new Result();
+		map.put("result", result);
+		Page page = new Page();
+		page.setCurrentPage(pageNum.intValue());
+		page.setShowCount(showCount.intValue());
+		try {
+			DataDesc datadesc = new DataDesc();
+			HashMap data = new HashMap();
+			data.put("users", userViewService.getTeaList(lessId, searchKey, page));
+			boolean paging = page.caculatePageing();
+			datadesc.setPaging(paging);
+			datadesc.setPage(page);
+			map.put("datadesc", datadesc);
+			map.put("data", data);
+			result.setRetcode(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setRetcode(-1);
+			result.setRetmsg("获取讲师列表失败" + e);
+		}
+		return map;
+	}
+	
+	@RequestMapping({"/downloadUserTemplate"})
+    public ResponseEntity<byte[]> downloadUserTemplate(HttpServletRequest request)
+            throws Exception {
+        String path = request.getServletContext().getRealPath("/templates/");
+        File file = new File(path + File.separator + "userTemplate.xlsx");
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentDispositionFormData("attachment", "userTemplate.xlsx");
+
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return new ResponseEntity(FileUtils.readFileToByteArray(file),
+                headers, HttpStatus.CREATED);
+    }
+	
 	private boolean needToRegiste(UserView user) {
 		if (StringUtils.isNullOrEmpty(user.getUserName()) || StringUtils.isNullOrEmpty(user.getPhone())
 				|| StringUtils.isNullOrEmpty(user.getEmail()) || StringUtils.isNullOrEmpty(user.getDept())) {

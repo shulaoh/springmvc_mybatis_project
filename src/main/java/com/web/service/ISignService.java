@@ -10,8 +10,10 @@ public abstract interface ISignService
 {
   public abstract int insert(Sign paramSign);
 
-  List<SignInfo> getSignListBySchId(String schId, Page page);
+  List<SignInfo> getSignList(String lessId,String schId, Page page);
   
   List<SignInfo> getSignListByLessId(String lessId);
+
+  SignInfo getSignByScheduleIdForCurrentUser(String lessonId, String scheduleId, String userId);
   
 }

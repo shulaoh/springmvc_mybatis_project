@@ -38,7 +38,7 @@ public class Const
   // WAIT：待审核 INFO：信息待补全 REGI：注册用户 DEL：注销用户
   public static final String USER_STATUS_WAIT = "WAIT";
   public static final String USER_STATUS_INFO = "INFO";
-  public static final String USER_STATUS_REGT = "REGT";
+  public static final String USER_STATUS_REGI = "REGI";
   public static final String USER_STATUS_DEL = "DEL";
   
   //100：系统管理员 30：一级管理员 20：二级管理员 10：讲师 0：学员 
@@ -50,7 +50,10 @@ public class Const
   public static final String USER_ROLE_ADMIN = "admin";
   public static final String USER_ROLE_TUT = "tut";
   
-  
+  // 客户用
+//  public static final String APP_ID="wx4f37f6e083c37854";
+//  public static final String APP_SECRET="40f7eb4af640799acbfc76eb05f67980";
+  // 测试用
   public static final String APP_ID="wxc0a422ba9287706a";
   public static final String APP_SECRET="a6c93320cad4374cbf58eeaf5505bed8";
   public static final String DEFULT_PASSWORD = "000000";
@@ -88,4 +91,19 @@ public class Const
 	  excelSettings.put("TEASCH", 73);
 	  excelSettings.put("TEASTU", 83);
   }
+//评价模板分类名称设定
+ public static final Map<String, String> commCatagory = new HashMap<String, String>();
+ static{
+	 commCatagory.put("STULES", "学员对整体项目评价调查");
+	 commCatagory.put("STUSCH", "学员对日程评价调查");
+	 commCatagory.put("STUTUT", "学员对日程讲师评价调查");
+	  
+	 commCatagory.put("TUTLES", "讲师对整体项目评价调查");
+	 commCatagory.put("TUTSCH", "讲师对日程安排评价调查");
+	 commCatagory.put("TUTSTU", "讲师对学员评价调查");
+	  
+	 commCatagory.put("TEALES", "班主任对整体项目评价调查");
+	 commCatagory.put("TEASCH", "班主任对日程评价调查");
+	 commCatagory.put("TEASTU", "班主任对学员评价调查");
+ }
 }

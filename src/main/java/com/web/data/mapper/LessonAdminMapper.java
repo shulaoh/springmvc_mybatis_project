@@ -13,4 +13,5 @@ public interface LessonAdminMapper {
     void deleteLessonAdmin(@Param("lessonId") String lessonId, @Param("userId") String userId);
     void deleteLessonAdminNotInList(@Param("lessonId") String lessonId, @Param("list") List<String> list);
     void deleteAllLessonAdmin(@Param("lessonId") String lessonId);
+	List<LessonAdmin> selectAdminByLessId(String lessId);
 }

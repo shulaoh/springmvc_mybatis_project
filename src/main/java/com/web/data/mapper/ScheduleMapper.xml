@@ -198,7 +198,7 @@
 	<select id="hasSchModRole" resultType="java.lang.Integer">
         select count(*)
         from t_lesson a left join t_less_admin b on a.less_id = b.less_id
-		where b.user_id = #{userId, jdbcType=VARCHAR} or a.creator_id = #{userId, jdbcType=VARCHAR}
+		where (b.user_id = #{userId, jdbcType=VARCHAR} or a.creator_id = #{userId, jdbcType=VARCHAR})
 		and a.less_id = #{lessonId, jdbcType=VARCHAR}
     </select>
     <select id="getLessonIdByScheduleId" resultType="java.lang.String">

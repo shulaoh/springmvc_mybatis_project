@@ -1,14 +1,19 @@
 package com.web.service;
 
-import com.web.data.mapper.LessonMapper;
-import com.web.data.mapper.LessonStuMapper;
-import com.web.data.pojo.LessionStu;
-import com.web.utils.Page;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
+import com.web.data.bean.SchStuInfo;
+import com.web.data.mapper.LessonMapper;
+import com.web.data.mapper.LessonStuMapper;
+import com.web.data.mapper.LessonStudentMapper;
+import com.web.data.pojo.LessionStu;
+import com.web.utils.Page;
 
 @Service("lessonStuService")
 public class LessonStuServiceImpl
@@ -18,6 +23,9 @@ public class LessonStuServiceImpl
   @Resource
   private LessonStuMapper lessonStuMapper;
 
+  @Resource
+  private LessonStudentMapper lsessonStudentMapper;
+  
   @Resource
   private LessonMapper lessonMapper;
 
@@ -77,4 +85,9 @@ public class LessonStuServiceImpl
     map.put("lessonId", lessId);
     return this.lessonStuMapper.deleteLessonStu(map);
   }
+
+	@Override
+	public List<SchStuInfo> getStuListBySch(String schId, Page page) {
+		return this.lsessonStudentMapper.getStuListPage(schId, page);
+	}
 }

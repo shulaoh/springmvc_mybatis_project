@@ -20,4 +20,38 @@
     <delete id="deleteAllLessonStudent">
         delete from t_less_student where less_id = #{lessonId}
     </delete>
+      
+  <resultMap id="SchStuResultMap" type="com.web.data.bean.SchStuInfo">
+    <result column="USER_ID" jdbcType="CHAR" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />   
+    <result column="S_STATUS" jdbcType="VARCHAR" property="stuStatus" /> 
+    <result column="REJ_REASON" jdbcType="VARCHAR" property="rejReason" /> 
+    <result column="TIME" jdbcType="VARCHAR" property="time" />
+	    <result column="SCH_ID" jdbcType="VARCHAR" property="schId" />
+	    <result column="CANCEL_FLAG" jdbcType="VARCHAR" property="cancelFlag" />
+	    <result column="REASON" jdbcType="VARCHAR" property="reason" />    
+	    <result column="APPROVE" jdbcType="CHAR" property="isApproved" />
+	    <result column="APPROVE_TIME" jdbcType="TIMESTAMP" property="approveDate" />
+	    <result column="APPROVE_ID" jdbcType="VARCHAR" property="approveUserId" /> 
+	    <result column="APPROVE_USER_NAME" jdbcType="VARCHAR" property="approveUserName" /> 
+	    <result column="sign_pic_url" jdbcType="VARCHAR" property="signPicUrl" /> 
+  </resultMap> 
+  
+  <select id="getStuListPage" resultMap="SchStuResultMap">
+	select
+	c.user_id,c.user_name,c.phone,a.s_status,a.rej_reason,
+	d.sch_id,d.time,d.CANCEL_FLAG,d.REASON,d.APPROVE,
+	d.APPROVE_TIME,d.approve_id,e.user_name as approve_user_name,f.sign_pic_url
+	from 
+	t_less_student a left join t_schedule b on a.less_id = b.less_id
+	left join t_users c on a.s_user_id = c.user_id
+	left join t_leave d on a.s_user_id = d.user_id and b.sch_id = d.sch_id
+	left join t_users e on d.approve_id = e.user_id
+	left join t_sign f on b.sch_id = f.sch_id and a.s_user_id = f.user_id
+	where 
+	b.sch_id = #{schId,jdbcType=VARCHAR}
+	order by 
+	d.reason desc,d.cancel_flag,approve_id
+</select>
 </mapper>

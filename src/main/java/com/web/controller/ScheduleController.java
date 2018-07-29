@@ -1,5 +1,7 @@
 package com.web.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.web.data.pojo.FileContent;
 import com.web.data.pojo.Lession;
 import com.web.data.pojo.Schedule;
@@ -9,6 +11,7 @@ import com.web.service.ILessonService;
 import com.web.service.INotificationService;
 import com.web.service.IScheduleService;
 import com.web.utils.DataDesc;
+import com.web.utils.HttpUtil;
 import com.web.utils.Page;
 import com.web.utils.ResourceDesc;
 import com.web.utils.Result;
@@ -21,10 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -277,13 +282,30 @@ public class ScheduleController {
 		return map;
 	}
 	
-	@RequestMapping({ "/putSchedule" })
+	@RequestMapping( value="/putSchedule" ,method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> putSchedule(@RequestParam String lessonId, @RequestParam String schId, @RequestParam String schName,
-			@RequestParam String schPlace, @RequestParam String schIntro, @RequestParam String ssTime,
-			@RequestParam String schLastMNum, @RequestParam String signFlag, @RequestParam String signSTime,
-			@RequestParam String signETime, @RequestParam String commentFlag, @RequestParam String allCommFlag,
-			@RequestParam String tutorId, String commTempIds, String attachments) {
+	public Map<String, Object> putSchedule(HttpServletRequest request, HttpSession session) {
+		
+		String paramStr = HttpUtil.getStringFromStream(request);
+		JSONObject jobj = JSON.parseObject(paramStr);
+		
+		String lessonId = jobj.getString("lessonId");
+		String schId = jobj.getString("schId");
+		String schName= jobj.getString("schName");
+		String schPlace = jobj.getString("schPlace");
+		String schIntro = jobj.getString("schIntro");
+		String ssTime= jobj.getString("ssTime");
+		String schLastMNum = jobj.getString("schLastMNum");
+		String signFlag = jobj.getString("signFlag");
+		String signSTime= jobj.getString("signSTime");
+		String signETime = jobj.getString("signETime");
+		String commentFlag = jobj.getString("commentFlag");
+		String allCommFlag= jobj.getString("allCommFlag");
+		String tutorId = jobj.getString("tutorId");
+		String commTempIds = jobj.getString("commTempIds");
+		String attachments= jobj.getString("attachments");
+		
+		
 		Map<String, Object> map = new HashMap<>();
 		Result result = new Result();
 		map.put("result", result);

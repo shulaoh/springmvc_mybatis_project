@@ -1,56 +1,107 @@
 package com.web.data.pojo;
 
-public class Leave
-{
-  private String userId;
-  private String schId;
-  private String time;
-  private String cancelFlag;
-  private String reason;
-  private Teacher user;
-  private String remark;
+import java.sql.Date;
+import java.sql.Timestamp;
 
-  public Teacher getUser()
-  {
-    return this.user; }
+public class Leave {
+	private String userId;
+	private String schId;
+	private String time;
+	private String cancelFlag;
+	private String reason;
+	private Teacher user;
+	private String remark;
 
-  public void setUser(Teacher user) {
-    this.user = user; }
+	private String isApproved;
+	private Timestamp approveDate;
+	private String approveUserId;
+	private Teacher approveUser;
 
-  public String getReason() {
-    return this.reason; }
+	public String getIsApproved() {
+		return isApproved;
+	}
 
-  public void setReason(String reason) {
-    this.reason = reason; }
+	public void setIsApproved(String isApproved) {
+		this.isApproved = isApproved;
+	}
 
-  public String getUserId() {
-    return this.userId; }
+	public Timestamp getApproveDate() {
+		return approveDate;
+	}
 
-  public void setUserId(String userId) {
-    this.userId = userId; }
+	public void setApproveDate(Timestamp approveDate) {
+		this.approveDate = approveDate;
+	}
 
-  public String getSchId() {
-    return this.schId; }
+	public String getApproveUserId() {
+		return approveUserId;
+	}
 
-  public void setSchId(String schId) {
-    this.schId = schId; }
+	public void setApproveUserId(String approveUserId) {
+		this.approveUserId = approveUserId;
+	}
 
-  public String getTime() {
-    return this.time; }
+	public Teacher getApproveUser() {
+		return approveUser;
+	}
 
-  public void setTime(String time) {
-    this.time = time; }
+	public void setApproveUser(Teacher approveUser) {
+		this.approveUser = approveUser;
+	}
 
-  public String getCancelFlag() {
-    return this.cancelFlag; }
+	public Teacher getUser() {
+		return this.user;
+	}
 
-  public void setCancelFlag(String cancelFlag) {
-    this.cancelFlag = cancelFlag; }
+	public void setUser(Teacher user) {
+		this.user = user;
+	}
 
-  public String getRemark() {
-    return this.remark; }
+	public String getReason() {
+		return this.reason;
+	}
 
-  public void setRemark(String remark) {
-    this.remark = remark;
-  }
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public String getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getSchId() {
+		return this.schId;
+	}
+
+	public void setSchId(String schId) {
+		this.schId = schId;
+	}
+
+	public String getTime() {
+		return this.time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public String getCancelFlag() {
+		return this.cancelFlag;
+	}
+
+	public void setCancelFlag(String cancelFlag) {
+		this.cancelFlag = cancelFlag;
+	}
+
+	public String getRemark() {
+		return this.remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

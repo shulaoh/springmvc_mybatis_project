@@ -29,9 +29,9 @@ public class WeixAcodeUtil {
         
         String imei ="867186032552993";
         String page="page/msg_waist/msg_waist";
-//        String token = getToken();   // 得到token
+        String token = getToken();   // 得到token
         
-        String token = "10_BR1tU9nYP7uV5gmQY2CsojFdzgHoT_ZH5LyVgan2YHI3SsLw3hv8ccxJsWV_-flgg5RfFke5qNkxpnKRBnZRy4aek3H0nXo8GnujhGoRrcXqVxw37R7BkAxcTWcMDGfAHAQHK";
+//        String token = "10_BR1tU9nYP7uV5gmQY2CsojFdzgHoT_ZH5LyVgan2YHI3SsLw3hv8ccxJsWV_-flgg5RfFke5qNkxpnKRBnZRy4aek3H0nXo8GnujhGoRrcXqVxw37R7BkAxcTWcMDGfAHAQHK";
         
         Map<String, Object> params = new HashMap<>();
         params.put("scene", imei);  //参数
@@ -68,7 +68,7 @@ public class WeixAcodeUtil {
      * 获取 token
 　　　* 普通的 get 可获 token
      */
-    public String getToken() {
+    public static String getToken() {
         try {
 
     		String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";

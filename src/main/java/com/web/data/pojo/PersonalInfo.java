@@ -26,8 +26,18 @@ public class PersonalInfo {
     private String pposition;
 
     private String remark;
+    
+    private String education;
 
-    public String getPersonId() {
+    public String getEducation() {
+		return education;
+	}
+
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+	public String getPersonId() {
         return personId;
     }
 

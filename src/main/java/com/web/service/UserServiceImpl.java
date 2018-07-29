@@ -8,10 +8,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.mysql.jdbc.StringUtils;
+import com.web.controller.SignController;
 import com.web.data.mapper.CompanyMapper;
 import com.web.data.mapper.PersonalInfoMapper;
 import com.web.data.mapper.SysUserMapper;
@@ -31,6 +33,8 @@ import sun.print.PSStreamPrintService;
 @Service("userService")
 public class UserServiceImpl implements IUserService {
 
+	private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+	
 	@Resource
 	private SysUserMapper sysUserMapper;
 
@@ -94,7 +98,6 @@ public class UserServiceImpl implements IUserService {
 		List<SysUser> users = new ArrayList<SysUser>();
 
 		if (ExcelUtil.importUsers(userFile, users, errs) && errs.isEmpty()) {
-
 			if (reduceUsers(users, errs)) {
 				List<SysUser> insertUsers = needInsert(users);
 				setCompanyId(insertUsers);
@@ -181,21 +184,37 @@ public class UserServiceImpl implements IUserService {
 			List<UserView> oldUserByEmail = null;
 			if (!phones.isEmpty()) {
 				oldUserByPhone = userViewMapper.getUsersByPhone(phones);
-				for (SysUser user: users) {
+				SysUser user = null;
+				for (int i = 0; i < users.size();i++) {
+					user = users.get(i);
 					for (UserView dbUser: oldUserByPhone) {
 						if (dbUser.getPhone().equals(user.getPhone())) {
-							user.setUserId(dbUser.getUserId());
+							if (dbUser.getUserName().equals(user.getUserName())) {
+								user.setUserId(dbUser.getUserId());
+							} else {
+								// 电话号码已经被别人占用
+								users.remove(i--);
+								errs.add("导入学员的姓名/手机号码与系统保存信息不匹配,姓名:" + user.getUserName() + ",手机号:" + user.getPhone());
+							}
 						}
 					}
 				}
 			}
 			if (!emails.isEmpty()) {
 				oldUserByEmail = userViewMapper.getUsersByEmail(emails);
-				for (SysUser user: users) {
+				SysUser user = null;
+				for (int i = 0; i < users.size();i++) {
+					user = users.get(i);
 					if (StringUtils.isNullOrEmpty(user.getUserId())) {
 						for (UserView dbUser: oldUserByEmail) {
 							if (dbUser.getEmail().equals(user.getEmail())) {
-								user.setUserId(dbUser.getUserId());
+								if (dbUser.getUserName().equals(user.getUserName())) {
+									user.setUserId(dbUser.getUserId());
+								} else {
+									// 邮件地址已经被别人占用
+									users.remove(i--);
+									errs.add("导入学员的姓名/邮件地址与系统保存信息不匹配,姓名:" + user.getUserName() + ",邮件地址:" + user.getEmail());
+								}
 							}
 						}
 					}
@@ -227,12 +246,12 @@ public class UserServiceImpl implements IUserService {
 		SysUser user = new SysUser();
 		BeanUtils.copyProperties(newUser,user);
 		if("000".equals(user.getCompanyId())) {
-			newUser.setRemark(user.getCompanyName());
+			user.setRemark(newUser.getCompanyName());
 		}
 		if (invitedUser != null && !invitedUser.getuStatus().equals(Const.USER_STATUS_DEL)) {
 			// 受邀用户
 			user.setUserId(invitedUser.getUserId());
-			user.setUstatus(Const.USER_STATUS_REGT);
+			user.setUstatus(Const.USER_STATUS_REGI);
 			if (sysUserMapper.updateByPrimaryKeySelective(user) > 0) {
 				pInfo.setUserId(invitedUser.getUserId());
 				pInfo.setPersonId(invitedUser.getPersonId());

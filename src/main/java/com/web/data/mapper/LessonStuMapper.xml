@@ -43,4 +43,5 @@
     	and S_USER_ID = #{userId,jdbcType=VARCHAR}
     </if>
   </delete>
+
 </mapper>

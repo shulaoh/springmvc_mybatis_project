@@ -151,7 +151,7 @@ public class TCommentController
       DataDesc datadesc = new DataDesc();
       HashMap data = new HashMap();
       UserView loginUser = (UserView) session.getAttribute("userSession");
-      data.put("Comments", this.commentService.selectCommentsListPage(page, loginUser.getuStatus(),lessonId, schId, targetId, targetType));
+      data.put("Comments", this.commentService.selectCommentsListPage(page, loginUser.getUserId(),lessonId, schId, targetId, targetType));
       boolean paging = page.caculatePageing();
       datadesc.setPaging(paging);
       datadesc.setPage(page);
@@ -295,6 +295,32 @@ public class TCommentController
 		} else {
 			return null;
 		}
+	}
+	/**
+	 * 查看指定的评价模板{"tempGroupId":"660b7f799703439f8764b365059afec1"}
+	 */
+	@RequestMapping({"/getCommTempById"})
+	@ResponseBody
+	public Map<String, Object> getCommTempById(@RequestParam String tempGroupId, HttpServletRequest request)
+			throws Exception {
+	    ResourceDesc rdesc = new ResourceDesc();
+	    HashMap map = new HashMap();
+	    Result result = new Result();
+	    map.put("result", result);
+	    try
+	    {
+	      HashMap data = new HashMap();
+	      data.put("temps", this.commentService.selectCommGroupItem(tempGroupId));
+	      map.put("data", data);
+	      result.setRetcode(1);
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	      result.setRetcode(-1);
+	      result.setRetmsg("查看指定的评价项失败" + e);
+	    }
+	    return map;
 	}
 
 	private File createDownFiles(HttpServletRequest request, List<CommImportItem> items, File file) {
